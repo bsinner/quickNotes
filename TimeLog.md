@@ -1,7 +1,5 @@
 # Time Log
 
-date task hours notes
-
 | Date     | Task | Hours | Notes |
 | -------- | ---- | ----- | ----- |
 | 1/25/18  | Setting up tomEE and soap ui | .5 | |

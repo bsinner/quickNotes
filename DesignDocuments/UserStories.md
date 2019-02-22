@@ -14,3 +14,5 @@ As a new user I want to sign up so that I can save notes and view them at a late
 As a registered user I want to view notes that I have saved so that I can select one 
 to edit, or selectively delete notes. 
   
+### Translate API
+As any user I want to translate text to the language of my choice. 

@@ -12,3 +12,4 @@
 | 2/11/19 | Completed week two exercise 2 | 1.5 ||
 | 2/15/19 | Fixed issue on week 2 exercise, updated time log, added Individual Project screen designs | 2.5 || 
 | 2/16/19 | Added user stories, created project plan, updated time log | 3 ||
+| 2/22/19 | Added JSP templates, began adding Hibernate to indie project | 2 ||

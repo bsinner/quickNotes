@@ -1,3 +1,5 @@
+package com.blakesinner.quickNotes.entity;
+
 /**
  * This class to represents a user.
  *

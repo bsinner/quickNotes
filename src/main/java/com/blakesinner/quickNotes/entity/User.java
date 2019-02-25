@@ -1,17 +1,33 @@
 package com.blakesinner.quickNotes.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+
 /**
  * This class to represents a user.
  *
  * @author bsinner
  */
+@Entity(name = "User")
+@Table(name = "users")
 public class User {
-    private String userName;
+    @Column(name = "username")
+    private String username;
+    @Column(name = "password")
     private String password;
+    @Column(name = "email")
     private String email;
+    @Column(name = "isAdmin")
+    private byte isAdmin;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
+    private int id;
 
     /**
-     * No arguement constructor.
+     * No argument constructor.
      */
     public User() { }
 
@@ -25,7 +41,7 @@ public class User {
 
     /**
      * Set the user's email.
-     * @param the email to set
+     * @param email the email to set
      */
     public void setEmail(String email) {
         this.email = email;
@@ -51,15 +67,39 @@ public class User {
      * Get the username.
      * @return the username
      */
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
     /**
      * Set the username.
-     * @param the userName
+     * @param userName username to set
      */
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String userName) {
+        this.username = username;
     }
+
+    /**
+     * Get the user's id.
+     * @return the id
+     */
+    public int getId() { return id; }
+
+    /**
+     * Set the users's id.
+     * @param id the id to set
+     */
+    public void setId(int id) { this.id = id; }
+
+    /**
+     * Get value of isAdmin
+     * @return 0 if the user doesn't have administrative privileges, 1 if they do
+     */
+    public byte getIsAdmin() { return isAdmin; }
+
+    /**
+     * Set isAdmin field.
+     * @param isAdmin 0 to represent a regular user, 1 to represent an admin user
+     */
+    public void setIsAdmin(byte isAdmin) { this.isAdmin = isAdmin; }
 }

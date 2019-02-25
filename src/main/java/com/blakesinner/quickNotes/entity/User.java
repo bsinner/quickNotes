@@ -19,7 +19,7 @@ public class User {
     @Column(name = "email")
     private String email;
     @Column(name = "isAdmin")
-    private byte isAdmin;
+    private int isAdmin;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -30,6 +30,21 @@ public class User {
      * No argument constructor.
      */
     public User() { }
+
+    /**
+     * Instantiates a new User.
+     *
+     * @param username the username
+     * @param password the password
+     * @param email    the email
+     * @param isAdmin  the is admin
+     */
+    public User(String username, String password, String email, int isAdmin) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.isAdmin = isAdmin;
+    }
 
     /**
      * Get the user's email.
@@ -95,11 +110,11 @@ public class User {
      * Get value of isAdmin
      * @return 0 if the user doesn't have administrative privileges, 1 if they do
      */
-    public byte getIsAdmin() { return isAdmin; }
+    public int getIsAdmin() { return isAdmin; }
 
     /**
      * Set isAdmin field.
      * @param isAdmin 0 to represent a regular user, 1 to represent an admin user
      */
-    public void setIsAdmin(byte isAdmin) { this.isAdmin = isAdmin; }
+    public void setIsAdmin(int isAdmin) { this.isAdmin = isAdmin; }
 }

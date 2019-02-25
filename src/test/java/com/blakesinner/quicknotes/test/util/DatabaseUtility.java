@@ -1,4 +1,4 @@
-package com.blakesinner.quickNotes.util;
+package com.blakesinner.quicknotes.test.util;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,13 +12,13 @@ import java.sql.Statement;
 /**
  * Class to run sql statements as part of set up or tear down in the unit tests.
  */
-public class DatabaseUtil {
+public class DatabaseUtility {
     private final Logger logger = LogManager.getLogger(this.getClass());
 
     //TODO add hard-coded values to props file
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
-    static final String DB_URL = "jdbc:mysql://localhost/FBTRTest";
+    static final String DB_URL = "jdbc:mysql://localhost:3306/notes";
 
     static final String USER = "root";
 
@@ -34,8 +34,7 @@ public class DatabaseUtil {
         Connection conn = null;
         Statement stmt = null;
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        InputStream inputStream = classloader.getResourceAsStream(sqlFile);
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(sqlFile))) {
 
             Class.forName("com.mysql.jdbc.Driver");
 
@@ -48,10 +47,12 @@ public class DatabaseUtil {
                 if (sql == null) {
                     break;
                 }
+
                 stmt.executeUpdate(sql);
 
             }
-
+        } catch (FileNotFoundException fe) {
+            logger.error(fe);
         } catch (SQLException se) {
             logger.error(se);
         } catch (Exception e) {

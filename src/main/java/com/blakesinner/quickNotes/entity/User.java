@@ -18,8 +18,6 @@ public class User {
     private String password;
     @Column(name = "email")
     private String email;
-    @Column(name = "isAdmin")
-    private int isAdmin;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -37,13 +35,11 @@ public class User {
      * @param username the username
      * @param password the password
      * @param email    the email
-     * @param isAdmin  the is admin
      */
-    public User(String username, String password, String email, int isAdmin) {
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.isAdmin = isAdmin;
     }
 
     /**
@@ -90,7 +86,7 @@ public class User {
      * Set the username.
      * @param userName username to set
      */
-    public void setUsername(String userName) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -106,15 +102,4 @@ public class User {
      */
     public void setId(int id) { this.id = id; }
 
-    /**
-     * Get value of isAdmin
-     * @return 0 if the user doesn't have administrative privileges, 1 if they do
-     */
-    public int getIsAdmin() { return isAdmin; }
-
-    /**
-     * Set isAdmin field.
-     * @param isAdmin 0 to represent a regular user, 1 to represent an admin user
-     */
-    public void setIsAdmin(int isAdmin) { this.isAdmin = isAdmin; }
 }

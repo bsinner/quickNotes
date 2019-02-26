@@ -43,36 +43,6 @@ public class UserDAO {
     }
 
     /**
-     * Finds users in the database by username.
-     * @param username the username to search for
-     * @return a list of found users
-     */
-    public List<User> getUsersByUsername(String username) {
-        Session session = sessionFactory.openSession();
-
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<User> query = builder.createQuery(User.class);
-        Root<User> root = query.from(User.class);
-
-        Expression<String> propertyPath = root.get("username");
-        query.where(builder.like(propertyPath, "%" + username + "%"));
-
-        List<User> users = session.createQuery(query).getResultList();
-        session.close();
-        return users;
-    }
-
-    /**
-     * Finds the user in the database with the passed in id.
-     */
-    public User getUserById(int id) {
-        Session session = sessionFactory.openSession();
-        User user = session.get(User.class, id);
-        session.close();
-        return user;
-    }
-
-    /**
      * Updates passed in user.
      * @param user user to update
      */

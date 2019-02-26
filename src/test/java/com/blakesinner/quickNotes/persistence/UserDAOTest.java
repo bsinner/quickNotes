@@ -25,7 +25,7 @@ class UserDAOTest {
     void setUp() {
         dao = new UserDAO();
 
-        com.blakesinner.quicknotes.test.util.DatabaseUtility dbUtil = new com.blakesinner.quicknotes.test.util.DatabaseUtility();
+        DatabaseUtility dbUtil = new DatabaseUtility();
         dbUtil.runSQL("/home/student/IdeaProjects/quickNotes/src/test/resources/cleandb.sql");
         dbUtil.runSQL("/home/student/IdeaProjects/quickNotes/src/test/resources/populatedb.sql");
     }
@@ -37,7 +37,6 @@ class UserDAOTest {
     @Test
     void getAllUsersSuccess() {
         List<User> users = dao.getAllUsers();
-
         assertEquals(3, users.size());
     }
 
@@ -46,8 +45,7 @@ class UserDAOTest {
      */
     @Test
     void getUsersByUsernameSuccess() {
-        List<User> users = dao.getUsersByUsername("smith");
-
+        List<User> users = dao.getByPropertyLike("username", "smith");
         assertEquals(2, users.size());
     }
 
@@ -56,9 +54,10 @@ class UserDAOTest {
      */
     @Test
     void getUserByIdSuccess() {
-        User foundUser = dao.getUserById(1);
+        List<User> foundUser = dao.getByPropertyEqual("id", "1");
         assertNotNull(foundUser);
-        assertEquals("bsmith", foundUser.getUsername());
+        assertEquals(1, foundUser.size());
+        assertEquals(1, foundUser.get(0).getId());
     }
 
     /**
@@ -66,11 +65,12 @@ class UserDAOTest {
      */
     @Test
     void insertSuccess() {
+        User newUser = new User("rsmith", "password4", "rsmith@gmail.com");
 
-        User newUser = new User("rsmith", "password4", "rsmith@gmail.com", 0);
         int id = dao.insert(newUser);
-        assertNotEquals(0,id);
-        User insertedUser = dao.getUserById(id);
+        assertNotEquals(0, id);
+        User insertedUser = dao.getByPropertyEqual("id", String.valueOf(id)).get(0);
+
         assertEquals("rsmith", insertedUser.getUsername());
         // Could continue comparing all values, but
         // it may make sense to use .equals()
@@ -82,8 +82,8 @@ class UserDAOTest {
      */
     @Test
     void deleteSuccess() {
-        dao.delete(dao.getUsersByUsername("ldavis").get(0));
-        assertEquals(dao.getUsersByUsername("ldavis").size(), 0);
+        dao.delete(dao.getByPropertyEqual("username", "ldavis").get(0));
+        assertEquals(dao.getByPropertyEqual( "username", "ldavis").size(), 0);
     }
 
     /**

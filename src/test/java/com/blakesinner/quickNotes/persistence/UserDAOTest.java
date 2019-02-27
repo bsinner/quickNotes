@@ -26,8 +26,8 @@ class UserDAOTest {
         dao = new UserDAO();
 
         DatabaseUtility dbUtil = new DatabaseUtility();
-        dbUtil.runSQL("/home/student/IdeaProjects/quickNotes/src/test/resources/cleandb.sql");
-        dbUtil.runSQL("/home/student/IdeaProjects/quickNotes/src/test/resources/populatedb.sql");
+        dbUtil.runSQL("target/test-classes/cleandb.sql");
+        dbUtil.runSQL("target/test-classes/populatedb.sql");
     }
 
     /**

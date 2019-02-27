@@ -1,2 +1,2 @@
-delete from users;
+DELETE FROM users;
 

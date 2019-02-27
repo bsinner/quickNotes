@@ -15,3 +15,4 @@
 | 2/22/19 | Added JSP templates, began adding Hibernate to indie project | 2 ||
 | 2/23/19 | Continued Hibernate demo | 1 ||
 | 2/24/19 | Continued adding Hibernate to indie project | 3 ||
+| 2/25/19 | Finished Hibernate exercise, fixed issues on indie project | 6 ||

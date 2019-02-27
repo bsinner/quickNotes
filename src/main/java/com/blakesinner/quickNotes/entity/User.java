@@ -12,11 +12,9 @@ import javax.persistence.*;
 @Entity(name = "User")
 @Table(name = "users")
 public class User {
-    @Column(name = "username")
+
     private String username;
-    @Column(name = "password")
     private String password;
-    @Column(name = "email")
     private String email;
 
     @Id
@@ -84,7 +82,7 @@ public class User {
 
     /**
      * Set the username.
-     * @param userName username to set
+     * @param username username to set
      */
     public void setUsername(String username) {
         this.username = username;

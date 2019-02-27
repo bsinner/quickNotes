@@ -66,15 +66,13 @@ class UserDAOTest {
     @Test
     void insertSuccess() {
         User newUser = new User("rsmith", "password4", "rsmith@gmail.com");
-
+        int i3d = newUser.getId();
         int id = dao.insert(newUser);
-        assertNotEquals(0, id);
+
         User insertedUser = dao.getByPropertyEqual("id", String.valueOf(id)).get(0);
 
-        assertEquals("rsmith", insertedUser.getUsername());
-        // Could continue comparing all values, but
-        // it may make sense to use .equals()
-        // TODO review .equals recommendations http://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#mapping-model-pojo-equalshashcode
+        assertNotEquals(0, id);
+        assertEquals(newUser, insertedUser);
     }
 
     /**

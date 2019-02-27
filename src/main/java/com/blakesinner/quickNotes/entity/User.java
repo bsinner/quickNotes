@@ -100,4 +100,21 @@ public class User {
      */
     public void setId(int id) { this.id = id; }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (this == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        User user = (User) o;
+
+        return username.equals(user.username)
+                && password.equals(user.password)
+                && email.equals(user.email);
+    }
+
 }

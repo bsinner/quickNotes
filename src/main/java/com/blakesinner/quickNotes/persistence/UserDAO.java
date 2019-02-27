@@ -11,7 +11,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
-import java.util.List;
+import java.util.*;
 
 /**
  * Data access object for the user entity.
@@ -23,22 +23,19 @@ public class UserDAO {
     private final Logger logger = LogManager.getLogger(this.getClass());
     SessionFactory sessionFactory = SessionFactoryProvider.getSessionFactory();
 
-    // TODO clean up repeated code in user search methods
-
     /**
      * Get a list of all users in database.
      * @return list of all users
      */
     public List<User> getAllUsers() {
         Session session = sessionFactory.openSession();
+
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<User> query = builder.createQuery(User.class);
-
         Root<User> root = query.from(User.class);
 
         List<User> users = session.createQuery(query).getResultList();
         session.close();
-
         return users;
     }
 
@@ -55,6 +52,7 @@ public class UserDAO {
     /**
      * Insert or update user.
      * @param user user to update
+     * @return the id of the inserted or updated user
      */
     public int insert(User user) {
         int id = 0;
@@ -92,9 +90,10 @@ public class UserDAO {
        CriteriaBuilder builder = session.getCriteriaBuilder();
        CriteriaQuery<User> query = builder.createQuery(User.class);
        Root<User> root = query.from(User.class);
-       query.select(root).where(builder.equal(root.get(propertyName), value));
-       List<User> users = session.createQuery(query).getResultList();
 
+       query.select(root).where(builder.equal(root.get(propertyName), value));
+
+       List<User> users = session.createQuery(query).getResultList();
        session.close();
        return users;
 
@@ -114,12 +113,12 @@ public class UserDAO {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<User> query = builder.createQuery(User.class);
         Root<User> root = query.from(User.class);
-        Expression<String> propertyPath = root.get(propertyName);
 
+
+        Expression<String> propertyPath = root.get(propertyName);
         query.where(builder.like(propertyPath, "%" + value + "%"));
 
         List<User> users = session.createQuery(query).getResultList();
-
         session.close();
         return users;
     }

@@ -33,24 +33,22 @@ public class DatabaseUtility {
     public void runSQL(String sqlFile) {
         Connection conn = null;
         Statement stmt = null;
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         try (BufferedReader br = new BufferedReader(new FileReader(sqlFile))) {
 
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(JDBC_DRIVER);
 
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             stmt = conn.createStatement();
 
-            while (true) {
-                String sql = br.readLine();
-                if (sql == null) {
-                    break;
-                }
+            String sql = "";
 
-                stmt.executeUpdate(sql);
-
+            while (br.ready()) {
+                sql += br.readLine();
             }
+
+            stmt.executeUpdate(sql);
+
         } catch (FileNotFoundException fe) {
             logger.error(fe);
         } catch (SQLException se) {

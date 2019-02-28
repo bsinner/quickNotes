@@ -100,11 +100,15 @@ public class User {
      */
     public void setId(int id) { this.id = id; }
 
+    /**
+     * Compares a passed in object to the current user object.
+     * @param o object to compare the current user to
+     * @return true if the passed in object represents the current user, false if it
+     * isn't identical
+     */
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
+        if (this == o) return true;
 
         if (this == null || getClass() != o.getClass()) {
             return false;

@@ -16,7 +16,7 @@ public class DatabaseUtility {
     private final Logger logger = LogManager.getLogger(this.getClass());
 
     //TODO add hard-coded values to props file
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     static final String DB_URL = "jdbc:mysql://localhost:3306/notes";
 

@@ -16,3 +16,5 @@
 | 2/23/19 | Continued Hibernate demo | 1 ||
 | 2/24/19 | Continued adding Hibernate to indie project | 3 ||
 | 2/25/19 | Finished Hibernate exercise, fixed issues on indie project | 6 ||
+| 2/26/19 | Worked on indie project | 2.5 ||
+| 2/27/19 | Worked on setting up quill.js in indie project | 1.5 ||

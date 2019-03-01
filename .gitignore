@@ -3,6 +3,7 @@
 .DS_Store*
 
 .idea/
+.idea/misc.xml
 *.log
 
 # User-specific stuff:

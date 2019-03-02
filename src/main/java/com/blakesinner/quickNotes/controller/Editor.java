@@ -17,10 +17,6 @@ import java.io.IOException;
 public class Editor extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        UserDAO userDAO = new UserDAO();
-
-        req.setAttribute("users", userDAO.getAllUsers());
-
         RequestDispatcher dispatcher = req.getRequestDispatcher("/editor.jsp");
         dispatcher.forward(req, res);
     }

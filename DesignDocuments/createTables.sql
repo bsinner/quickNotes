@@ -12,7 +12,7 @@ CREATE TABLE notes (
     id INT AUTO_INCREMENT PRIMARY KEY
     , user_id INT NOT NULL
     , title VARCHAR(40)
-    , contents TEXT
+    , contents JSON
     , creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
     , CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
@@ -27,7 +27,4 @@ VALUES
 INSERT INTO notes
     (user_id, title, contents)
 VALUES
-    (2, "a", "aa")
-    , (2, "b", "bb")
-    , (3, "c", "cc")
-;
+    (2, "Hello World Note", '{"ops":[{"insert":"hello "},{"attributes":{"bold":true},"insert":"world"},{"insert":"\\n"}]}');

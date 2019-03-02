@@ -1,7 +1,5 @@
 package com.blakesinner.quickNotes.controller;
 
-import com.blakesinner.quickNotes.persistence.UserDAO;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

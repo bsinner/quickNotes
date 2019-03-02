@@ -8,7 +8,8 @@
 <%@include file="templates/menu.jsp"%>
 
 <div id="editorContainer">
-    <div id="editor" class="ui segment"></div>
+    <div id="editor"></div>
+    <button id="saveBtn" class="ui green button">Save</button>
 </div>
 
 <script type="text/javascript" src="js/editor/quill.min.js"></script>

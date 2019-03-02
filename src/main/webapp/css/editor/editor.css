@@ -1,2 +1,6 @@
 #editorContainer { margin: 0em 2em 0em 2em; }
-#editor { height: 300px; margin-top: 0px; }
+#editor { height: 300px; }
+#saveBtn {
+    float: right;
+    margin-top: .5em;
+}

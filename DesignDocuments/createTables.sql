@@ -15,6 +15,7 @@ CREATE TABLE notes (
     , contents JSON
     , creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
     , CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    , UNIQUE (user_id, title)
 );
 
 INSERT INTO users
@@ -27,4 +28,5 @@ VALUES
 INSERT INTO notes
     (user_id, title, contents)
 VALUES
-    (2, "Hello World Note", '{"ops":[{"insert":"hello "},{"attributes":{"bold":true},"insert":"world"},{"insert":"\\n"}]}');
+    (2, "Hello World Note", '{"ops":[{"insert":"hello "},{"attributes":{"bold":true},"insert":"world"},{"insert":"\\n"}]}')
+    , (3, "Hello World Note", '{"ops":[{"insert":"hello "},{"attributes":{"bold":true},"insert":"world"},{"insert":"\\n"}]}');

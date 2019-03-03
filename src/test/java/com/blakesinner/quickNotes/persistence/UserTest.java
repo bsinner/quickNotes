@@ -1,7 +1,7 @@
 package com.blakesinner.quickNotes.persistence;
 
 import com.blakesinner.quickNotes.entity.User;
-import com.blakesinner.quicknotes.test.util.DatabaseUtility;
+import com.blakesinner.quickNotes.test.util.DatabaseUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author bsinner
  */
-class UserDAOTest {
+class UserTest {
 
     UserDAO dao;
 
@@ -66,7 +66,6 @@ class UserDAOTest {
     @Test
     void insertSuccess() {
         User newUser = new User("rsmith", "password4", "rsmith@gmail.com");
-        int i3d = newUser.getId();
         int id = dao.insert(newUser);
 
         User insertedUser = dao.getByPropertyEqual("id", String.valueOf(id)).get(0);

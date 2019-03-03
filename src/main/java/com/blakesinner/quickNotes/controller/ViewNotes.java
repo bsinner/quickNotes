@@ -12,12 +12,25 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Servlet to view all notes.
+ *
+ * @author bsinner
+ */
 @WebServlet(
         urlPatterns = ("/viewNotes")
 )
 
 public class ViewNotes extends HttpServlet {
 
+    /**
+     * Get user notes and forward to viewNotes jsp page.
+     *
+     * @param req               the HttpRequest
+     * @param res               the HttpResponse
+     * @throws ServletException If a servlet exception occurs
+     * @throws IOException      If an I/O exception occurs
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 

@@ -52,5 +52,22 @@ public class NoteTest {
         assertEquals(testNote, newNote);
     }
 
+    @Test
+    void testDelete() {
+        dao.delete(dao.getByPropertyEqual("title", "Lorem Ipsum").get(0));
+        assertEquals(0, dao.getByPropertyEqual("title", "Lorem Ipsum").size());
+    }
 
+    @Test
+    void testGetByPropertyEqual() {
+        List<Note> notes = dao.getByPropertyEqual("id", "1");
+        assertEquals(1, notes.size());
+        assertEquals(1, notes.get(0).getId());
+    }
+
+    @Test
+    void getByPropertyLike() {
+        List<Note> notes = dao.getByPropertyLike("title", "World");
+        assertEquals(2, notes.size());
+    }
 }

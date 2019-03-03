@@ -1,4 +1,4 @@
-package com.blakesinner.quicknotes.test.util;
+package com.blakesinner.quickNotes.test.util;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

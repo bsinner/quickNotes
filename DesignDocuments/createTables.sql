@@ -14,7 +14,8 @@ CREATE TABLE notes (
     , title VARCHAR(40)
     , contents TEXT
     , creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
-    , CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    , CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE ON UPDATE CASCADE
     , UNIQUE (user_id, title)
 );
 

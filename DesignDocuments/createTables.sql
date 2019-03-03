@@ -12,7 +12,7 @@ CREATE TABLE notes (
     id INT AUTO_INCREMENT PRIMARY KEY
     , user_id INT NOT NULL
     , title VARCHAR(40)
-    , contents JSON
+    , contents TEXT
     , creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
     , CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     , UNIQUE (user_id, title)

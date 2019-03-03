@@ -2,7 +2,6 @@ package com.blakesinner.quickNotes.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.json.JsonObject;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -17,7 +16,7 @@ public class Note {
 
 
     private String title;
-    private JsonObject contents;
+    private String contents;
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
     @Column(name = "user_id")
@@ -40,7 +39,7 @@ public class Note {
      * @param contents contents of note
      * @param userId note creator id
      */
-    public Note(String title, JsonObject contents, int userId) {
+    public Note(String title, String contents, int userId) {
         this.title = title;
         this.contents = contents;
         this.userId = userId;
@@ -69,7 +68,7 @@ public class Note {
      *
      * @return the contents
      */
-    public JsonObject getContents() {
+    public String getContents() {
         return contents;
     }
 
@@ -78,7 +77,7 @@ public class Note {
      *
      * @param contents the contents
      */
-    public void setContents(JsonObject contents) {
+    public void setContents(String contents) {
         this.contents = contents;
     }
 

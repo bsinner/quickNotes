@@ -23,11 +23,13 @@ class UserTest {
      */
     @BeforeEach
     void setUp() {
+
         dao = new UserDAO();
 
         DatabaseUtility dbUtil = new DatabaseUtility();
-        dbUtil.runSQL("target/test-classes/cleandb.sql");
-        dbUtil.runSQL("target/test-classes/populatedb.sql");
+
+        dbUtil.runSQL("target/test-classes/cleanUsers.sql");
+        dbUtil.runSQL("target/test-classes/populateUsers.sql");
     }
 
     /**

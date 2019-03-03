@@ -135,4 +135,27 @@ public class Note {
         this.id = id;
     }
 
+    /**
+     * Test if the current note and a passed in note are equal.
+     *
+     * @param o note to compare to
+     * @return true if the notes are equal, false if they aren't equal
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (this == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Note note = (Note) o;
+
+        return title.equals(note.getTitle())
+                && userId == note.getUserId()
+                && id == note.getId()
+                && contents.equals(note.getContents());
+
+    }
+
 }

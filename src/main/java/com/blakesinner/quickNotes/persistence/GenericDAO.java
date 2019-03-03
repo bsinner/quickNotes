@@ -11,16 +11,31 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+/**
+ * Generic DAO with CRUD methods.
+ *
+ * @param <T> the entity type
+ */
 public class GenericDAO<T> {
 
     private final Logger logger = LogManager.getLogger(this.getClass());
     private final SessionFactory sessionFactory = SessionFactoryProvider.getSessionFactory();
     private Class<T> type;
 
+    /**
+     * Instantiates a new Generic dao.
+     *
+     * @param type the type of entity to use
+     */
     public GenericDAO(Class<T> type) {
         this.type = type;
     }
 
+    /**
+     * Gets all entities.
+     *
+     * @return all found entities
+     */
     public List<T> getAll() {
         Session session = sessionFactory.openSession();
 
@@ -33,6 +48,11 @@ public class GenericDAO<T> {
         return list;
     }
 
+    /**
+     * Save or update.
+     *
+     * @param entity entity to save or update
+     */
     public void saveOrUpdate(T entity) {
         Session session = sessionFactory.openSession();
 
@@ -40,6 +60,12 @@ public class GenericDAO<T> {
         session.close();
     }
 
+    /**
+     * Inserts new entity.
+     *
+     * @param entity entity to insert
+     * @return id of inserted entity
+     */
     public int insert(T entity) {
         Session session = sessionFactory.openSession();
 
@@ -53,6 +79,11 @@ public class GenericDAO<T> {
         return id;
     }
 
+    /**
+     * Delete entity.
+     *
+     * @param entity deleted entity
+     */
     public void delete(T entity) {
         Session session = sessionFactory.openSession();
 
@@ -63,6 +94,13 @@ public class GenericDAO<T> {
         session.close();
     }
 
+    /**
+     * Gets by property equal.
+     *
+     * @param propertyName property name
+     * @param value        value to search for
+     * @return found entities
+     */
     public List<T> getByPropertyEqual(String propertyName, String value) {
         Session session = sessionFactory.openSession();
 
@@ -77,6 +115,13 @@ public class GenericDAO<T> {
         return results;
     }
 
+    /**
+     * Gets by property like.
+     *
+     * @param propertyName property name
+     * @param value        value to search for
+     * @return found entities
+     */
     public List<T> getByPropertyLike(String propertyName, String value) {
         Session session = sessionFactory.openSession();
 

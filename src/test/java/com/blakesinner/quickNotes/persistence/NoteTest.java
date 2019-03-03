@@ -8,11 +8,19 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Note test class.
+ *
+ * @author bsinner
+ */
 public class NoteTest {
 
     GenericDAO<Note> dao;
     Note testNote;
 
+    /**
+     * Set up for note tests.
+     */
     @BeforeEach
     void setUp() {
         dao = new GenericDAO<>(Note.class);
@@ -23,12 +31,18 @@ public class NoteTest {
         dbUtil.runSQL("target/test-classes/populateNotes.sql");
     }
 
+    /**
+     * Test getAll method.
+     */
     @Test
     void testGetAll() {
         List<Note> notes = dao.getAll();
         assertEquals(3, notes.size());
     }
 
+    /**
+     * Test saveOrUpdate method.
+     */
     @Test
     void testUpdate() {
 
@@ -43,6 +57,9 @@ public class NoteTest {
         assertEquals(testNote, updatedNote);
     }
 
+    /**
+     * Test insert method.
+     */
     @Test
     void testInsert() {
         int newId = dao.insert(testNote);
@@ -52,12 +69,18 @@ public class NoteTest {
         assertEquals(testNote, newNote);
     }
 
+    /**
+     * Test delete method.
+     */
     @Test
     void testDelete() {
         dao.delete(dao.getByPropertyEqual("title", "Lorem Ipsum").get(0));
         assertEquals(0, dao.getByPropertyEqual("title", "Lorem Ipsum").size());
     }
 
+    /**
+     * Test getByPropertyEqual method.
+     */
     @Test
     void testGetByPropertyEqual() {
         List<Note> notes = dao.getByPropertyEqual("id", "1");
@@ -65,8 +88,11 @@ public class NoteTest {
         assertEquals(1, notes.get(0).getId());
     }
 
+    /**
+     * Test getByPropertyLike method.
+     */
     @Test
-    void getByPropertyLike() {
+    void testGetByPropertyLike() {
         List<Note> notes = dao.getByPropertyLike("title", "World");
         assertEquals(2, notes.size());
     }

@@ -19,8 +19,9 @@ public class Note {
     private String contents;
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
-    @Column(name = "user_id")
-    private int userId;
+
+    @ManyToOne
+    private User user;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -35,14 +36,14 @@ public class Note {
     /**
      * Instantiates a new Note.
      *
-     * @param title note title
+     * @param title    note title
      * @param contents contents of note
-     * @param userId note creator id
+     * @param user     note creator id
      */
-    public Note(String title, String contents, int userId) {
+    public Note(String title, String contents, User user) {
         this.title = title;
         this.contents = contents;
-        this.userId = userId;
+        this.user = user;
     }
 
     /**
@@ -100,21 +101,21 @@ public class Note {
     }
 
     /**
-     * Gets user who created note id.
+     * Gets user.
      *
-     * @return the user id
+     * @return user that created note
      */
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
     /**
-     * Sets user who created note id.
+     * Sets user.
      *
-     * @param userId the user id
+     * @param user user that created note
      */
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     /**
@@ -152,7 +153,7 @@ public class Note {
         Note note = (Note) o;
 
         return title.equals(note.getTitle())
-                && userId == note.getUserId()
+                && user.equals(note.getUser())
                 && id == note.getId()
                 && contents.equals(note.getContents());
 

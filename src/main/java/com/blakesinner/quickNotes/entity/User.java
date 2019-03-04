@@ -3,6 +3,8 @@ package com.blakesinner.quickNotes.entity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class to represents a user.
@@ -21,6 +23,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private int id;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Note> notes = new HashSet<>();
 
     /**
      * No argument constructor.
@@ -42,6 +47,7 @@ public class User {
 
     /**
      * Get the user's email.
+     *
      * @return the email
      */
     public String getEmail() {
@@ -50,6 +56,7 @@ public class User {
 
     /**
      * Set the user's email.
+     *
      * @param email the email to set
      */
     public void setEmail(String email) {
@@ -58,6 +65,7 @@ public class User {
 
     /**
      * Get the user's password.
+     *
      * @return the password
      */
     public String getPassword() {
@@ -66,6 +74,7 @@ public class User {
 
     /**
      * Set the user's password.
+     *
      * @param password to set
      */
     public void setPassword(String password) {
@@ -74,6 +83,7 @@ public class User {
 
     /**
      * Get the username.
+     *
      * @return the username
      */
     public String getUsername() {
@@ -82,6 +92,7 @@ public class User {
 
     /**
      * Set the username.
+     *
      * @param username username to set
      */
     public void setUsername(String username) {
@@ -90,15 +101,35 @@ public class User {
 
     /**
      * Get the user's id.
+     *
      * @return the id
      */
     public int getId() { return id; }
 
     /**
      * Set the users's id.
+     *
      * @param id the id to set
      */
     public void setId(int id) { this.id = id; }
+
+    /**
+     * Get user notes.
+     *
+     * @return user notes
+     */
+    public Set<Note> getNotes() {
+        return notes;
+    }
+
+    /**
+     * Set user notes.
+     *
+     * @param notes user notes
+     */
+    public void setNotes(Set<Note> notes) {
+        this.notes = notes;
+    }
 
     /**
      * Compares a passed in object to the current user object.

@@ -1,6 +1,7 @@
 package com.blakesinner.quickNotes.controller;
 
 import com.blakesinner.quickNotes.entity.Note;
+import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
 
 import javax.servlet.RequestDispatcher;
@@ -34,10 +35,9 @@ public class ViewNotes extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
-        GenericDAO<Note> dao = new GenericDAO<>(Note.class);
-        List<Note> notes = dao.getByPropertyEqual("userId", "3");
+        User user = new GenericDAO<>(User.class).getByPropertyEqual("id", "3").get(0);
 
-        req.setAttribute("notes", notes);
+        req.setAttribute("notes", user.getNotes());
 
         RequestDispatcher rd = req.getRequestDispatcher("/viewNotes.jsp");
         rd.forward(req, res);

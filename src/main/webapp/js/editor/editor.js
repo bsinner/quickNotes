@@ -1,7 +1,15 @@
 window.onload = () => {
-    const quill = new Quill('#editor', {
+    const quill = new Quill("#editor", {
         modules: {
-            toolbar: [ ['bold', 'italic', 'underline'] ]
+            toolbar: [
+                [{"font" : []}]
+                , [{"size" : []}]
+                , [{"align" : []}]
+                , ["bold", "italic", "underline"]
+                , ["blockquote"]
+                , [{"color" : []}]
+                , [{"background" : []}] m
+            ]
         },
         theme: "snow"
     });

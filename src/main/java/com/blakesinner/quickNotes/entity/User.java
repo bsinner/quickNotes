@@ -132,6 +132,24 @@ public class User {
     }
 
     /**
+     * Add note to notes.
+     * @param note note to add
+     */
+    public void addNote(Note note) {
+        notes.add(note);
+        note.setUser(this);
+    }
+
+    /**
+     * Remove note from notes
+     * @param note note to remove
+     */
+    public void removeNote(Note note) {
+        notes.remove(note);
+        note.setUser(null);
+    }
+
+    /**
      * Compares a passed in object to the current user object.
      * @param o object to compare the current user to
      * @return true if the passed in object represents the current user, false if it

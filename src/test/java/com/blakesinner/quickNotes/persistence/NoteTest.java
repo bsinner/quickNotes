@@ -1,6 +1,7 @@
 package com.blakesinner.quickNotes.persistence;
 
 import com.blakesinner.quickNotes.entity.Note;
+import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.test.util.DatabaseUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ public class NoteTest {
 
     GenericDAO<Note> dao;
     Note testNote;
+    User testUser;
 
     /**
      * Set up for note tests.
@@ -24,7 +26,10 @@ public class NoteTest {
     @BeforeEach
     void setUp() {
         dao = new GenericDAO<>(Note.class);
-        testNote = new Note("test_note", "{}", 1);
+
+        testUser = new GenericDAO<>(User.class).getByPropertyEqual("id", "1").get(0);
+        testNote = new Note("test_note", "{}", testUser);
+
         DatabaseUtility dbUtil = new DatabaseUtility();
 
         dbUtil.runSQL("target/test-classes/cleanNotes.sql");
@@ -62,11 +67,15 @@ public class NoteTest {
      */
     @Test
     void testInsert() {
+        testUser.addNote(testNote);
+
         int newId = dao.insert(testNote);
 
         Note newNote = dao.getByPropertyEqual("id", String.valueOf(newId)).get(0);
 
+        assertNotEquals(0, newId);
         assertEquals(testNote, newNote);
+        assertEquals("bsmith", newNote.getUser().getUsername());
     }
 
     /**

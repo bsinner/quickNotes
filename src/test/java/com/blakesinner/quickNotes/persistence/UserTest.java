@@ -1,5 +1,6 @@
 package com.blakesinner.quickNotes.persistence;
 
+import com.blakesinner.quickNotes.entity.Note;
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.test.util.DatabaseUtility;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,6 +75,27 @@ class UserTest {
 
         assertNotEquals(0, id);
         assertEquals(newUser, insertedUser);
+    }
+
+    /**
+     * Verify successful insert of user with note.
+     */
+    @Test
+    void insertWithNoteSuccess() {
+        User newUser = new User("ksmith", "password8", "ksmith@gmail.com");
+        Note newNote = new Note("Untitled", "{}", newUser);
+        newUser.addNote(newNote);
+
+        int id = dao.insert(newUser);
+
+        User insertedUser = dao.getByPropertyEqual("id", String.valueOf(id)).get(0);
+
+        assertNotEquals(0, id);
+        assertEquals(newUser, insertedUser);
+        assertEquals(1, newUser.getNotes().size());
+
+        newUser.removeNote(newNote);
+        assertEquals(0, newUser.getNotes().size());
     }
 
     /**

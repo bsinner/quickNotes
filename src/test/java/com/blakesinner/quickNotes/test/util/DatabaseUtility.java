@@ -24,6 +24,7 @@ public class DatabaseUtility {
 
     static final String PASS = "student";
 
+    static final char DELIMITER = ';';
 
     /**
      * Run the sql.
@@ -44,10 +45,18 @@ public class DatabaseUtility {
             String sql = "";
 
             while (br.ready()) {
-                sql += br.readLine();
+                char readCharacter = (char) br.read();
+
+                sql += readCharacter;
+
+                if (readCharacter == DELIMITER) {
+                    stmt.addBatch(sql);
+                    sql = "";
+                }
+
             }
 
-            stmt.executeUpdate(sql);
+            stmt.executeBatch();
 
         } catch (FileNotFoundException fe) {
             logger.error(fe);

@@ -1,3 +1,5 @@
+DELETE FROM notes;
+
 INSERT INTO notes
     (id, user_id, title, contents)
 VALUES

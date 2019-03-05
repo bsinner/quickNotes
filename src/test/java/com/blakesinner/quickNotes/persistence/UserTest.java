@@ -29,8 +29,7 @@ class UserTest {
 
         DatabaseUtility dbUtil = new DatabaseUtility();
 
-        dbUtil.runSQL("target/test-classes/cleanUsers.sql");
-        dbUtil.runSQL("target/test-classes/populateUsers.sql");
+        dbUtil.runSQL("target/test-classes/setUpUserTests.sql");
     }
 
     /**

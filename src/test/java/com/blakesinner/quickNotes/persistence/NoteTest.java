@@ -32,8 +32,7 @@ public class NoteTest {
 
         DatabaseUtility dbUtil = new DatabaseUtility();
 
-        dbUtil.runSQL("target/test-classes/cleanNotes.sql");
-        dbUtil.runSQL("target/test-classes/populateNotes.sql");
+        dbUtil.runSQL("target/test-classes/setupNoteTests.sql");
     }
 
     /**

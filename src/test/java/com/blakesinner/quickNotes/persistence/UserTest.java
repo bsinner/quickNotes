@@ -37,7 +37,7 @@ class UserTest {
      * user table.
      */
     @Test
-    void getAllUsersSuccess() {
+    void testGetAll() {
         List<User> users = dao.getAll();
         assertEquals(3, users.size());
     }
@@ -46,7 +46,7 @@ class UserTest {
      * Tests getUsersByUsername method success.
      */
     @Test
-    void getUsersByUsernameSuccess() {
+    void testGetUsersByUsername() {
         List<User> users = dao.getByPropertyLike("username", "smith");
         assertEquals(2, users.size());
     }
@@ -55,7 +55,7 @@ class UserTest {
      * Tests if get user by id returns the correct user.
      */
     @Test
-    void getUserByIdSuccess() {
+    void testGetUserById() {
         List<User> foundUser = dao.getByPropertyEqual("id", "1");
         assertNotNull(foundUser);
         assertEquals(1, foundUser.size());
@@ -66,7 +66,7 @@ class UserTest {
      * Verify successful insert of a user
      */
     @Test
-    void insertSuccess() {
+    void testInsert() {
         User newUser = new User("rsmith", "password4", "rsmith@gmail.com");
         int id = dao.insert(newUser);
 
@@ -80,7 +80,7 @@ class UserTest {
      * Verify successful insert of user with note.
      */
     @Test
-    void insertWithNoteSuccess() {
+    void testInsertWithNote() {
         User newUser = new User("ksmith", "password8", "ksmith@gmail.com");
         Note newNote = new Note("Untitled", "{}", newUser);
         newUser.addNote(newNote);
@@ -101,7 +101,7 @@ class UserTest {
      * Verify successful delete of user
      */
     @Test
-    void deleteSuccess() {
+    void testDelete() {
         dao.delete(dao.getByPropertyEqual("username", "ldavis").get(0));
         assertEquals(dao.getByPropertyEqual( "username", "ldavis").size(), 0);
     }
@@ -110,7 +110,7 @@ class UserTest {
      * Verify successful get by property (equal match)
      */
     @Test
-    void getByPropertyEqualSuccess() {
+    void testGetByPropertyEqual() {
         List<User> users = dao.getByPropertyLike("username", "bsmith");
         assertEquals(1, users.size());
         assertEquals(1, users.get(0).getId());
@@ -120,7 +120,7 @@ class UserTest {
      * Verify successful get by property (like match)
      */
     @Test
-    void getByPropertyLikeSuccess() {
+    void testGetByPropertyLike() {
         List<User> users = dao.getByPropertyLike("username", "smith");
         assertEquals(2, users.size());
     }

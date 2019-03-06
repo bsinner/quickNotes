@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 /**
  * Class to run sql statements as part of set up or tear down in the unit tests.
@@ -15,16 +16,8 @@ import java.sql.Statement;
 public class DatabaseUtility {
     private final Logger logger = LogManager.getLogger(this.getClass());
 
-    //TODO add hard-coded values to props file
-    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-
-    static final String DB_URL = "jdbc:mysql://localhost:3306/notes";
-
-    static final String USER = "root";
-
-    static final String PASS = "student";
-
-    static final char DELIMITER = ';';
+    private static final String PROPS_PATH = "/databaseUtility.properties";
+    private static final char DELIMITER = ';';
 
     /**
      * Run the sql.
@@ -34,14 +27,15 @@ public class DatabaseUtility {
     public void runSQL(String sqlFile) {
         Connection conn = null;
         Statement stmt = null;
+
+        Properties props = loadProperties();
+
         try (BufferedReader br = new BufferedReader(new FileReader(sqlFile))) {
 
-            Class.forName(JDBC_DRIVER);
+            Class.forName(props.getProperty("jdbc.driver"));
 
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
+            conn = DriverManager.getConnection(props.getProperty("db.url"), props);
             stmt = conn.createStatement();
-
             String sql = "";
 
             while (br.ready()) {
@@ -67,4 +61,24 @@ public class DatabaseUtility {
         }
 
     }
+
+    /**
+     * Loads properties for the database utility from props file.
+     *
+     * @return properties object with loaded properties
+     */
+    private Properties loadProperties() {
+        Properties props = new Properties();
+
+        try {
+            props.load(this.getClass().getResourceAsStream(PROPS_PATH));
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return props;
+    }
+
 }

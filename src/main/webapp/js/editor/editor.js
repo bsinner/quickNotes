@@ -5,10 +5,12 @@ window.onload = () => {
                 [{"font" : []}]
                 , [{"size" : []}]
                 , [{"align" : []}]
-                , ["bold", "italic", "underline"]
-                , ["blockquote"]
-                , [{"color" : []}]
-                , [{"background" : []}] m
+                , ["bold", "italic", "underline", "strike", "blockquote"]
+                , [{"color" : []}, {"background" : []}]
+                , [{"script" : "sub"}, {"script": "super"}]
+                , [{"list" : "ordered"}, {"list" : "bullet"}, {"header" : 1}, {"header" : 2}]
+                , ["link", "image", "video"]
+                , ["clean"]
             ]
         },
         theme: "snow"

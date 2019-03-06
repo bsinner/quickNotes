@@ -98,12 +98,26 @@ class UserTest {
     }
 
     /**
-     * Verify successful delete of user
+     * Verify successful delete of user.
      */
     @Test
     void testDelete() {
-        dao.delete(dao.getByPropertyEqual("username", "ldavis").get(0));
-        assertEquals(dao.getByPropertyEqual( "username", "ldavis").size(), 0);
+        setUpDeleteTest();
+
+        GenericDAO<Note> noteDao = new GenericDAO<>(Note.class);
+        User user = dao.getByPropertyEqual("username", "ldavis").get(0);
+
+        int userCount = dao.getAll().size();
+        int noteCount = noteDao.getAll().size();
+        int userNoteCount = user.getNotes().size();
+        int userId = user.getId();
+
+        dao.delete(user);
+
+        assertEquals(userCount - 1, dao.getAll().size());
+        assertEquals(noteCount - userNoteCount, noteDao.getAll().size());
+        assertEquals(0, dao.getByPropertyEqual("id", String.valueOf(userId)).size());
+
     }
 
     /**
@@ -123,6 +137,15 @@ class UserTest {
     void testGetByPropertyLike() {
         List<User> users = dao.getByPropertyLike("username", "smith");
         assertEquals(2, users.size());
+    }
+
+    /**
+     * Prepare the note table to be used in the delete user test.
+     */
+    void setUpDeleteTest() {
+        DatabaseUtility dbUtil = new DatabaseUtility();
+        dbUtil.runSQL("target/test-classes/setupNoteTests.sql");
+
     }
 
 }

@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class UserTest {
 
-    UserDAO dao;
+    GenericDAO<User> dao;
 
     /**
      * Initialize user DAO.
@@ -25,11 +25,11 @@ class UserTest {
     @BeforeEach
     void setUp() {
 
-        dao = new UserDAO();
+        dao = new GenericDAO<>(User.class);
 
         DatabaseUtility dbUtil = new DatabaseUtility();
 
-        dbUtil.runSQL("target/test-classes/setUpUserTests.sql");
+        dbUtil.runSQL("target/test-classes/setupUserTests.sql");
     }
 
     /**
@@ -38,7 +38,7 @@ class UserTest {
      */
     @Test
     void getAllUsersSuccess() {
-        List<User> users = dao.getAllUsers();
+        List<User> users = dao.getAll();
         assertEquals(3, users.size());
     }
 

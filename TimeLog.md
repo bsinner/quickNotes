@@ -21,3 +21,5 @@
 | 2/28/19 | Worked on indie project | 4 ||
 | 3/1/19  | Set up css in indie project editor page | 4 ||
 | 3/2/19  | Added note entity to indie project, added view notes page | 7 ||
+| 3/3/19  | Added week 5 exercise to indie project | 2.5 ||
+| 3/4/19  | Finalized week 5 exercise and added additonal buttons to WYSIWYG editor | 1 ||

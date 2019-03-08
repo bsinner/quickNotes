@@ -7,6 +7,7 @@
 .idea/misc.xml
 *.log
 */hibernate.cfg.xml
+*.pem
 
 # User-specific stuff:
 # .idea/workspace.xml

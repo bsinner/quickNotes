@@ -23,3 +23,6 @@
 | 3/2/19  | Added note entity to indie project, added view notes page | 7 ||
 | 3/3/19  | Added week 5 exercise to indie project | 2.5 ||
 | 3/4/19  | Finalized week 5 exercise and added additonal buttons to WYSIWYG editor | 1 ||
+| 3/5/19  | Fixed project issues, added functionality to DatabaseUtility | 4 ||
+| 3/6/19  | Read week 6 guide to writing testable code | 2 ||
+| 3/7/19  | Sent feedback from week 5 code review | 3 ||

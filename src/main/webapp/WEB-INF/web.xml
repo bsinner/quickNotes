@@ -1,8 +1,11 @@
 <!--<!DOCTYPE web-app PUBLIC-->
 
 <web-app>
+
   <display-name>Quick Notes</display-name>
+
   <welcome-file-list>
-    <welcome-file>editor.jsp</welcome-file>
+    <welcome-file>editor</welcome-file>
   </welcome-file-list>
+
 </web-app>

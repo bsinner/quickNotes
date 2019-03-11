@@ -18,6 +18,14 @@ import java.util.Map;
 )
 
 public class Editor extends HttpServlet {
+
+    /** Forwards to the editor page and passes it an note if a note id was included in the query string.
+     *
+     * @param req               The HttpRequest
+     * @param res               The HttpResponse
+     * @throws ServletException If a servlet exception occurs
+     * @throws IOException      If an I/O exception occurs
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         GenericDAO<Note> dao = new GenericDAO<>(Note.class);
@@ -36,6 +44,12 @@ public class Editor extends HttpServlet {
         dispatcher.forward(req, res);
     }
 
+    /**
+     * Returns a map of the query string parameters.
+     *
+     * @param queryString String containing query string
+     * @return Map of query string
+     */
     private Map<String, String> parseQueryStrings(String queryString) {
         String[] strings = queryString.split("&");
         Map<String, String> results = new HashMap<>();

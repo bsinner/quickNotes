@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Servlet to view all notes.
@@ -27,8 +26,8 @@ public class ViewNotes extends HttpServlet {
     /**
      * Get user notes and forward to viewNotes jsp page.
      *
-     * @param req               the HttpRequest
-     * @param res               the HttpResponse
+     * @param req               The HttpRequest
+     * @param res               The HttpResponse
      * @throws ServletException If a servlet exception occurs
      * @throws IOException      If an I/O exception occurs
      */

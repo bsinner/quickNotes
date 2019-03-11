@@ -8,6 +8,7 @@
 *.log
 */hibernate.cfg.xml
 *.pem
+sshLogin.sh
 
 # User-specific stuff:
 # .idea/workspace.xml

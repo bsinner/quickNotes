@@ -26,3 +26,7 @@
 | 3/5/19  | Fixed project issues, added functionality to DatabaseUtility | 4 ||
 | 3/6/19  | Read week 6 guide to writing testable code | 2 ||
 | 3/7/19  | Sent feedback from week 5 code review | 3 ||
+| 3/8/19  | Setting up AWS account | 5 ||
+| 3/9/19  | Added indie project WAR to AWS | 2 ||
+| 3/10/19 | Worked on fixing timezone bug in mysql, prepared for checkpoint 2 | 1.5 ||
+| 3/11/19 | Fixed mysql bug, added updated indie project to AWS WAR, sent professional development feedback | 2 ||

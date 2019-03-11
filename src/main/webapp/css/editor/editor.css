@@ -1,6 +1,5 @@
 #editorContainer { margin: 0em 2em 0em 2em; }
 #editor { height: 300px; }
-#saveBtn {
-    float: right;
-    margin-top: .5em;
-}
+#saveBtn { float: right; }
+#viewBtn { float: left; }
+#saveBtn, #viewBtn { margin-top: .5em; }

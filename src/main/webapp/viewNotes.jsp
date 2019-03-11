@@ -23,7 +23,7 @@
                             <input type="checkbox"><label></label>
                         </div>
                     </td>
-                    <td><a href="#">${note.title}</a></td>
+                    <td><a href="editor?note=${note.id}">${note.title}</a></td>
                     <td>${note.creationDate}</td>
                 </tr>
             </c:forEach>

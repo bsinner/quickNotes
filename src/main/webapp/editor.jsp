@@ -13,5 +13,7 @@
 </div>
 
 <script type="text/javascript" src="js/editor/quill.min.js"></script>
-<script type="text/javascript" src="js/editor/editor.js"></script>
+
+<%@include file="js-jsp/editor/editor-js.jsp"%>
+
 <%@include file="templates/footer.jsp"%>

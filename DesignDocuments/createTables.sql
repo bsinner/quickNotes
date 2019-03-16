@@ -23,32 +23,10 @@ CREATE TABLE notes (
 CREATE TABLE user_roles (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
     , username VARCHAR(30) NOT NULL UNIQUE
-    , role ENUM ("ADMIN") DEFAULT NULL
+    , role ENUM ("REGULAR", "ADMIN") DEFAULT "REGULAR"
     , CONSTRAINT user_roles_fk FOREIGN KEY (username) REFERENCES users(username)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-# If a note with a null title is added name it Untitled-<current count of a user's untitled notes + 1>
-DELIMITER ~~
-    CREATE TRIGGER nullNoteTitleInsert BEFORE INSERT ON notes
-        FOR EACH ROW
-        BEGIN
-            IF NEW.title IS NULL THEN
-                SET NEW.title = (
-                    SELECT CONCAT("Untitled-", COUNT(id) + 1)
-                    FROM notes
-                    WHERE user_id = NEW.user_id AND title LIKE 'Untitled%');
-            END IF;
-        END;~~
-
-    CREATE TRIGGER nullNoteTitleUpdate BEFORE UPDATE ON notes
-        FOR EACH ROW
-        BEGIN
-            IF NEW.title IS NULL THEN
-                SET NEW.title = OLD.title;
-            END IF;
-        END;~~
-DELIMITER ;
 
 INSERT INTO users
     (id, username, email, password)

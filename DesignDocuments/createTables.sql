@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS notes;
-DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS user_roles;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
@@ -12,7 +12,7 @@ CREATE TABLE users (
 CREATE TABLE notes (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
     , user_id INT NOT NULL
-    , title VARCHAR(40)
+    , title VARCHAR(40) DEFAULT NULL
     , contents TEXT
     , creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
     , CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES users(id)
@@ -28,6 +28,28 @@ CREATE TABLE user_roles (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+# If a note with a null title is added name it Untitled-<current count of a user's untitled notes + 1>
+DELIMITER ~~
+    CREATE TRIGGER nullNoteTitleInsert BEFORE INSERT ON notes
+        FOR EACH ROW
+        BEGIN
+            IF NEW.title IS NULL THEN
+                SET NEW.title = (
+                    SELECT CONCAT("Untitled-", COUNT(id) + 1)
+                    FROM notes
+                    WHERE user_id = NEW.user_id AND title LIKE 'Untitled%');
+            END IF;
+        END;~~
+
+    CREATE TRIGGER nullNoteTitleUpdate BEFORE UPDATE ON notes
+        FOR EACH ROW
+        BEGIN
+            IF NEW.title IS NULL THEN
+                SET NEW.title = OLD.title;
+            END IF;
+        END;~~
+DELIMITER ;
+
 INSERT INTO users
     (id, username, email, password)
 VALUES
@@ -39,5 +61,11 @@ INSERT INTO notes
     (user_id, title, contents)
 VALUES
     (2, "Hello World Note", '{"ops":[{"insert":"hello "},{"attributes":{"bold":true},"insert":"world"},{"insert":"\\\\n"}]}')
-     , (3, "Hello World Note", '{"ops":[{"insert":"hello "},{"attributes":{"bold":true},"insert":"world"},{"insert":"\\\\n"}]}')
-     , (3, "Lorem Ipsum", '{"ops":[{"attributes":{"italic":true},"insert":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},{"insert":"\\\\n"}]}');
+    , (3, "Hello World Note", '{"ops":[{"insert":"hello "},{"attributes":{"bold":true},"insert":"world"},{"insert":"\\\\n"}]}')
+    , (3, "Lorem Ipsum", '{"ops":[{"attributes":{"italic":true},"insert":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},{"insert":"\\\\n"}]}');
+
+INSERT INTO notes
+    (user_id, contents)
+VALUES
+    (2, "{}")
+    , (2, "{}");

@@ -30,3 +30,5 @@
 | 3/9/19  | Added indie project WAR to AWS | 2 ||
 | 3/10/19 | Worked on fixing timezone bug in mysql, prepared for checkpoint 2 | 1.5 ||
 | 3/11/19 | Fixed mysql bug, added updated indie project to AWS WAR, sent professional development feedback | 2 ||
+| 3/15/19 | Updated indie project database, started adding login form to indie project | 4 ||
+| 3/16/19 | Worked on indie project front end and added realms to tomcat | 5.5 ||

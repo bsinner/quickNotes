@@ -1,0 +1,10 @@
+i {
+    font-size: 1.3em;
+    float: right;
+    margin: .2em .2em 0em 0em;
+    color: rgba(0, 0, 0, .6);
+}
+
+i:hover {
+    color: rgba(0, 0, 0, .9);
+}

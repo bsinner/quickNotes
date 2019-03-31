@@ -15,14 +15,14 @@
         Sign In
     </div>
     <div class="content">
-        <form class="ui form" method="POST" action="j_security_check">
+        <form class="ui form">
             <div class="field">
                 <label>E-mail</label>
-                <input type="text" name="j_username" id="email">
+                <input type="text" id="email">
             </div>
             <div class="field">
                 <label>Password</label>
-                <input type="password" name="j_password" id="password">
+                <input type="password" id="password">
             </div>
             <input type="submit" class="ui button" id="loginBtn" value="Sign In"/>
         </form>

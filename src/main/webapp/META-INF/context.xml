@@ -1,8 +1,0 @@
-<Context docBase="quickNotes" path="/quickNotes" reloadable="true">
-    <Realm className="org.apache.catalina.realm.JDBCRealm"
-    driverName="com.mysql.cj.jdbc.Driver"
-    connectionURL="jdbc:mysql://localhost:3306/notes?user=tomcat&amp;password=tomcat"
-    userTable="users" userNameCol="username" userCredCol="password"
-    userRoleTable="user_roles" roleNameCol="role" >
-    </Realm>
-</Context>

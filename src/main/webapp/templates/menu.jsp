@@ -15,7 +15,7 @@
         Sign In
     </div>
     <div class="content">
-        <form class="ui form" action="POST" action="j_security_check">
+        <form class="ui form" method="POST" action="j_security_check">
             <div class="field">
                 <label>E-mail</label>
                 <input type="text" name="j_username" id="email">

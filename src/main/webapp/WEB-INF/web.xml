@@ -11,14 +11,15 @@
   <login-config>
     <auth-method>FORM</auth-method>
     <form-login-config>
-      <form-login-page>./editor.jsp</form-login-page>
+      <form-login-page>/editor.jsp</form-login-page>
+      <form-error-page>/loginError.jsp</form-error-page>
     </form-login-config>
   </login-config>
 
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>viewNotes</web-resource-name>
-      <url-pa>/viewNotes</url-pa>
+      <url-pattern>/viewNotes</url-pattern>
     </web-resource-collection>
     <auth-constraint>
       <role-name>registered-user</role-name>

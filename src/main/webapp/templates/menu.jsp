@@ -8,21 +8,21 @@
     </div>
 </div>
 
-<%--This div contains the sign in menu and is hidden by default--%>
+<%--login popup--%>
 <div class="ui tiny modal" id="loginModal">
     <i class="icon-cancel" id="loginExit"></i>
     <div class="header">
         Sign In
     </div>
     <div class="content">
-        <form class="ui form">
+        <form class="ui form" method="POST" action="<%=request.getContextPath()%>/api/login">
             <div class="field">
                 <label>E-mail</label>
-                <input type="text" id="email">
+                <input type="text" id="email" name="email">
             </div>
             <div class="field">
                 <label>Password</label>
-                <input type="password" id="password">
+                <input type="password" id="password" name="password">
             </div>
             <input type="submit" class="ui button" id="loginBtn" value="Sign In"/>
         </form>

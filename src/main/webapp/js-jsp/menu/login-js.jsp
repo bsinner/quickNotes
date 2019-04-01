@@ -16,23 +16,6 @@
         loginModal.modal("hide");
     };
 
-    document.getElementById("loginBtn").onclick = () => {
-        if (emailInput.value < 1
-                || passwordInput.value < 1) {
-            // highlight form fields if they are empty
-            return;
-        }
-
-        $.ajax({
-            method: "POST"
-            , url: "<%=request.getContextPath()%>/api/login?email=" + emailInput.value + "&password=" + passwordInput.value
-        }).done(data => {
-            window.sessionStorage.setItem("username", data);
-            showLoggedIn(data);
-            loginModal.modal("hide");
-        });
-    };
-
     $("body").on("click", "#logout", () => {
         $.ajax({
             method: "POST"
@@ -41,6 +24,23 @@
             window.sessionStorage.removeItem("username");
             showLoggedOut();
         });
+    }).on("click", "#loginBtn", () => {
+        if (emailInput.value < 1
+                || passwordInput.value < 1) {
+            // highlight form fields if they are empty
+            return;
+        }
+
+        $.ajax({
+            method: "POST"
+                , url: "<%=request.getContextPath()%>/api/login?email=" + emailInput.value + "&password=" + passwordInput.value
+            }).done(data => {
+                window.sessionStorage.setItem("username", data);
+                showLoggedIn(data);
+                loginModal.modal("hide");
+        });
+    }).on("click", "#signIn", () => {
+        loginModal.modal("show");
     });
 
     // Show if the user is logged in on the menu bar

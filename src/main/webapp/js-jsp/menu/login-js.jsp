@@ -2,10 +2,12 @@
 
     initMenu();
 
+    // Popup element and its inputs
     const loginModal = $("#loginModal");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
 
+    // Event handlers
     document.getElementById("signIn").onclick = () => {
         loginModal.modal("show");
     };
@@ -31,17 +33,28 @@
         });
     };
 
+    $("body").on("click", "#logout", () => {
+        $.ajax({
+            method: "POST"
+            , url: "<%=request.getContextPath()%>/api/logout"
+        }).done(() => {
+            window.sessionStorage.removeItem("username");
+            showLoggedOut();
+        });
+    });
+
+    // Show if the user is logged in on the menu bar
     function initMenu() {
         const username = sessionStorage.getItem("username");
 
         if (username == null) {
-            showNotLoggedIn();
+            showLoggedOut();
         } else {
             showLoggedIn(username);
         }
     }
 
-    function showNotLoggedIn() {
+    function showLoggedOut() {
         const rMenu = $("#rightMenu")
 
         rMenu.empty();
@@ -54,7 +67,7 @@
 
         rMenu.empty();
         rMenu.append("<a class=\"item\">Signed in As " + username + "</a>");
-        rMenu.append("<a href=\"#\" class=\"item\">Sign Out</a>");
+        rMenu.append("<a href=\"#\" class=\"item\" id=\"logout\">Sign Out</a>");
 
     }
 

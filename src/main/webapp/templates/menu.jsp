@@ -2,9 +2,9 @@
     <div class="header item">
         <a href="editor" id="homeLink">Quick Notes</a>
     </div>
-    <div class="right menu">
+    <div class="right menu" id="rightMenu">
         <a href="#" class="item" id="signIn">Sign In</a>
-        <a href="#" class="item">Sign Out</a>
+        <a href="#" class="item">Sign Up</a>
     </div>
 </div>
 

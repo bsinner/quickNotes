@@ -1,6 +1,5 @@
 package com.blakesinner.quickNotes.controller;
 
-import com.blakesinner.quickNotes.entity.Note;
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
 

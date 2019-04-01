@@ -15,7 +15,7 @@
         Sign In
     </div>
     <div class="content">
-        <form class="ui form" method="POST" action="<%=request.getContextPath()%>/api/login">
+        <form class="ui form" id="loginForm">
             <div class="field">
                 <label>E-mail</label>
                 <input type="text" id="email" name="email">
@@ -24,8 +24,8 @@
                 <label>Password</label>
                 <input type="password" id="password" name="password">
             </div>
-            <input type="submit" class="ui button" id="loginBtn" value="Sign In"/>
         </form>
+        <button class="ui button" id="loginBtn">Sign In</button>
     </div>
-
 </div>
+

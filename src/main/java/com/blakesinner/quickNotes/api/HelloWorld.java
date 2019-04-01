@@ -2,7 +2,6 @@ package com.blakesinner.quickNotes.api;
 
 import javax.ws.rs.*;
 
-@Secured
 @Path("/helloworld")
 public class HelloWorld {
 

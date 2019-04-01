@@ -1,4 +1,4 @@
-window.onload = () => {
+<script>
 
     const loginModal = $("#loginModal");
     const emailInput = document.getElementById("email");
@@ -13,12 +13,17 @@ window.onload = () => {
     };
 
     document.getElementById("loginBtn").onclick = () => {
-        if (emailInput.innerHTML.length < 1
-            || passwordInput.length < 1) {
-
+        if (emailInput.value < 1
+                || passwordInput.value < 1) {
             // highlight form fields if they are empty
-
+            return;
         }
+
+    alert("<%=request.getContextPath()%>/api/login?email=" + emailInput.value + "&password=" + passwordInput.value);
+        $.ajax({
+            method: "POST"
+            , url: "<%=request.getContextPath()%>/api/login?email=" + emailInput.value + "&password=" + passwordInput.value
+        }).done(data => alert(data));
     };
 
-};
+</script>

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,17 +29,17 @@ public class Editor extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        GenericDAO<Note> dao = new GenericDAO<>(Note.class);
-        String qString = req.getQueryString();
-
-
-        if (qString != null) {
-            Map<String, String> querys = parseQueryStrings(qString);
-
-            String contents = dao.getByPropertyEqual("id", querys.get("note")).get(0).getContents();
-
-            req.setAttribute("contents", contents);
-        }
+//        GenericDAO<Note> dao = new GenericDAO<>(Note.class);
+//        String qString = req.getQueryString();
+//
+//
+//        if (qString != null) {
+//            Map<String, String> querys = parseQueryStrings(qString);
+//
+//            String contents = dao.getByPropertyEqual("id", querys.get("note")).get(0).getContents();
+//
+//            req.setAttribute("contents", contents);
+//        }
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("/editor.jsp");
         dispatcher.forward(req, res);
@@ -52,12 +53,29 @@ public class Editor extends HttpServlet {
      */
     private Map<String, String> parseQueryStrings(String queryString) {
         String[] strings = queryString.split("&");
+
+        if (strings.length < 1) return Collections.EMPTY_MAP;
+
         Map<String, String> results = new HashMap<>();
 
-        for (String str : strings) {
-            String[] temp = str.split("=");
+        for (int i = 0, l = strings.length; i < l; i++) {
+            String[] temp = strings[i].split("=");
+
+            if (temp.length <= 1) {
+                continue;
+            }
+
             results.put(temp[0], temp[1]);
         }
+//        for (String str : strings) {
+//            String[] temp = str.split("=");
+//
+//            if (temp.length > 1) {
+//                results.put(temp[0], temp[1]);
+//            } else {
+//                results.put(temp[0], "");
+//            }
+//        }
 
         return results;
     }

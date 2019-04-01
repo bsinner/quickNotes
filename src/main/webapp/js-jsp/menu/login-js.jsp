@@ -26,4 +26,8 @@
         }).done(data => alert(data));
     };
 
+    const showLoggedIn = username => {
+
+    }
+
 </script>

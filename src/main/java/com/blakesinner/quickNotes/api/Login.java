@@ -6,11 +6,9 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +57,6 @@ public class Login {
                 .build();
     }
 
-    // TODO: create by propertiesEqual dao method and search for email and password combination
     private Map<String, String> queryUser(String email, String password) {
         GenericDAO<User> dao = new GenericDAO<>(User.class);
 

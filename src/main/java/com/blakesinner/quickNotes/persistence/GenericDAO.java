@@ -5,11 +5,11 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Root;
+
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Generic DAO with CRUD methods.
@@ -138,5 +138,29 @@ public class GenericDAO<T> {
         List<T> results = session.createQuery(query).getResultList();
         session.close();
         return results;
+    }
+
+    /**
+     * Search for entities by multiple properties equal.
+     *
+     * @param properties map of properties to search for
+     * @return found entities
+     */
+    public List<T> getByPropertiesEqual(Map<String, String> properties) {
+        Session session = sessionFactory.openSession();
+
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<T> query = cb.createQuery(type);
+        Root<T> root = query.from(type);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        for(Map.Entry item : properties.entrySet()) {
+            predicates.add(cb.equal(root.get((String) item.getKey()), item.getValue()));
+        }
+
+        query.select(root).where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+
+        return session.createQuery(query).getResultList();
     }
 }

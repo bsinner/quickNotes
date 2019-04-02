@@ -1,5 +1,7 @@
 <script>
 
+    // Display the users's username if they are logged in
+    // otherwise display a sign in and sign up button
     initMenu();
 
     // Popup element and its inputs
@@ -24,13 +26,13 @@
             window.sessionStorage.removeItem("username");
             showLoggedOut();
         });
+
     }).on("click", "#loginBtn", () => {
         if (emailInput.value < 1
                 || passwordInput.value < 1) {
             // highlight form fields if they are empty
             return;
         }
-
         $.ajax({
             method: "POST"
                 , url: "<%=request.getContextPath()%>/api/login?email=" + emailInput.value + "&password=" + passwordInput.value
@@ -39,11 +41,13 @@
                 showLoggedIn(data);
                 loginModal.modal("hide");
         });
+
     }).on("click", "#signIn", () => {
         loginModal.modal("show");
+
     });
 
-    // Show if the user is logged in on the menu bar
+    // DHTML Menu bar functions
     function initMenu() {
         const username = sessionStorage.getItem("username");
 
@@ -55,7 +59,7 @@
     }
 
     function showLoggedOut() {
-        const rMenu = $("#rightMenu")
+        const rMenu = $("#rightMenu");
 
         rMenu.empty();
         rMenu.append("<a href=\"#\" class=\"item\" id=\"signIn\">Sign In</a>");
@@ -63,12 +67,11 @@
     }
 
     function showLoggedIn(username) {
-        const rMenu = $("#rightMenu")
+        const rMenu = $("#rightMenu");
 
         rMenu.empty();
         rMenu.append("<a class=\"item\">Signed in As " + username + "</a>");
         rMenu.append("<a href=\"#\" class=\"item\" id=\"logout\">Sign Out</a>");
-
     }
 
 </script>

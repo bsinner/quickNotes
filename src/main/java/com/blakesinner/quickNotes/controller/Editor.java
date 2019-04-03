@@ -1,8 +1,5 @@
 package com.blakesinner.quickNotes.controller;
 
-import com.blakesinner.quickNotes.entity.Note;
-import com.blakesinner.quickNotes.persistence.GenericDAO;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -67,15 +64,6 @@ public class Editor extends HttpServlet {
 
             results.put(temp[0], temp[1]);
         }
-//        for (String str : strings) {
-//            String[] temp = str.split("=");
-//
-//            if (temp.length > 1) {
-//                results.put(temp[0], temp[1]);
-//            } else {
-//                results.put(temp[0], "");
-//            }
-//        }
 
         return results;
     }

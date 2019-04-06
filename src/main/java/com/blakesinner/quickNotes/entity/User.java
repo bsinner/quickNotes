@@ -19,7 +19,7 @@ public class User {
     private String username;
     private String password;
     private String email;
-    private Role role;
+//    private Role role;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -120,18 +120,18 @@ public class User {
      *
      * @return the role
      */
-    public Role getRole() {
-        return role;
-    }
+//    public Role getRole() {
+//        return role;
+//    }
 
     /**
      * Sets role.
      *
      * @param role the role
      */
-    public void setRole(Role role) {
-        this.role = role;
-    }
+//    public void setRole(Role role) {
+//        this.role = role;
+//    }
 
     /**
      * Get user notes.

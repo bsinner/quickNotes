@@ -51,7 +51,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 
     private void checkRegularPermissions(List<Role> roles, User user) {
         boolean access = false;
-        Role userRole = user.getRole();
+//        Role userRole = user.getRole();
 
         for (Role role : roles) {
 //            if (user.get)

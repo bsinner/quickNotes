@@ -1,13 +1,10 @@
-DROP TABLE IF EXISTS notes;
-DROP TABLE IF EXISTS user_roles;
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS user_roles, notes, users;
 
 CREATE TABLE users (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
     , username VARCHAR(30) NOT NULL UNIQUE
     , email VARCHAR(100) NOT NULL UNIQUE
     , password VARCHAR(25) NOT NULL
-    , role ENUM("USER", "ADMIN") DEFAULT "USER"
 );
 
 CREATE TABLE notes (
@@ -23,11 +20,21 @@ CREATE TABLE notes (
 
 CREATE TABLE user_roles (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-    , username VARCHAR(30) NOT NULL UNIQUE
-    , role ENUM ("REGULAR", "ADMIN") DEFAULT "REGULAR"
-    , CONSTRAINT user_roles_fk FOREIGN KEY (username) REFERENCES users(username)
+    , user_id INT NOT NULL UNIQUE
+    , role ENUM ("USER", "ADMIN") DEFAULT "USER"
+    , CONSTRAINT user_roles_fk FOREIGN KEY (user_id) REFERENCES users(id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+DELIMITER ~~
+    CREATE TRIGGER newUserInsert AFTER INSERT ON users
+        FOR EACH ROW
+        BEGIN
+            IF 0 = (SELECT COUNT(id) FROM user_roles WHERE user_id = NEW.id) THEN
+               INSERT INTO user_roles (user_id) VALUES (NEW.id);
+            END IF;
+        END;~~
+DELIMITER ;
 
 INSERT INTO users
     (id, username, email, password)

@@ -1,6 +1,5 @@
 package com.blakesinner.quickNotes.entity;
 
-import com.blakesinner.quickNotes.api.Role;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -19,7 +18,6 @@ public class User {
     private String username;
     private String password;
     private String email;
-//    private Role role;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -28,6 +26,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Note> notes = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<UserRole> userRoles = new HashSet<>();
 
     /**
      * No argument constructor.

@@ -40,7 +40,10 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 
     private void checkPermissions(Map<String, List<Role>> roles, Cookie accessToken) {
         GenericDAO<User> dao = new GenericDAO<>(User.class);
-
+//        User user = dao.get
+//
+//        findMatchingPermissions();
+//        findMatchingPermissions();
         // check if the user matches regular roles first
 //        checkRegularPermissions(roles.get(REGULAR_ROLES), user);
 
@@ -49,18 +52,20 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 
     }
 
-    private void checkRegularPermissions(List<Role> roles, User user) {
+    private boolean findMatchingPermissions(List<Role> roles, User user) {
         boolean access = false;
+//        Role user.getRol
+
+        return access;
+    }
+//    private void comparePermissions(List<Role> roles, User user) {
+//        boolean access = false;
 //        Role userRole = user.getRole();
 
-        for (Role role : roles) {
+//        for (Role role : roles) {
 //            if (user.get)
-        }
-    }
-
-    private void checkOwnerPermissions(List<Role> roles, User user) {
-
-    }
+//        }
+//    }
 
     private Map<String, List<Role>> getRoles(AnnotatedElement annotatedElement) {
         Map<String, List<Role>> roles = new HashMap<>();

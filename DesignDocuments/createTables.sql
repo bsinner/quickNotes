@@ -7,6 +7,7 @@ CREATE TABLE users (
     , username VARCHAR(30) NOT NULL UNIQUE
     , email VARCHAR(100) NOT NULL UNIQUE
     , password VARCHAR(25) NOT NULL
+    , role ENUM("USER", "ADMIN") DEFAULT "USER"
 );
 
 CREATE TABLE notes (

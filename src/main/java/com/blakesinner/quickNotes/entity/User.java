@@ -1,5 +1,6 @@
 package com.blakesinner.quickNotes.entity;
 
+import com.blakesinner.quickNotes.api.Role;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private Role role;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -112,6 +114,24 @@ public class User {
      * @param id the id to set
      */
     public void setId(int id) { this.id = id; }
+
+    /**
+     * Gets role.
+     *
+     * @return the role
+     */
+    public Role getRole() {
+        return role;
+    }
+
+    /**
+     * Sets role.
+     *
+     * @param role the role
+     */
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     /**
      * Get user notes.

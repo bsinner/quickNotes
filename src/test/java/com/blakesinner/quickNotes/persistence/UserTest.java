@@ -51,7 +51,7 @@ class UserTest {
     @Test
     void testGetUsersByUsername() {
         List<User> users = dao.getByPropertyLike("username", "smith");
-        assertEquals(2, users.size());
+        assertEquals(1, users.size());
     }
 
     /**
@@ -139,7 +139,7 @@ class UserTest {
     @Test
     void testGetByPropertyLike() {
         List<User> users = dao.getByPropertyLike("username", "smith");
-        assertEquals(2, users.size());
+        assertEquals(1, users.size());
     }
 
     /**

@@ -35,3 +35,12 @@
 | 3/18/19 | Started adding JDBC Realms to indie project | 3 ||
 | 3/21/19 | Continued to set up JDBC Realms in indie project | 2.5 ||
 | 3/23/19 | Completed week 7 exercise | 3.5 ||
+| 3/28/19 | Researched adding authentication to indie project | 2 ||
+| 3/29/19 | Started adding authentication to indie project | 8 ||
+| 3/30/19 | Got authentication to work with indie project | 6 ||
+| 3/31/19 | Prepared for indie project checkpoint 3 | 3 ||
+| 4/1/19  | Finalized changes for indie project checkpoint 3 | 2 ||
+| 4/5/19  | Worked on indie project | 3 ||
+| 4/6/19  | Worked on week 9 exercises and indie project | 5 || 
+| 4/7/19  | Completed week 9 exercises, worked on week 8 exercises | 4 ||
+| 4/8/19  | Finished week 8 exercises added feedback for professional development presentations | 1.75 ||

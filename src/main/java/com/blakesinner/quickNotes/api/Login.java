@@ -80,7 +80,7 @@ public class Login {
             JwtBuilder accessToken = Jwts.builder()
                     .setIssuer(ISSUER)
                     .setIssuedAt(new Date())
-                    .setSubject(user.getUsername() + "|" + user.getId())
+                    .setSubject(String.valueOf(user.getId()))
                     .setExpiration(expiry);
 
             accessToken.signWith(

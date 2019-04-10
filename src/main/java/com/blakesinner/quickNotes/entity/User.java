@@ -117,22 +117,22 @@ public class User {
     public void setId(int id) { this.id = id; }
 
     /**
-     * Gets role.
+     * Gets user roles.
      *
-     * @return the role
+     * @return the user roles
      */
-//    public Role getRole() {
-//        return role;
-//    }
+    public Set<UserRole> getUserRoles() {
+        return userRoles;
+    }
 
     /**
-     * Sets role.
+     * Sets user roles.
      *
-     * @param role the role
+     * @param userRoles the user roles
      */
-//    public void setRole(Role role) {
-//        this.role = role;
-//    }
+    public void setUserRoles(Set<UserRole> userRoles) {
+        this.userRoles = userRoles;
+    }
 
     /**
      * Get user notes.

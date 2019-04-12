@@ -2,10 +2,7 @@ package com.blakesinner.quickNotes.api;
 
 import javax.ws.rs.*;
 
-@Secured(
-    roles = {"USER", "ADMIN"},
-    ownerOnlyRoles = {"USER"}
-)
+@Secured(roles = {"USER", "ADMIN"})
 @Path("/helloworld")
 public class HelloWorld {
 

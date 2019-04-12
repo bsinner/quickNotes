@@ -11,7 +11,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @NameBinding
 @Retention(RUNTIME)
 @Target({TYPE, METHOD})
+/**
+ * Used to bind authentication and authorization filters to api
+ * endpoints. Note that if roles is left blank, and no OwnerOnly
+ * annotation is present all users with valid access tokens will
+ * have access to a given endpoint.
+ */
 public @interface Secured {
     String[] roles() default {};
-    String[] ownerOnlyRoles() default {};
 }

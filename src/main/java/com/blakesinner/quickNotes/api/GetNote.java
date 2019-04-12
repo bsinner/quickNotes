@@ -9,14 +9,14 @@ import javax.ws.rs.QueryParam;
 
 @Secured(roles = {"ADMIN"})
 @Path("/note")
+@OwnerOnly(
+        resourceType = Note.class
+        , fkParam = "user_id"
+        , roles = {"USER"}
+)
 public class GetNote {
 
     @GET
-    @OwnerOnly(
-            resourceType = Note.class
-            , fkParam = "user_id"
-            , roles = {"USER"}
-    )
     public String getNote(@QueryParam("id")String id) {
         GenericDAO<Note> dao = new GenericDAO<>(Note.class);
 

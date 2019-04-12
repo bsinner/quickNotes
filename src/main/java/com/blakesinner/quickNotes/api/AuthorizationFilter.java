@@ -17,10 +17,10 @@ import java.util.*;
 @Priority(Priorities.AUTHORIZATION)
 public class AuthorizationFilter implements ContainerRequestFilter {
 
-    public static final String REGULAR_ROLES = "roles";
-    public static final String OWNER_ROLES = "ownerOnlyRoles";
+    private static final String REGULAR_ROLES = "roles";
+    private static final String OWNER_ROLES = "ownerOnlyRoles";
 //    public static final String ACCESS_TOKEN_COOKIE = "access_token";
-e id =
+
     @Context
     private ResourceInfo resourceInfo;
 
@@ -32,10 +32,13 @@ e id =
         Class<?> resourceClass = resourceInfo.getResourceClass();
         Map<String, List<String>> roles = getRequestContextRoles(resourceClass);
 
-        if (roles == null || roles.size() == 0 || checkPermissions(roles.get(REGULAR_ROLES))) {
+
+        if (checkPermissions(roles.get(REGULAR_ROLES))) {
             return;
         } else if (checkPermissions(roles.get(OWNER_ROLES))) {
             // search the db to see if the resource is owned
+            return;
+        } else if (roles.size() == 2 && roles.get(OWNER_ROLES).size() == 0 && roles.get(REGULAR_ROLES).size() == 0) {
             return;
         }
 
@@ -57,18 +60,24 @@ e id =
         Secured secured = annotatedElement.getAnnotation(Secured.class);
         OwnerOnly ownerOnly = annotatedElement.getAnnotation(OwnerOnly.class);
 
-        if (annotatedElement != null && secured != null) {
-            roles.put(REGULAR_ROLES, new ArrayList<>(Arrays.asList(secured.roles())));
-            roles.put(OWNER_ROLES, new ArrayList<>(Arrays.asList(ownerOnly.roles())));
-            roles.get(REGULAR_ROLES).removeAll(roles.get(OWNER_ROLES));
+        roles.put(REGULAR_ROLES, secured == null
+                ? Collections.emptyList()
+                : new ArrayList<>(Arrays.asList(secured.roles()))
+        );
 
-            return roles;
+        roles.put(OWNER_ROLES, ownerOnly == null
+                ? Collections.emptyList()
+                : new ArrayList<>(Arrays.asList(ownerOnly.roles()))
+        );
+
+        if (roles.size() > 1) {
+            roles.get(REGULAR_ROLES).removeAll(roles.get(OWNER_ROLES));
         }
 
-        return null;
+        return roles;
     }
 
-    public void sendForbidden(ContainerRequestContext context) {
+    private void sendForbidden(ContainerRequestContext context) {
         context.abortWith(
             Response.status(Response.Status.FORBIDDEN)
             .build()

@@ -20,7 +20,7 @@ CREATE TABLE notes (
 
 CREATE TABLE user_roles (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-    , user_id INT NOT NULL UNIQUE
+    , user_id INT NOT NULL
     , role ENUM ("USER", "ADMIN") DEFAULT "USER"
     , CONSTRAINT user_roles_fk FOREIGN KEY (user_id) REFERENCES users(id)
         ON DELETE CASCADE ON UPDATE CASCADE

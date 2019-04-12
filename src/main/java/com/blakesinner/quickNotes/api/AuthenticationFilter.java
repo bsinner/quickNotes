@@ -1,9 +1,6 @@
 package com.blakesinner.quickNotes.api;
 
-import com.blakesinner.quickNotes.entity.User;
-import com.blakesinner.quickNotes.persistence.GenericDAO;
 import io.jsonwebtoken.*;
-
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;

@@ -33,48 +33,23 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         Class<?> resourceClass = resourceInfo.getResourceClass();
         Map<String, List<String>> roles = getRequestContextRoles(resourceClass);
 
-        if (roles == null) {
-            // send 403...
-
+        if (roles == null || roles.size() == 0 || checkPermissions(roles.get(REGULAR_ROLES))) {
+            return;
         }
 
-//        Cookie cookie = context.getCookies().get(ACCESS_TOKEN_COOKIE);
-        String a = securityContext.getUserPrincipal().getName();
-        GenericDAO<User> dao = new GenericDAO<>(User.class);
-//        User currentUser = dao.getByPropertyEqual();
 
-//        checkPermissions(roles, currentUser);
+        // if this point is reached send unauthorized
     }
 
-    private void checkPermissions(Map<String, List<String>> roles, User user) {
-        GenericDAO<User> dao = new GenericDAO<>(User.class);
-//        User user = dao.getByPropertyEqual("id", );
-//        User user = dao.get
-//
-//        findMatchingPermissions();
-//        findMatchingPermissions();
-        // check if the user matches regular roles first
-//        checkRegularPermissions(roles.get(REGULAR_ROLES), user);
+    private boolean checkPermissions(List<String> roles) {
+        for (String role : roles) {
+            if (securityContext.isUserInRole(role)) {
+                return true;
+            }
+        }
 
-        // then check owner-only
-//        checkOwnerPermissions(roles.get(OWNER_ROLES), user);
-
+        return false;
     }
-
-    private boolean searchForMatchingPerm(List<String> roles, User user) {
-        boolean access = false;
-//        Role user.getRol
-
-        return access;
-    }
-//    private void comparePermissions(List<Role> roles, User user) {
-//        boolean access = false;
-//        Role userRole = user.getRole();
-
-//        for (Role role : roles) {
-//            if (user.get)
-//        }
-//    }
 
     private Map<String, List<String>> getRequestContextRoles(AnnotatedElement annotatedElement) {
         Map<String, List<String>> roles = new HashMap<>();

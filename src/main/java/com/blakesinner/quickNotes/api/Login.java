@@ -75,25 +75,29 @@ public class Login {
      */
     private Response buildOkResponse(User user) {
         Date expiry = new Date();
-            expiry.setTime(expiry.getTime() + TOKEN_LIFESPAN);
+        expiry.setTime(expiry.getTime() + TOKEN_LIFESPAN);
 
-            JwtBuilder accessToken = Jwts.builder()
-                    .setIssuer(ISSUER)
-                    .setIssuedAt(new Date())
-                    .setSubject(String.valueOf(user.getId()))
-                    .setExpiration(expiry);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("sub", user.getId());
+        claims.put("rol", user.getUserRolesString());
 
-            accessToken.signWith(
-                    Keys.hmacShaKeyFor("supersecret1111111111111111111111111111".getBytes())
-                    , SignatureAlgorithm.HS256
-            );
+        JwtBuilder accessToken = Jwts.builder()
+                .setIssuer(ISSUER)
+                .setIssuedAt(new Date())
+                .setClaims(claims)
+                .setExpiration(expiry);
 
-            String tokenString = accessToken.compact();
+        accessToken.signWith(
+                Keys.hmacShaKeyFor("supersecret1111111111111111111111111111".getBytes())
+                , SignatureAlgorithm.HS256
+        );
 
-            return Response.status(Response.Status.OK)
-                    .header(HttpHeaders.SET_COOKIE, "access_token=" + tokenString + "; HttpOnly")
-                    .entity(user.getUsername())
-                    .build();
+        String tokenString = accessToken.compact();
+
+        return Response.status(Response.Status.OK)
+                .header(HttpHeaders.SET_COOKIE, "access_token=" + tokenString + "; HttpOnly")
+                .entity(user.getUsername())
+                .build();
     }
 
     /**

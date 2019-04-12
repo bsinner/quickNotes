@@ -2,10 +2,8 @@ package com.blakesinner.quickNotes.api;
 
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
+
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -16,6 +14,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 import java.security.Principal;
+import java.util.*;
 
 /**
  * Filter that can be applied to api endpoints to validate them.
@@ -40,13 +39,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         Cookie accessTokenCookie = context.getCookies().get("access_token");
 
         if (accessTokenCookie != null) {
-            int currentUserId = validateAccessToken(accessTokenCookie, context);
+            Map<String, String[]> userIdAndRoles = validateAccessToken(accessTokenCookie, context);
 
-            if(currentUserId > 0) {
-                addSecurityContext(context, currentUserId);
-                return;
-            }
-
+            addSecurityContext(context, userIdAndRoles);
+            return;
         }
 
         sendUnauthorized(context);
@@ -59,18 +55,27 @@ public class AuthenticationFilter implements ContainerRequestFilter {
      * @param token   the access token
      * @param context the request context
      */
-    private int validateAccessToken(Cookie token, ContainerRequestContext context) {
+    private Map<String, String[]> validateAccessToken(Cookie token, ContainerRequestContext context) {
         try {
             String tokenString = token.getValue();
 
             Jws<Claims> parsedClaims = Jwts.parser()
                     .setSigningKey("supersecret1111111111111111111111111111".getBytes())
                     .parseClaimsJws(tokenString);
-            return Integer.parseInt(parsedClaims.getBody().getSubject());
+
+            Claims claims = parsedClaims.getBody();
+            String[] roles = claims.get("rol").toString().split(" ");
+            String id = claims.getSubject();
+
+            if (roles == null || id == null || roles.length < 1 || id.length() < 1) {
+                throw new JwtException("Access token roles or id not found");
+            }
+
+            return Collections.singletonMap(id, roles);
         } catch (JwtException e) {
             sendUnauthorized(context);
         }
-        return 0;
+        return null;
     }
 
     /**
@@ -87,23 +92,25 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         );
     }
 
-    private void addSecurityContext(ContainerRequestContext context, int userId) {
+    private void addSecurityContext(ContainerRequestContext context, Map<String, String[]> userIdAndRoles) {
         final SecurityContext currentSecurityContext = context.getSecurityContext();
+
         context.setSecurityContext(new SecurityContext() {
+
+            private final String id = userIdAndRoles.keySet().iterator().next();
+            private final String[] roles = userIdAndRoles.get(id);
 
             @Override
             public Principal getUserPrincipal() {
-              return new Principal() {
-                  @Override
-                  public String getName() {
-                      return null;
-                  }
-              };
+                return new Principal() {
+                    @Override
+                    public String getName() { return id; }
+                };
             }
 
             @Override
             public boolean isUserInRole(String s) {
-                return false;
+                return Arrays.stream(roles).anyMatch(s::equals);
             }
 
             @Override

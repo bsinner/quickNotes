@@ -135,6 +135,20 @@ public class User {
     }
 
     /**
+     * Gets a space seperated string of user roles.
+     * @return the user roles string
+     */
+    public String getUserRolesString() {
+        String result = "";
+
+        for(UserRole role : userRoles) {
+           result += role.getRole() + " ";
+        }
+
+        return result.trim();
+    }
+
+    /**
      * Get user notes.
      *
      * @return user notes

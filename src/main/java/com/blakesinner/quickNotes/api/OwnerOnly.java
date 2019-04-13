@@ -12,8 +12,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target({TYPE, METHOD})
 public @interface OwnerOnly {
-    Class<?> resourceType();
-    String pkParam() default "id";
-    String fkParam();
-    String[] roles() default {};
+//    Class<?> resourceType();
+//    String pkParam() default "id";
+//    String fkParam();
+//    String[] roles() default {};
 }

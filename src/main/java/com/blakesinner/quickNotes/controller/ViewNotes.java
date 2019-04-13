@@ -9,6 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 import java.io.IOException;
 
 /**
@@ -32,7 +34,6 @@ public class ViewNotes extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-
         User user = new GenericDAO<>(User.class).getByPropertyEqual("id", "3").get(0);
 
         req.setAttribute("notes", user.getNotes());

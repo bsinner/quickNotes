@@ -119,6 +119,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             public String getAuthenticationScheme() {
                 return "Bearer";
             }
+
         });
     }
 }

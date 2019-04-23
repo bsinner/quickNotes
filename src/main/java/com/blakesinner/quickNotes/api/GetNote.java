@@ -3,6 +3,11 @@ package com.blakesinner.quickNotes.api;
 import com.blakesinner.quickNotes.entity.Note;
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -38,7 +43,7 @@ public class GetNote {
 
     /**
      * Get JSON object of user note titles, dates, and ids.
-     * TODO: what dates? last modified and created? both?
+     * TODO: date created, last modified, or both?
      * @return
      */
     @GET
@@ -51,19 +56,29 @@ public class GetNote {
                 "id", securityContext.getUserPrincipal().getName()
         ).get(0).getNotes();
 
-        String results = notes.size() > 0 ? concatNotes(notes) : "No notes found";
+        String results = notes.size() > 0 ? createNoteJson(notes) : "No notes found";
 
         return Response.status(200).entity(results).build();
     }
 
-    private String concatNotes(Set<Note> notes) {
-        String results = "";
+
+    private String createNoteJson(Set<Note> notes) {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.createObjectNode();
 
         for (Note note : notes) {
-            results += note.getContents();
+            JsonNode childNode = mapper.createObjectNode();
+            ((ObjectNode) childNode).put("created", note.getCreationDate().toString());
+            ((ObjectNode) childNode).put("title", note.getTitle());
+            ((ObjectNode) root).set("note" + note.getId(), childNode);
+        }
+        try {
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(root);
+        } catch (JsonProcessingException jpe) {
+//            TODO: output with logger
         }
 
-        return results;
+        return "No notes found";
     }
 
 }

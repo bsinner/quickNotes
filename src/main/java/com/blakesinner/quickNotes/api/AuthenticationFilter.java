@@ -98,12 +98,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             private final String[] roles = userIdAndRoles.get(id);
 
             @Override
-            public Principal getUserPrincipal() {
-                return new Principal() {
-                    @Override
-                    public String getName() { return id; }
-                };
-            }
+            public Principal getUserPrincipal() { return () -> id; }
 
             @Override
             public boolean isUserInRole(String s) {

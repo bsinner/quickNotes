@@ -7,7 +7,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -24,6 +25,7 @@ public class GetNote {
     @Context
     private SecurityContext securityContext;
     private final static GenericDAO<Note> dao = new GenericDAO<>(Note.class);
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     @GET
     public Response getNote(@QueryParam("id") String id) {
@@ -56,7 +58,7 @@ public class GetNote {
                 "id", securityContext.getUserPrincipal().getName()
         ).get(0).getNotes();
 
-        String results = notes.size() > 0 ? createNoteJson(notes) : "No notes found";
+        String results = notes.size() > 0 ? createNoteJson(notes) : "{}";
 
         return Response.status(200).entity(results).build();
     }
@@ -75,10 +77,10 @@ public class GetNote {
         try {
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(root);
         } catch (JsonProcessingException jpe) {
-//            TODO: output with logger
+            logger.trace("Json processing exception occurred");
         }
 
-        return "No notes found";
+        return "{}";
     }
 
 }

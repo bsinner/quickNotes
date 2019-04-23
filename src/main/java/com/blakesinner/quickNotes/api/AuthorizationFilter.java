@@ -76,8 +76,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 //        Map<String, List<String>> roles = new HashMap<>();
         Secured secured = annotatedElement.getAnnotation(Secured.class);
 //        OwnerOnly ownerOnly = annotatedElement.getAnnotation(OwnerOnly.class);
-        List<String> li = new ArrayList<>(Arrays.asList(secured.roles()));
-        return li;
+        return new ArrayList<>(Arrays.asList(secured.roles()));
 //        roles.put(REGULAR_ROLES, secured == null
 //                ? Collections.emptyList()
 //                : new ArrayList<>(Arrays.asList(secured.roles()))

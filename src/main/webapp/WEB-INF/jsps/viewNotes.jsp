@@ -1,8 +1,8 @@
-<%@include file="templates/header.jsp"%>
+<%@include file="../../templates/header.jsp"%>
 </head>
 <body>
 
-<%@include file="templates/menu.jsp"%>
+<%@include file="../../templates/menu.jsp"%>
 
 <br>
 <div class="ui two column centered grid">
@@ -40,6 +40,6 @@
     </div>
 </div>
 
-<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="js/viewNotes/viewNotes.js"></script>
-<%@include file="templates/footer.jsp"%>
+<%@include file="../../templates/footer.jsp"%>

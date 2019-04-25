@@ -36,7 +36,7 @@ public class ViewNotes extends HttpServlet {
 
         req.setAttribute("notes", user.getNotes());
 
-        RequestDispatcher rd = req.getRequestDispatcher("/viewNotes.jsp");
+        RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/jsps/viewNotes.jsp");
         rd.forward(req, res);
     }
 

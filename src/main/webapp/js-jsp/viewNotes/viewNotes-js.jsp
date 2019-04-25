@@ -1,3 +1,4 @@
+<script>
 window.onload = () => {
     $("input[type=checkbox]").bind("click", () => {
         const btn = $("#delBtn");
@@ -8,4 +9,10 @@ window.onload = () => {
             btn.attr("class", "ui small disabled button");
         }
     });
-}
+
+    // (async () => {
+    //     const results = fetch("")
+    // })();
+
+};
+</script>

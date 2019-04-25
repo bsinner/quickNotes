@@ -9,6 +9,7 @@
 */hibernate.cfg.xml
 *.pem
 sshLogin.sh
+*accessTokenPw.txt*
 
 # User-specific stuff:
 # .idea/workspace.xml

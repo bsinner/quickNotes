@@ -2,6 +2,7 @@ package com.blakesinner.quickNotes.api;
 
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
+import com.blakesinner.quickNotes.util.JwtSecretLoader;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -88,7 +89,7 @@ public class Login {
                 .setExpiration(expiry);
 
         accessToken.signWith(
-                Keys.hmacShaKeyFor("supersecret1111111111111111111111111111".getBytes())
+                Keys.hmacShaKeyFor(getKey())
                 , SignatureAlgorithm.HS256
         );
 
@@ -111,5 +112,12 @@ public class Login {
                         , " realm=\"" + REALM + "\", charset=\"" + CHARSET + "\"")
                 .build();
     }
+
+    /**
+     * Get the current secret key used to sign tokens.
+     *
+     * @return the key
+     */
+    private byte[] getKey() { return new JwtSecretLoader().getSecret().getBytes(); }
 
 }

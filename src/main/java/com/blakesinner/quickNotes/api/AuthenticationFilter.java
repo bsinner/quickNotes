@@ -1,5 +1,6 @@
 package com.blakesinner.quickNotes.api;
 
+import com.blakesinner.quickNotes.util.JwtSecretLoader;
 import io.jsonwebtoken.*;
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
@@ -57,7 +58,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             String tokenString = token.getValue();
 
             Jws<Claims> parsedClaims = Jwts.parser()
-                    .setSigningKey("supersecret1111111111111111111111111111".getBytes())
+                    .setSigningKey(getKey())
                     .parseClaimsJws(tokenString);
 
             Claims claims = parsedClaims.getBody();
@@ -89,6 +90,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         );
     }
 
+    /**
+     * Set the security context to contain the current users's id and roles.
+     *
+     * @param context        context of the current request
+     * @param userIdAndRoles user's id and roles
+     */
     private void addSecurityContext(ContainerRequestContext context, Map<String, String[]> userIdAndRoles) {
         final SecurityContext currentSecurityContext = context.getSecurityContext();
 
@@ -117,4 +124,11 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
         });
     }
+
+    /**
+     * Get the current JWT secret key being used to validate tokens.
+     *
+     * @return the key
+     */
+    private byte[] getKey() { return new JwtSecretLoader().getSecret().getBytes(); }
 }

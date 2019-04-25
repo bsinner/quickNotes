@@ -38,6 +38,6 @@ public class JspFilter {
      * @param cookie the cookie
      * @return       the cookie
      */
-    public Cookie setCookie(Cookie cookie) { this.cookie = cookie; }
+    public Cookie setCookie(Cookie cookie) { return this.cookie = cookie; }
 
 }

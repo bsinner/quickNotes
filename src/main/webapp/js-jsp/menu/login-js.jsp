@@ -72,6 +72,7 @@
         rMenu.empty();
         rMenu.append("<a class=\"item\">Signed in As " + username + "</a>");
         rMenu.append("<a href=\"#\" class=\"item\" id=\"logout\">Sign Out</a>");
+        rMenu.append("<a href=\"<%=request.getContextPath()%>/api/note/all\" class=\"item\">View Saved Notes</a>");
     }
 
 </script>

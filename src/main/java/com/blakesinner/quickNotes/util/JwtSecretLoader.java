@@ -5,13 +5,24 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.net.URISyntaxException;
 
+/**
+ * The Jwt secret loader.
+ */
 public class JwtSecretLoader {
 
     private final String PATH = "/accessTokenPw.txt";
     private final Logger logger = LogManager.getLogger(this.getClass());
 
+    /**
+     * Instantiates a new Jwt secret loader.
+     */
     public JwtSecretLoader() { }
 
+    /**
+     * Gets JWT secret.
+     *
+     * @return the secret
+     */
     public String getSecret() {
         String results = "";
 
@@ -26,6 +37,11 @@ public class JwtSecretLoader {
         return results;
     }
 
+    /**
+     * Get the file object from the PATH instance variable.
+     *
+     * @return the file
+     */
     private File getFile() {
         File file = null;
 

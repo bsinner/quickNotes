@@ -40,6 +40,8 @@ public class ViewNotes extends HttpServlet {
             rd = req.getRequestDispatcher("/WEB-INF/jsps/login.jsp");
         }
 
+        req.setAttribute("servlet", "/viewNotes");
+
         rd.forward(req, res);
     }
 

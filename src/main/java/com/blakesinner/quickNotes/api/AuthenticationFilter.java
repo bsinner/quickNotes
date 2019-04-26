@@ -15,7 +15,10 @@ import java.security.Principal;
 import java.util.*;
 
 /**
- * Filter that can be applied to api endpoints to validate them.
+ * Filter to determine if the user trying to access a given api endpoint has an access
+ * token that is signed by this webapp.
+ *
+ * @author bsinner
  */
 @Secured
 @Provider

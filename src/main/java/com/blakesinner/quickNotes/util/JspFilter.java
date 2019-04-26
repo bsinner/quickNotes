@@ -1,9 +1,10 @@
 package com.blakesinner.quickNotes.util;
 
 import javax.servlet.http.Cookie;
+import java.util.Optional;
 
 /**
- * Checks passed in Cookie array for a valid access token
+ * Checks passed in Cookie array for an JWT token signed by this webapp.
  *
  * @author bsinner
  */
@@ -24,7 +25,29 @@ public class JspFilter {
      *
      * @return true or false depending on if the access token is valid
      */
-    public boolean isValid() { return false; }
+    public boolean isValid() {
+        Optional<String> token = getToken();
+
+        if (!token.isPresent()) return false;
+
+        return true;
+    }
+
+    /**
+     * Get the value of the cookie with name equal to instance
+     * variable NAME.
+     *
+     * @return cookie value, or null of no matching token is found
+     */
+    private Optional<String> getToken() {
+        for (Cookie c : cookies) {
+            if (c.getName().equals(NAME)) {
+                return Optional.of(c.getValue());
+            }
+        }
+
+        return Optional.empty();
+    }
 
 
 }

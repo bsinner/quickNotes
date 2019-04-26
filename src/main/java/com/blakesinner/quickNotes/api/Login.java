@@ -7,7 +7,10 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+
+import javax.servlet.ServletContext;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import java.util.*;
@@ -34,12 +37,16 @@ public class Login {
      */
     @POST
     @Produces({"text/plain"})
-    public Response authenticate(@QueryParam("email") String email, @QueryParam("password") String password) {
+    public Response authenticate(
+            @QueryParam("email") String email
+            , @QueryParam("password") String password
+            , @Context ServletContext context)
+    {
 
         User user = queryUser(email, password);
 
         if (user != null) {
-            return buildOkResponse(user);
+            return buildOkResponse(user, context.getContextPath());
         }
 
         return buildUnauthorizedResponse();
@@ -71,10 +78,11 @@ public class Login {
     /**
      * Create a 200 Ok response with an access token set as it's cookie.
      *
-     * @param user the logged in user
-     * @return     the response
+     * @param user        the logged in user
+     * @param contextPath the base path of the request
+     * @return            the response
      */
-    private Response buildOkResponse(User user) {
+    private Response buildOkResponse(User user, String contextPath) {
         Date expiry = new Date();
         expiry.setTime(expiry.getTime() + TOKEN_LIFESPAN);
 
@@ -96,7 +104,10 @@ public class Login {
         String tokenString = accessToken.compact();
 
         return Response.status(Response.Status.OK)
-                .header(HttpHeaders.SET_COOKIE, "access_token=" + tokenString + "; HttpOnly")
+                .header(HttpHeaders.SET_COOKIE,
+                        "access_token=" + tokenString
+                        + "; Path=" + contextPath
+                        + "; HttpOnly")
                 .entity(user.getUsername())
                 .build();
     }

@@ -32,10 +32,14 @@ public class ViewNotes extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         JspFilter filter = new JspFilter(req.getCookies());
+        RequestDispatcher rd = null;
 
-        boolean test = filter.isValid();
+        if (filter.isValid()) {
+            rd = req.getRequestDispatcher("/WEB-INF/jsps/viewNotes.jsp");
+        } else {
+            rd = req.getRequestDispatcher("/WEB-INF/jsps/login.jsp");
+        }
 
-        RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/jsps/login.jsp");
         rd.forward(req, res);
     }
 

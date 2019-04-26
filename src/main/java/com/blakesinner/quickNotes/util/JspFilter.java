@@ -1,5 +1,9 @@
 package com.blakesinner.quickNotes.util;
 
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javax.servlet.http.Cookie;
 import java.util.Optional;
 
@@ -12,6 +16,7 @@ public class JspFilter {
 
     private Cookie[] cookies;
     private static final String NAME = "access_token";
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     /**
      * Instantiates a new JspFilter.
@@ -27,8 +32,18 @@ public class JspFilter {
      */
     public boolean isValid() {
         Optional<String> token = getToken();
+        byte[] key = new JwtSecretLoader().getSecret().getBytes();
 
         if (!token.isPresent()) return false;
+
+        try {
+            Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token.get());
+        } catch (JwtException je) {
+            logger.info("Invalid access token found: " + token.get());
+            return false;
+        }
 
         return true;
     }

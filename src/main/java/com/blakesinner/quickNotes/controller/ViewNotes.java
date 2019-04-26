@@ -1,7 +1,6 @@
 package com.blakesinner.quickNotes.controller;
 
-import com.blakesinner.quickNotes.entity.User;
-import com.blakesinner.quickNotes.persistence.GenericDAO;
+import com.blakesinner.quickNotes.util.JspFilter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -32,11 +31,11 @@ public class ViewNotes extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        User user = new GenericDAO<>(User.class).getByPropertyEqual("id", "3").get(0);
+        JspFilter filter = new JspFilter(req.getCookies());
 
-        req.setAttribute("notes", user.getNotes());
+        boolean test = filter.isValid();
 
-        RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/jsps/viewNotes.jsp");
+        RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/jsps/login.jsp");
         rd.forward(req, res);
     }
 

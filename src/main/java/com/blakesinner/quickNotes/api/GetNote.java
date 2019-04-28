@@ -44,12 +44,12 @@ public class GetNote {
     }
 
     /**
-     * Get JSON object of user note titles, dates, and ids.
-     * TODO: date created, last modified, or both?
-     * @return
+     * Get JSON list summarizing the current user's notes.
+     *
+     * @return list of user notes, with ids, titles, and dates
      */
     @GET
-    @Path("/all")
+    @Path("/list")
     public Response getAllUserNotes() {
 
         GenericDAO<User> DAO = new GenericDAO<>(User.class);
@@ -63,10 +63,15 @@ public class GetNote {
         return Response.status(200).entity(results).build();
     }
 
-
+    /**
+     * Creates note list json.
+     *
+     * @param notes the notes to represent in json
+     * @return      the json object
+     */
     private String createNoteJson(Set<Note> notes) {
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.createObjectNode();
+        JsonNode root = mapper.createArrayNode();
 
         for (Note note : notes) {
             JsonNode childNode = mapper.createObjectNode();

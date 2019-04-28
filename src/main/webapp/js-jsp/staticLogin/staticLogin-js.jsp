@@ -16,7 +16,7 @@
                     { method: "POST" })
             .then((res) => {
                 if(res.status === 401) {
-                    alert("invalid creds");
+                    showError();
                 } else {
                     submit()
                 }
@@ -32,6 +32,10 @@
             const form = document.getElementById("form");
             form.setAttribute("action", root + "${servlet}");
             form.submit();
+        };
+
+        const showError = () => {
+            // TODO: add error handleing
         };
     };
 

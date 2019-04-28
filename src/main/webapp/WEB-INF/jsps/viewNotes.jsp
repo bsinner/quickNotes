@@ -5,7 +5,7 @@
 <%@include file="../../templates/menu.jsp"%>
 
 <br>
-<div class="ui two column centered grid">
+<div class="ui two column centered grid" style="display: none;">
     <div class="column">
         <table class="ui celled table" id="noteTable">
             <thead>
@@ -40,6 +40,6 @@
     </div>
 </div>
 
-<script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="js/viewNotes/viewNotes.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<%@include file="../../js-jsp/viewNotes/viewNotes-js.jsp"%>
 <%@include file="../../templates/footer.jsp"%>

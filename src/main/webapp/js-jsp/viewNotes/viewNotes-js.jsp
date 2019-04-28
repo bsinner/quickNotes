@@ -1,5 +1,9 @@
 <script>
-// window.onload = () => {
+
+
+    /*
+     * Button and checkbox event handlers
+     */
     $("input[type=checkbox]").bind("click", () => {
         const btn = $("#delBtn");
 
@@ -10,10 +14,16 @@
         }
     });
 
+    /*
+     * Fetch user notes when the page loads
+     */
     fetch("<%=request.getContextPath()%>/api/note/all", { credentials: "same-origin" })
             .then((res) => res.json())
             .then((data) => outputData(data));
 
+    /*
+     * Display found user notes
+     */
     const outputData = data => {
         const lng = Object.keys(data).length;
 
@@ -25,9 +35,11 @@
         data.forEach((item) => alert(item.toString()));
     };
 
+    /*
+     * Display if none are found
+     */
     const displayNoneFound = () => {
         alert("no notes found");
     }
 
-// };
 </script>

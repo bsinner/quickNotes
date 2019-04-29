@@ -10,13 +10,13 @@
     const passwordInput = document.getElementById("password");
 
     // Event handlers
-    document.getElementById("signIn").onclick = () => {
-        loginModal.modal("show");
-    };
-
-    document.getElementById("loginExit").onclick = () => {
-        loginModal.modal("hide");
-    };
+    // document.getElementById("signIn").onclick = () => {
+    //     loginModal.modal("show");
+    // };
+    //
+    // document.getElementById("loginExit").onclick = () => {
+    //     loginModal.modal("hide");
+    // };
 
     $("body").on("click", "#logout", () => {
         $.ajax({
@@ -28,24 +28,22 @@
         });
 
     }).on("click", "#loginBtn", () => {
+
         if (emailInput.value < 1
                 || passwordInput.value < 1) {
             // highlight form fields if they are empty
             return;
         }
-        $.ajax({
-            method: "POST"
+
+        $.ajax({method: "POST"
                 , url: "<%=request.getContextPath()%>/api/login?email=" + emailInput.value + "&password=" + passwordInput.value
-            }).done(data => {
-                window.sessionStorage.setItem("username", data);
-                showLoggedIn(data);
-                loginModal.modal("hide");
-        });
-
-    }).on("click", "#signIn", () => {
-        loginModal.modal("show");
-
-    });
+        }).done(data => {
+            window.sessionStorage.setItem("username", data);
+            showLoggedIn(data);
+            loginModal.modal("hide")
+        })}
+    ).on("click", "#loginExit", () => loginModal.modal("hide")
+    ).on("click", "#signIn", () => loginModal.modal("show"));
 
     // DHTML Menu bar functions
     function initMenu() {

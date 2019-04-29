@@ -5,7 +5,7 @@
 <%@include file="../../templates/menu.jsp"%>
 
 <br>
-<div class="ui two column centered grid" style="display: none;">
+<div class="ui two column centered grid" id="resultsTable" style="display: none;">
     <div class="column">
         <table class="ui celled table" id="noteTable">
             <thead>
@@ -15,7 +15,7 @@
                 <th>Created on</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="results">
             <c:forEach var="note" items="${notes}">
                 <tr>
                     <td class="collapsing">

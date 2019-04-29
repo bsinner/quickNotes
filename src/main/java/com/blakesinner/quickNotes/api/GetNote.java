@@ -11,8 +11,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
@@ -50,6 +52,7 @@ public class GetNote {
      */
     @GET
     @Path("/list")
+    @Produces({MediaType.APPLICATION_JSON})
     public Response getAllUserNotes() {
 
         GenericDAO<User> DAO = new GenericDAO<>(User.class);
@@ -71,14 +74,15 @@ public class GetNote {
      */
     private String createNoteJson(Set<Note> notes) {
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.createArrayNode();
+        ObjectNode root = mapper.createObjectNode();
 
         for (Note note : notes) {
-            JsonNode childNode = mapper.createObjectNode();
-            ((ObjectNode) childNode).put("created", note.getCreationDate().toString());
-            ((ObjectNode) childNode).put("title", note.getTitle());
-            ((ObjectNode) root).set("note" + note.getId(), childNode);
+            ObjectNode childNode = mapper.createObjectNode();
+            childNode.put("created", note.getCreationDate().toString());
+            childNode.put("title", note.getTitle());
+            root.set(String.valueOf(note.getId()), childNode);
         }
+
         try {
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(root);
         } catch (JsonProcessingException jpe) {

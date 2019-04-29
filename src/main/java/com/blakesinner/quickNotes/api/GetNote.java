@@ -20,6 +20,11 @@ import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Endpoints for getting one or all notes.
+ *
+ * @author bsinner
+ */
 @Secured(roles = {"USER", "ADMIN"})
 @Path("/note")
 public class GetNote {
@@ -29,7 +34,14 @@ public class GetNote {
     private final static GenericDAO<Note> dao = new GenericDAO<>(Note.class);
     private final Logger logger = LogManager.getLogger(this.getClass());
 
+    /**
+     * Get contents of one note.
+     *
+     * @param id the note id
+     * @return   the note contents
+     */
     @GET
+    @Produces({"application/json"})
     public Response getNote(@QueryParam("id") String id) {
         List<Note> notes = dao.getByPropertyEqual("id", id);
         int userId = Integer.parseInt(securityContext.getUserPrincipal().getName());

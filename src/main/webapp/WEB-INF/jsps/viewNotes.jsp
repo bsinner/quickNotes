@@ -16,17 +16,7 @@
             </tr>
             </thead>
             <tbody id="results">
-            <c:forEach var="note" items="${notes}">
-                <tr>
-                    <td class="collapsing">
-                        <div class="ui fitted checkbox">
-                            <input type="checkbox"><label></label>
-                        </div>
-                    </td>
-                    <td><a href="editor?note=${note.id}">${note.title}</a></td>
-                    <td>${note.creationDate}</td>
-                </tr>
-            </c:forEach>
+
             </tbody>
             <tfoot class="full-width">
             <tr>

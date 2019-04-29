@@ -1,23 +1,16 @@
 <script>
 
-    // Display the users's username if they are logged in
-    // otherwise display a sign in and sign up button
+    // Display if the user is logged in or logged out
     initMenu();
 
-    // Popup element and its inputs
+    // Modal elements
     const loginModal = $("#loginModal");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
 
-    // Event handlers
-    // document.getElementById("signIn").onclick = () => {
-    //     loginModal.modal("show");
-    // };
-    //
-    // document.getElementById("loginExit").onclick = () => {
-    //     loginModal.modal("hide");
-    // };
-
+    /*
+     * Event handlers
+     */
     $("body").on("click", "#logout", () => {
         $.ajax({
             method: "POST"
@@ -35,6 +28,9 @@
             return;
         }
 
+        /*
+         * Login method
+         */
         $.ajax({method: "POST"
                 , url: "<%=request.getContextPath()%>/api/login?email=" + emailInput.value + "&password=" + passwordInput.value
         }).done(data => {
@@ -42,10 +38,11 @@
             showLoggedIn(data);
             loginModal.modal("hide")
         })}
+
     ).on("click", "#loginExit", () => loginModal.modal("hide")
     ).on("click", "#signIn", () => loginModal.modal("show"));
 
-    // DHTML Menu bar functions
+    // DHTML Menu bar generation
     function initMenu() {
         const username = sessionStorage.getItem("username");
 

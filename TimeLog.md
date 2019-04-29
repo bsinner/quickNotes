@@ -44,3 +44,17 @@
 | 4/6/19  | Worked on week 9 exercises and indie project | 5 || 
 | 4/7/19  | Completed week 9 exercises, worked on week 8 exercises | 4 ||
 | 4/8/19  | Finished week 8 exercises added feedback for professional development presentations | 1.75 ||
+| 4/11/19 | Worked on indie project | 5 ||
+| 4/14/19 | Worked on professional development presentation | 3 ||
+| 4/15/19 | Completed professional development presentation, worked on team project | 4 ||
+| 4/18/19 | Worked on endpoint in indie project | 3 ||
+| 4/19/19 | Added tests to team project | 6 ||
+| 4/20/19 | Worked on multi-threading exercise, watched some of the cave of programming videos | 6.5 ||
+| 4/22/19 | Deployed team project to AWS, added addtional unit tests | 5 ||
+| 4/23/19 | Updated team project UI | 3 ||
+| 4/24/19 | Made small changes to team project endpoints to prepare it to be turned in | 1 ||
+| 4/25/19 | Changed indie project to view notes list using jax-rs, set up servlet authentication filter, added class for loading JWT secrets | 7.5 ||
+| 4/27/19 | Completed indie project javascript for view notes page | 2.5 ||
+| 4/28/19 | Fixed indie project note loading servlet | 1 ||
+
+

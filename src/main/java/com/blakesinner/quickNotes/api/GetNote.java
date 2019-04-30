@@ -34,7 +34,8 @@ public class GetNote {
     private final Logger logger = LogManager.getLogger(this.getClass());
 
     /**
-     * Get contents of one note.
+     * Get contents of one note, if the user doesn't have admin role and the
+     * note isn't theirs send 403 Forbidden.
      *
      * @param id the note id
      * @return   the note contents
@@ -46,8 +47,12 @@ public class GetNote {
         int userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
 
         if (notes.size() > 0) {
-            if (notes.get(0).getUser().getId() != userId) {
+
+            if (notes.get(0).getUser().getId() != userId
+                    && !securityContext.isUserInRole("ADMIN")) {
+
                 return Response.status(403).build();
+
             }
 
             return Response.status(200).entity(notes.get(0).getContents()).build();

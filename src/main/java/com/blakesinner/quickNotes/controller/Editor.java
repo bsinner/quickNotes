@@ -32,14 +32,14 @@ public class Editor extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        String qString = req.getQueryString();
-
-        if (qString != null) {
-            String contents = getContents(qString);
-            if (contents != null) {
-                req.setAttribute("contents", contents);
-            }
-        }
+//        String qString = req.getQueryString();
+//
+//        if (qString != null) {
+//            String contents = getContents(qString);
+//            if (contents != null) {
+//                req.setAttribute("contents", contents);
+//            }
+//        }
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("/editor.jsp");
         dispatcher.forward(req, res);

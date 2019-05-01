@@ -34,7 +34,14 @@ function checkQueryString() {
 
 async function fetchNote(id) {
     return await fetch("<%=request.getContextPath()%>/api/note?id=" + id, { credentials: "same-origin" })
-            .then(res => res.text())
+            .then(res => {
+                if (!res.ok) {
+                    console.error("Error loading note: " + res.status);
+                    return "{}";
+                }
+
+                return res.text();
+            })
             .then(data => data)
             .catch(err => { console.error(err) });
 }

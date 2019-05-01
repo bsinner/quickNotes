@@ -56,6 +56,5 @@
 | 4/25/19 | Changed indie project to view notes list using jax-rs, set up servlet authentication filter, added class for loading JWT secrets | 7.5 ||
 | 4/27/19 | Completed indie project javascript for view notes page | 2.5 ||
 | 4/28/19 | Fixed indie project note loading servlet | 1 ||
-| 4/30/19 | Fixed authentication role bugs and js bug in indie project | 2 ||
-
-
+| 4/29/19 | Fixed authentication role bugs and js bug in indie project | 2 ||
+| 4/30/19 | Start changing editor to load notes with AJAX | .5 ||

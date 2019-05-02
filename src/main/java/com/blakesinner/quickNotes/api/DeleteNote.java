@@ -12,6 +12,11 @@ import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * API Endpoint to delete note.
+ *
+ * @author bsinner
+ */
 @Secured(roles = {"USER", "ADMIN"})
 @Path("/delete")
 public class DeleteNote {
@@ -20,6 +25,12 @@ public class DeleteNote {
     private SecurityContext securityContext;
     private final static GenericDAO<Note> dao = new GenericDAO<>(Note.class);
 
+    /**
+     * Search for and delete note.
+     *
+     * @param id the note id
+     * @return   response indicating status of note deletion
+     */
     @DELETE
     public Response deleteNote(@QueryParam("id") String id) {
         List<Note> notes = dao.getByPropertyEqual("id", id);
@@ -32,6 +43,13 @@ public class DeleteNote {
                 .orElseGet(() -> deleteFromDatabase(notes.get(0)));
     }
 
+    /**
+     * Check if the current user owns the note to delete, or if the current user
+     * has admin privileges.
+     *
+     * @param note the note to delete
+     * @return     forbidden response or empty Optional object
+     */
     private Optional<Response> checkIfUnauthorized(Note note) {
         if (note.getUser().getId() != Integer.parseInt(securityContext.getUserPrincipal().getName())
                 && !securityContext.isUserInRole("ADMIN")
@@ -47,6 +65,12 @@ public class DeleteNote {
 
     }
 
+    /**
+     * Delete the note from the database.
+     *
+     * @param note the note to delete
+     * @return     response indicating success of note deletion
+     */
     private Response deleteFromDatabase(Note note) {
         dao.delete(note);
         List<Note> noteSearch = dao.getByPropertyEqual("id", String.valueOf(note.getId()));

@@ -34,8 +34,8 @@ public class GetNote {
     private final Logger logger = LogManager.getLogger(this.getClass());
 
     /**
-     * Get contents of one note, if the user doesn't have admin role and the
-     * note isn't theirs send 403 Forbidden.
+     * Get the contents of one note if the note belongs to the current user
+     * or if the current user is an admin.
      *
      * @param id the note id
      * @return   the note contents

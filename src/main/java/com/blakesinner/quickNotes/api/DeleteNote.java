@@ -25,24 +25,22 @@ public class DeleteNote {
         List<Note> notes = dao.getByPropertyEqual("id", id);
 
         if (notes.size() == 0) {
-            return Response.status(404).entity("Note with id " + id + " not found").build();
+            return Response.status(404).entity("Note ID: " + id + " not found").build();
         }
 
-        Note note = notes.get(0);
-        Optional<Response> authResults = checkIfUnauthorized(note);
-
-        return authResults.orElseGet(() -> deleteFromDatabase(note));
-
-        // check if authorized
-
-        // try to delete note, return 404 or 200
+        return checkIfUnauthorized(notes.get(0))
+                .orElseGet(() -> deleteFromDatabase(notes.get(0)));
     }
 
     private Optional<Response> checkIfUnauthorized(Note note) {
         if (note.getUser().getId() != Integer.parseInt(securityContext.getUserPrincipal().getName())
                 && !securityContext.isUserInRole("ADMIN")
         ) {
-            return Optional.of(Response.status(403).entity("Note to delete does not belong to current user").build());
+            return Optional.of(
+                    Response.status(403)
+                    .entity("Note ID: " + note.getId() + " does not belong to current user")
+                    .build()
+            );
         }
 
         return Optional.empty();
@@ -50,7 +48,17 @@ public class DeleteNote {
     }
 
     private Response deleteFromDatabase(Note note) {
-        return Response.status(404).build(); // placeholder
+        dao.delete(note);
+        List<Note> noteSearch = dao.getByPropertyEqual("id", String.valueOf(note.getId()));
+
+        return noteSearch.size() == 0
+                ? Response.status(200)
+                        .entity("Note ID: " + note.getId() + " deleted")
+                        .build()
+                : Response.status(500)
+                        .entity("Note ID: " + note.getId() + " found, but could not be deleted")
+                        .build();
+
     }
 
 }

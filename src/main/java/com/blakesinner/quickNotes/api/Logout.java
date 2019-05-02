@@ -24,7 +24,7 @@ public class Logout {
     public Response logout() {
         return Response.status(Response.Status.OK)
                 .header(HttpHeaders.SET_COOKIE
-                        , "access_token=deleted-cookie; expires=Thu, 01 Jan 1970 00:00:00 GMT")
+                        , "access_token=deleted-cookie; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/quickNotes_war")
                 .entity("")
                 .build();
     }

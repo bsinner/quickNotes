@@ -39,7 +39,14 @@ public class DeleteNote {
     }
 
     private Optional<Response> checkIfUnauthorized(Note note) {
-        return Optional.of(Response.status(403).entity("Note to delete does not belong to current user").build());
+        if (note.getUser().getId() != Integer.parseInt(securityContext.getUserPrincipal().getName())
+                && !securityContext.isUserInRole("ADMIN")
+        ) {
+            return Optional.of(Response.status(403).entity("Note to delete does not belong to current user").build());
+        }
+
+        return Optional.empty();
+
     }
 
     private Response deleteFromDatabase(Note note) {

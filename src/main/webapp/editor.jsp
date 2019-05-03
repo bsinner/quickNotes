@@ -10,7 +10,6 @@
 <div id="editorContainer">
     <div id="editor"></div>
     <button id="saveBtn" class="ui green button">Save</button>
-    <a id="viewBtn" class="ui small button" href="viewNotes">View all</a>
 </div>
 
 <script type="text/javascript" src="js/editor/quill.min.js"></script>

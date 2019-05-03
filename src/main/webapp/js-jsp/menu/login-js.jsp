@@ -57,17 +57,19 @@
         const rMenu = $("#rightMenu");
 
         rMenu.empty();
-        rMenu.append("<a href=\"#\" class=\"item\" id=\"signIn\">Sign In</a>");
-        rMenu.append("<a href=\"#\" class=\"item\">Sign Up</a>");
+        rMenu.append("<a href=\"#\" class=\"item\" id=\"signIn\">Sign In</a>"
+                + "<a href=\"#\" class=\"item\">Sign Up</a>");
     }
 
     function showLoggedIn(username) {
         const rMenu = $("#rightMenu");
 
         rMenu.empty();
-        rMenu.append("<a class=\"item\">Signed in As " + username + "</a>");
-        rMenu.append("<a href=\"#\" class=\"item\" id=\"logout\">Sign Out</a>");
-        rMenu.append("<a href=\"<%=request.getContextPath()%>/api/note/all\" class=\"item\">View Saved Notes</a>");
+        rMenu.append("<a class='item'>Signed in As " + username + "</a>"
+                + "<a href='#' class='item' id='logout'>Sign Out</a>"
+                + "<a href='viewNotes' class='item'>View Saved Notes</a>"
+                + "<a href='new' class='item'>Create</a>"
+        );
     }
 
 </script>

@@ -29,3 +29,15 @@
     </div>
 </div>
 
+<div class="ui tiny modal" id="createModal">
+    <i class="icon-cancel" id="createExit"></i>
+    <div class="header">Create</div>
+    <div class="content">
+        <form class="ui form">
+            <label>Title</label>
+            <input type="text" maxlength="40">
+        </form>
+        <button class="ui button" id="createSubmit">Create</button>
+    </div>
+</div>
+

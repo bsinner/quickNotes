@@ -14,7 +14,8 @@ import java.io.IOException;
 
 public class Editor extends HttpServlet {
 
-    /** Forwards to the editor page and passes it an note if a note id was included in the query string.
+    /** 
+     * Forwards to the editor page and passes it a note if a note id was included in the query string.
      *
      * @param req               The HttpRequest
      * @param res               The HttpResponse

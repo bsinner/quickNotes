@@ -4,9 +4,14 @@
 
 <%@include file="../../templates/menu.jsp"%>
 
+<!-- Table of found notes is hidden until notes are fetched -->
 <br>
 <div class="ui two column centered grid" id="resultsTable" style="display: none;">
     <div class="column">
+
+        <h2 class="ui center aligned header">All Notes</h2>
+        <br>
+
         <table class="ui celled table" id="noteTable">
             <thead>
             <tr>
@@ -27,6 +32,12 @@
             </tr>
             </tfoot>
         </table>
+
+        <!-- Note delete success message is hidden by default -->
+        <div class="ui small message" style="display: none;" id="delMessage">
+            <div class="header">Notes Deleted</div>
+        </div>
+
     </div>
 </div>
 

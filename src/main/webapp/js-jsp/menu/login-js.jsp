@@ -5,13 +5,14 @@
 
     // Modal elements
     const loginModal = $("#loginModal");
+    const rightMenu = $("#rightMenu");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
 
     /*
      * Event handlers
      */
-    $("body").on("click", "#logout", () => {
+    rightMenu.on("click", "#logout", () => {
         $.ajax({
             method: "POST"
             , url: "<%=request.getContextPath()%>/api/logout"
@@ -20,7 +21,12 @@
             showLoggedOut();
         });
 
-    }).on("click", "#loginBtn", () => {
+    }).on("click", "#signIn", () => loginModal.modal("show"));
+
+    /*
+     * Event handlers for modal buttons
+     */
+    loginModal.on("click", "#loginBtn", () => {
 
         if (emailInput.value < 1
                 || passwordInput.value < 1) {
@@ -28,9 +34,7 @@
             return;
         }
 
-        /*
-         * Login method
-         */
+        // Login
         $.ajax({method: "POST"
                 , url: "<%=request.getContextPath()%>/api/login?email=" + emailInput.value + "&password=" + passwordInput.value
         }).done(data => {
@@ -39,8 +43,7 @@
             loginModal.modal("hide")
         })}
 
-    ).on("click", "#loginExit", () => loginModal.modal("hide")
-    ).on("click", "#signIn", () => loginModal.modal("show"));
+    ).on("click", "#loginExit", () => loginModal.modal("hide") );
 
     // DHTML Menu bar generation
     function initMenu() {
@@ -54,18 +57,14 @@
     }
 
     function showLoggedOut() {
-        const rMenu = $("#rightMenu");
-
-        rMenu.empty();
-        rMenu.append("<a href=\"#\" class=\"item\" id=\"signIn\">Sign In</a>"
+        rightMenu.empty();
+        rightMenu.append("<a href=\"#\" class=\"item\" id=\"signIn\">Sign In</a>"
                 + "<a href=\"#\" class=\"item\">Sign Up</a>");
     }
 
     function showLoggedIn(username) {
-        const rMenu = $("#rightMenu");
-
-        rMenu.empty();
-        rMenu.append("<a class='item'>Signed in As " + username + "</a>"
+        rightMenu.empty();
+        rightMenu.append("<a class='item'>Signed in As " + username + "</a>"
                 + "<a href='#' class='item' id='logout'>Sign Out</a>"
                 + "<a href='viewNotes' class='item'>View Saved Notes</a>"
                 + "<a href='new' class='item'>Create</a>"

@@ -1,18 +1,9 @@
 <script>
 
-
     /*
-     * Button and checkbox event handlers
+     * Add event handlers to note list
      */
-    $("input[type=checkbox]").bind("click", () => {
-        const btn = $("#delBtn");
-
-        if ($("input:checkbox:checked").length > 0) {
-            btn.attr("class", "ui small button");
-        } else {
-            btn.attr("class", "ui small disabled button");
-        }
-    });
+     setUpForm();
 
     /*
      * Fetch user notes when the page loads
@@ -24,7 +15,7 @@
     /*
      * Display found user notes
      */
-    const outputData = data => {
+    function outputData(data) {
 
         if (Object.keys(data).length === 0) {
             displayNoneFound();
@@ -36,10 +27,10 @@
 
         Object.keys(data).forEach(key => {
 
-            resultsNode.append("<tr>"
+            resultsNode.append("<tr class='note'  data-id='" + key + "'>"
                 + "<td class='collasing'>"
                     + "<div class='ui fitted checkbox'>"
-                        + "<input type='checkbox'><label></label>"
+                        + "<input type='checkbox' class='delCheckbox'><label></label>"
                     + "</div>"
                 + "</td>"
                 + "<td><a href='editor?note=" + key + "'>" + data[key].title + "</a></td>"
@@ -48,13 +39,68 @@
 
         });
 
-    };
+    }
+
+    /*
+     * Add event handlers to form.
+     */
+    function setUpForm() {
+        const btn = $("#delBtn");
+
+        $("#results").on("click", ".delCheckbox", () => {
+
+
+            if ($(".delCheckbox:input:checked").length > 0) {
+                btn.attr("class", "negative ui small button");
+            } else {
+                btn.attr("class", "ui small disabled button");
+            }
+
+        });
+
+        btn.click(() => {
+            let delCount = 0;
+
+            $(".note").each(function(i) {
+
+                const currElement = $(this);
+
+                if (currElement.find(".delCheckbox:input:checked").length > 0) {
+                    deleteNote(currElement.attr("data-id")).then(deleted => {
+
+                        if (deleted) {
+                            delCount++;
+                            currElement.remove();
+                        }
+
+                    });
+                }
+            });
+
+            btn.attr("class", "ui small disabled button");
+
+        });
+    }
+
+    async function deleteNote(id) {
+
+        return await fetch("<%=request.getContextPath()%>/api/delete?id=" + id, {
+                    method: "DELETE", credentials: "same-origin"
+            })
+            .then(res => {
+                if (!res.ok) {
+                    console.error("Error deleting note: " + res.status);
+                    return false;
+                }
+                return true;
+            });
+    }
 
     /*
      * Display if none are found
      */
-    const displayNoneFound = () => {
-        alert("no notes found");
+    function displayNoneFound() {
+        // TODO: create link to create note
     }
 
 </script>

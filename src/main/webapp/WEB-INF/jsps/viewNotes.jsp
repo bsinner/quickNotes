@@ -16,9 +16,7 @@
             </tr>
             </thead>
             <tbody id="results">
-                <!-- ------- -->
                 <!-- Results -->
-                <!-- ------- -->
             </tbody>
             <tfoot class="full-width">
             <tr>

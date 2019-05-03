@@ -7,7 +7,7 @@
 <!-- Table of found notes is hidden until notes are fetched -->
 <br>
 <div class="ui two column centered grid" id="resultsTable" style="display: none;">
-    <div class="column">
+    <div class="column" id="resultsColumn">
 
         <h2 class="ui center aligned header">All Notes</h2>
         <br>

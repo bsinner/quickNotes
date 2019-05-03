@@ -49,8 +49,8 @@
         // Delete button
         const btn = $("#delBtn");
 
-        // If at least one checkbox is checked make the delete
-        // button clickable
+        // If at least one checkbox is checked activate the
+        // delete button
         $("#results").on("click", ".delCheckbox", () => {
 
             if ($(".delCheckbox:input:checked").length > 0) {
@@ -61,29 +61,41 @@
 
         });
 
-        // When the delete button is clicked delete all selected
-        // notes, remove them from the page, and gray out the
-        // delete button.
+        // Deletes the selected notes, displays success message,
+        // deactivates delete button. Promise.all() is used so
+        // the page will wait and display the number of notes
+        // deleted instead of 0
         btn.click(() => {
             let delCount = 0;
+
+            var promises = [];
 
             $(".note").each(function(i) {
 
                 const currElement = $(this);
 
                 if (currElement.find(".delCheckbox:input:checked").length > 0) {
-                    deleteNote(currElement.attr("data-id")).then(deleted => {
 
-                        if (deleted) {
-                            delCount++;
-                            currElement.remove();
+                    promises.push(deleteNote(currElement.attr("data-id")).then(wasDeleted => {
+
+                        if (wasDeleted) {
+                            delCount += 1;
+                            currElement.transition({
+                                animation : "scale"
+                                , onComplete : () => { currElement.remove(); }
+                            })
                         }
 
-                    });
+                    }));
+
                 }
             });
 
-            btn.attr("class", "ui small disabled button");
+            Promise.all(promises)
+                .then(() => {
+                    btn.attr("class", "ui small disabled button");
+                    showMessage(delCount);
+                });
 
         });
     }
@@ -92,9 +104,9 @@
      * Try to delete a note with the passed in id, on success return
      * true, on error return false.
      */
-    async function deleteNote(id) {
+    function deleteNote(id) {
 
-        return await fetch("<%=request.getContextPath()%>/api/delete?id=" + id, {
+        return fetch("<%=request.getContextPath()%>/api/delete?id=" + id, {
                     method: "DELETE", credentials: "same-origin"
             })
             .then(res => {
@@ -104,6 +116,30 @@
                 }
                 return true;
             });
+    }
+
+    /*
+     * Show a message displaying how many notes where deleted
+     */
+    function showMessage(count) {
+
+        const msg = $("<div class='ui small message'>"
+                        + "<div class='header'>"
+                            + count
+                            + (count === 1 ? " Note was" : " Notes were")
+                            + " Deleted"
+                        + "</div>"
+                    + "</div>");
+
+        $("#resultsColumn").append(msg);
+
+        setTimeout(() => {
+            msg.transition({
+                animation : "scale"
+                , onComplete : () => { msg.remove(); }
+            });
+        }, 4500);
+
     }
 
     /*

@@ -3,7 +3,7 @@
     /*
      * Add event handlers to note list
      */
-     setUpForm();
+    setUpForm();
 
     /*
      * Fetch user notes when the page loads
@@ -42,13 +42,16 @@
     }
 
     /*
-     * Add event handlers to form.
+     * Add event handlers to the list of notes.
      */
     function setUpForm() {
+
+        // Delete button
         const btn = $("#delBtn");
 
+        // If at least one checkbox is checked make the delete
+        // button clickable
         $("#results").on("click", ".delCheckbox", () => {
-
 
             if ($(".delCheckbox:input:checked").length > 0) {
                 btn.attr("class", "negative ui small button");
@@ -58,6 +61,9 @@
 
         });
 
+        // When the delete button is clicked delete all selected
+        // notes, remove them from the page, and gray out the
+        // delete button.
         btn.click(() => {
             let delCount = 0;
 
@@ -82,6 +88,10 @@
         });
     }
 
+    /*
+     * Try to delete a note with the passed in id, on success return
+     * true, on error return false.
+     */
     async function deleteNote(id) {
 
         return await fetch("<%=request.getContextPath()%>/api/delete?id=" + id, {

@@ -58,4 +58,5 @@
 | 4/28/19 | Fixed indie project note loading servlet | 1 ||
 | 4/29/19 | Fixed indie project authentication role bugs and js bug in indie project | 2 ||
 | 4/30/19 | Start changing indie project back to loading notes with AJAX | .5 ||
-| 5/1/19  | Complete loading note with AJAX in indie project | .5 ||
+| 5/1/19  | Completed indie project loading note with AJAX | .5 ||
+| 5/2/19  | Completed indie project delete note endpoint, worked on indie project front end | 9 ||

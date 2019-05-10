@@ -8,3 +8,7 @@ i {
 i:hover {
     color: rgba(0, 0, 0, .9);
 }
+
+.leftButtonMargin {
+    margin-left: .7em !important;
+}

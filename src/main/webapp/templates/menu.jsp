@@ -1,3 +1,4 @@
+<!-- Menu bar -->
 <div class="ui huge menu">
     <div class="header item">
         <a href="editor" id="homeLink">Quick Notes</a>
@@ -8,36 +9,57 @@
     </div>
 </div>
 
-<%--login popup--%>
+<!-- Login modal -->
 <div class="ui tiny modal" id="loginModal">
+
     <i class="icon-cancel" id="loginExit"></i>
     <div class="header">
         Sign In
     </div>
+
     <div class="content">
+
         <form class="ui form" id="loginForm">
+
             <div class="field">
                 <label>E-mail</label>
                 <input type="text" id="email" name="email">
             </div>
+
             <div class="field">
                 <label>Password</label>
                 <input type="password" id="password" name="password">
             </div>
+
         </form>
+
         <button class="ui button" id="loginBtn">Sign In</button>
+
     </div>
 </div>
 
+<!-- Create modal -->
 <div class="ui tiny modal" id="createModal">
+
     <i class="icon-cancel" id="createExit"></i>
-    <div class="header">Create</div>
+    <div class="header">
+        Create
+    </div>
+
     <div class="content">
+
         <form class="ui form">
-            <label>Title</label>
-            <input type="text" maxlength="40">
+            <div class="field">
+                <label>Title</label>
+                <input id="title" type="text" maxlength="40">
+            </div>
         </form>
-        <button class="ui button" id="createSubmit">Create</button>
+
+        <br>
+        <button class="ui right floated green button leftButtonMargin" id="createSubmit">Create</button>
+        <button class="ui right floated button" id="createCancel">Cancel</button>
+        <br><br>
+
     </div>
 </div>
 

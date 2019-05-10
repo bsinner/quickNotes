@@ -6,6 +6,7 @@
 
     // Modal elements
     const loginModal = $("#loginModal");
+    const createModal = $("#createModal");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
 
@@ -21,10 +22,12 @@
             showLoggedOut();
         });
 
-    }).on("click", "#signIn", () => loginModal.modal("show"));
+    })
+    .on("click", "#create", () => { createModal.modal("show"); })
+    .on("click", "#signIn", () => { loginModal.modal("show"); });
 
     /*
-     * Event handlers for modal buttons
+     * Login modal event handlers
      */
     loginModal.on("click", "#loginBtn", () => {
 
@@ -43,9 +46,29 @@
             loginModal.modal("hide")
         })}
 
-    ).on("click", "#loginExit", () => loginModal.modal("hide") );
+    ).on("click", "#loginExit", () => { loginModal.modal("hide"); });
 
-    // DHTML Menu bar generation
+    /*
+     * Create modal event handlers
+     */
+    createModal
+    .on("click", "#createSubmit", () => {
+        const title = document.getElementById("title").value;
+
+        if (title.length < 1) {
+            alert("note created");
+        } else {
+            // highlight form fields     
+        }
+
+    })
+    .on("click", "#createCancel", () => { createModal.modal("hide"); })
+    .on("click", "#createExit", () => { createModal.modal("hide"); });
+
+    /*
+     * Create menu that displays if the user is logged in or
+     * logged out
+     */
     function initMenu() {
         const username = sessionStorage.getItem("username");
 
@@ -67,9 +90,9 @@
         const rMenu = $("#rightMenu");
         rMenu.empty();
         rMenu.append("<a class='item'>Signed in As " + username + "</a>"
-                + "<a href='#' class='item' id='logout'>Sign Out</a>"
+                + "<a class='item' id='logout'>Sign Out</a>"
                 + "<a href='viewNotes' class='item'>View Saved Notes</a>"
-                + "<a href='new' class='item'>Create</a>"
+                + "<a class='item' id='create'>Create</a>"
         );
     }
 

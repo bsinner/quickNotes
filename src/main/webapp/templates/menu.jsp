@@ -51,11 +51,11 @@
         <form class="ui form">
 
             <div class="field" id="titleDiv">
-                <div class="ui error message">
-                    <p>Note must have a title</p>
-                </div>
                 <label>Title</label>
                 <input id="title" type="text" maxlength="40">
+                <div class="ui compact small negative message" id="titleError" style="display: none;">
+                    <p>Note must have title</p>
+                </div>
             </div>
 
         </form>

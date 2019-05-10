@@ -12,3 +12,7 @@ i:hover {
 .leftButtonMargin {
     margin-left: .7em !important;
 }
+
+#titleError {
+    padding: .4em .65em .4em .65em;
+}

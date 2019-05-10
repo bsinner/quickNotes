@@ -59,20 +59,12 @@
         if (title.val().length > 1) {
 
         } else {
-            const titleDiv = $("#titleDiv");
-            titleDiv.addClass("error");
-
-            title.on("input", () => {
-                if (title.val().length > 1) {
-                    titleDiv.removeClass("error");
-                }
-            })
-
+            showCreateNoteInputError(title);
         }
 
     })
-    .on("click", "#createCancel", () => { createModal.modal("hide"); })
-    .on("click", "#createExit", () => { createModal.modal("hide"); });
+    .on("click", "#createCancel", () => { closeCreateModal(); })
+    .on("click", "#createExit", () => { closeCreateModal(); });
 
     /*
      * Create menu that displays if the user is logged in or
@@ -103,6 +95,33 @@
                 + "<a href='viewNotes' class='item'>View Saved Notes</a>"
                 + "<a class='item' id='create'>Create</a>"
         );
+    }
+
+    /*
+     * Show create note input error
+     */
+    function showCreateNoteInputError(title) {
+        const titleDiv = $("#titleDiv");
+        const titleErrMsg = document.getElementById("titleError");
+
+        titleDiv.addClass("error");
+        titleErrMsg.removeAttribute("style");
+
+        title.on("input", () => {
+            if (title.val().length > 1) {
+                titleErrMsg.setAttribute("style", "display: none;");
+                titleDiv.removeClass("error");
+            }
+        });
+    }
+
+    /*
+     * Close the create modal and clear any error states
+     */
+    function closeCreateModal() {
+        createModal.modal("hide");
+        $("#titleDiv").removeClass("error");
+        document.getElementById("titleError").setAttribute("style", "display: none");
     }
 
 </script>

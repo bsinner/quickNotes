@@ -1,18 +1,18 @@
 <script>
 
+
     // Display if the user is logged in or logged out
     initMenu();
 
     // Modal elements
     const loginModal = $("#loginModal");
-    const rightMenu = $("#rightMenu");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
 
     /*
      * Event handlers
      */
-    rightMenu.on("click", "#logout", () => {
+    $("#rightMenu").on("click", "#logout", () => {
         $.ajax({
             method: "POST"
             , url: "<%=request.getContextPath()%>/api/logout"
@@ -57,14 +57,16 @@
     }
 
     function showLoggedOut() {
-        rightMenu.empty();
-        rightMenu.append("<a href=\"#\" class=\"item\" id=\"signIn\">Sign In</a>"
-                + "<a href=\"#\" class=\"item\">Sign Up</a>");
+        const rMenu = $("#rightMenu");
+        rMenu.empty();
+        rMenu.append("<a class='item' id='signIn'>Sign In</a>"
+                + "<a class='item'>Sign Up</a>");
     }
 
     function showLoggedIn(username) {
-        rightMenu.empty();
-        rightMenu.append("<a class='item'>Signed in As " + username + "</a>"
+        const rMenu = $("#rightMenu");
+        rMenu.empty();
+        rMenu.append("<a class='item'>Signed in As " + username + "</a>"
                 + "<a href='#' class='item' id='logout'>Sign Out</a>"
                 + "<a href='viewNotes' class='item'>View Saved Notes</a>"
                 + "<a href='new' class='item'>Create</a>"

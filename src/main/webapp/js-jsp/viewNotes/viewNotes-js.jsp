@@ -126,7 +126,7 @@
         const msg = $("<div class='ui small message'>"
                         + "<div class='header'>"
                             + count
-                            + (count === 1 ? " Note was" : " Notes were")
+                            + (count === 1 ? " Note" : " Notes")
                             + " Deleted"
                         + "</div>"
                     + "</div>");

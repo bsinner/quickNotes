@@ -53,12 +53,21 @@
      */
     createModal
     .on("click", "#createSubmit", () => {
-        const title = document.getElementById("title").value;
 
-        if (title.length < 1) {
-            alert("note created");
+        const title = $("#title");
+
+        if (title.val().length > 1) {
+
         } else {
-            // highlight form fields     
+            const titleDiv = $("#titleDiv");
+            titleDiv.addClass("error");
+
+            title.on("input", () => {
+                if (title.val().length > 1) {
+                    titleDiv.removeClass("error");
+                }
+            })
+
         }
 
     })

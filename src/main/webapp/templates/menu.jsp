@@ -49,10 +49,15 @@
     <div class="content">
 
         <form class="ui form">
-            <div class="field">
+
+            <div class="field" id="titleDiv">
+                <div class="ui error message">
+                    <p>Note must have a title</p>
+                </div>
                 <label>Title</label>
                 <input id="title" type="text" maxlength="40">
             </div>
+
         </form>
 
         <br>

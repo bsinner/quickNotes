@@ -3,6 +3,7 @@ package com.blakesinner.quickNotes.api;
 import com.blakesinner.quickNotes.entity.Note;
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
+import com.blakesinner.quickNotes.util.DurationMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -94,7 +95,7 @@ public class GetNote {
 
         for (Note note : notes) {
             ObjectNode childNode = mapper.createObjectNode();
-            childNode.put("created", note.getCreationDate().toString());
+            childNode.put("created", DurationMessage.elapsed(note.getCreationDate()));
             childNode.put("title", note.getTitle());
             root.set(String.valueOf(note.getId()), childNode);
         }

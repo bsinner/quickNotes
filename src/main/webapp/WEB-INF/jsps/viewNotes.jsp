@@ -4,7 +4,7 @@
 
 <%@include file="../../templates/menu.jsp"%>
 
-<!-- Table of found notes is hidden until notes are fetched -->
+<!-- Hidden table of found notes -->
 <br>
 <div class="ui two column centered grid" id="resultsTable" style="display: none;">
     <div class="column" id="resultsColumn">
@@ -17,7 +17,7 @@
             <tr>
                 <th></th>
                 <th>Name</th>
-                <th>Created on</th>
+                <th>Created</th>
             </tr>
             </thead>
             <tbody id="results">

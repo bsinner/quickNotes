@@ -60,3 +60,4 @@
 | 4/30/19 | Start changing indie project back to loading notes with AJAX | .5 ||
 | 5/1/19  | Completed indie project loading note with AJAX | .5 ||
 | 5/2/19  | Completed indie project delete note endpoint, worked on indie project front end | 9 ||
+| 5/10/19 | Setup indie project create and update | 9 ||

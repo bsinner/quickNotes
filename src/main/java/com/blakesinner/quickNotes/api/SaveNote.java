@@ -10,6 +10,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.util.List;
 
 @Path("/saveNote")
 public class SaveNote {
@@ -25,7 +26,7 @@ public class SaveNote {
             , @QueryParam("contents") String contents) {
 
         User user = getUser();
-        Note note = getNote();
+        Note note = getNote(id);
 
         Response error = getInvalidResponse(user, note);
 
@@ -37,14 +38,6 @@ public class SaveNote {
         return Response.status(204).build();
     }
 
-    private Note getNote() {
-        return null;
-    }
-
-    private User getUser() {
-        return null;
-    }
-
     private Response getInvalidResponse(User user, Note note) {
         return null;
     }
@@ -52,4 +45,20 @@ public class SaveNote {
     private void updateNote(String title, String contents) {
 
     }
+
+
+    private Note getNote(String id) {
+        List<Note> notes = dao.getByPropertyEqual("id", id);
+        if (notes.size() > 0) return notes.get(0);
+        return null;
+    }
+
+    private User getUser() {
+        return new GenericDAO<>(User.class)
+                .getByPropertyEqual(
+                        "id"
+                        , securityContext.getUserPrincipal().getName())
+                .get(0);
+    }
+
 }

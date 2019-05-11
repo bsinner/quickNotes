@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @Table(name = "notes")
 public class Note {
 
-
     private String title;
     private String contents;
-    @Column(name = "creation_date")
+
+    @Column(name = "creation_date", insertable = false)
     private LocalDateTime creationDate;
 
     @ManyToOne

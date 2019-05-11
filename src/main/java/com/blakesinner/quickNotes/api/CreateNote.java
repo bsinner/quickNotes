@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Secured(roles = {"USER", "ADMIN"})
@@ -36,12 +37,10 @@ public class CreateNote {
     }
 
     private boolean duplicateCheck(String title) {
-        // TODO: search for notes by user id and title
-        List<Note> allNotes = dao.getByPropertyEqual("title", title);
-        int uid = Integer.parseInt(securityContext.getUserPrincipal().getName());
+        Set<Note> allNotes = getCurrentUser().getNotes();
 
         List<Note> userNotes = allNotes.stream()
-                .filter(note -> note.getUser().getId() == uid)
+                .filter(note -> note.getTitle().equals(title))
                 .collect(Collectors.toCollection(ArrayList::new));
 
         return userNotes.size() != 0;
@@ -49,11 +48,7 @@ public class CreateNote {
 
 
     private Note getNewNote(String title) {
-        String uid = securityContext.getUserPrincipal().getName();
-        User user = new GenericDAO<>(User.class)
-                .getByPropertyEqual("id", uid)
-                .get(0);
-
+        User user = getCurrentUser();
         Note note = new Note(title, "{}", user);
         int id = dao.insert(note);
 
@@ -78,6 +73,10 @@ public class CreateNote {
 
     private Response okResponse(int id) {
         return Response.status(200).entity(id).build();
+    }
+
+    private User getCurrentUser() {
+        return new GenericDAO<>(User.class).getByPropertyEqual("id", securityContext.getUserPrincipal().getName()).get(0);
     }
 
 }

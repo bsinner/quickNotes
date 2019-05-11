@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 
+@Secured(roles = {"USER", "ADMIN"})
 @Path("/saveNote")
 public class SaveNote {
 
@@ -28,24 +29,45 @@ public class SaveNote {
         User user = getUser();
         Note note = getNote(id);
 
-        Response error = getInvalidResponse(user, note);
+        Response error = errorCheck(user, note);
 
         if (error != null) {
             return error;
         }
 
-        updateNote(title, contents);
+        updateNote(title, contents, note);
         return Response.status(204).build();
     }
+    
+    private void updateNote(String title, String contents, Note note) {
+        if (title != null) {
+            note.setTitle(title);
+        }
 
-    private Response getInvalidResponse(User user, Note note) {
+        if (contents != null) {
+            note.setContents(contents);
+        }
+
+        dao.saveOrUpdate(note);
+    }
+
+    private Response errorCheck(User user, Note note) {
+        if (note == null) {
+            return Response.status(404)
+                    .entity("Error 404: Note not found")
+                    .build();
+        }
+
+        if (user.getId() != note.getUser().getId()
+                && !securityContext.isUserInRole("ADMIN")) {
+
+            return Response.status(403)
+                    .entity("Error 403: Note does not belong to user")
+                    .build();
+        }
+
         return null;
     }
-
-    private void updateNote(String title, String contents) {
-
-    }
-
 
     private Note getNote(String id) {
         List<Note> notes = dao.getByPropertyEqual("id", id);

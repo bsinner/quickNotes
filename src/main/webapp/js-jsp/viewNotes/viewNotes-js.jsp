@@ -33,7 +33,7 @@
                         + "<input type='checkbox' class='delCheckbox'><label></label>"
                     + "</div>"
                 + "</td>"
-                + "<td><a href='editor?note=" + key + "'>" + data[key].title + "</a></td>"
+                + "<td><a href='editor?id=" + key + "'>" + data[key].title + "</a></td>"
                 + "<td>" + data[key].created + "</td>"
             + "</tr>");
 

@@ -1,24 +1,35 @@
 <script>
 
 const REGEX = /id=([0-9]+)/;
+const PATH = "<%=request.getContextPath()%>";
 
 /*
- * Load the editor
+ * Load the editor, load the current note, if no note is detected
+ * id is null
  */
 const editor = loadEditor();
+loadNote();
 
-/*
- * If there is a query string containing a note id, load the note
- */
-const id = checkQueryString();
-if (id != null) {
-    fetchNote(id).then(text => loadContents(editor, text));
+function loadNote() {
+    const idString = parseQueryString();
+
+    if (idString != null) {
+
+        fetchNote(idString)
+                .then(text => {
+                    if (text != null) {
+                        loadContents(text);
+                        addSaveButton(idString);
+                    }
+                });
+    }
+
 }
 
 /*
- * Check the query string for a note id parameter
+ * Search the query string for a note parameter
  */
-function checkQueryString() {
+function parseQueryString() {
     let queryString = window.location.search;
 
     const results = queryString.match(REGEX);
@@ -34,29 +45,39 @@ function checkQueryString() {
  * Fetch the contents of a given note id
  */
 async function fetchNote(id) {
-    return await fetch("<%=request.getContextPath()%>/api/note?id=" + id, { credentials: "same-origin" })
+    return await fetch(PATH + "/api/note?id=" + id, { credentials: "same-origin" })
         .then(res => {
             if (!res.ok) {
                 console.error("Error loading note: " + res.status);
-                return "{}";
+                return null;
             }
 
             return res.text();
         })
         .then(data => data)
-        .catch(err => { console.error(err) });
+        .catch(err => { console.error(err); });
 }
 
 /*
  * Load note contents into the Quill editor
  */
-function loadContents(editor, noteString) {
+function loadContents(noteString) {
     try {
         const noteJson = JSON.parse(noteString);
             editor.setContents(noteJson);
     } catch (SyntaxError) {
         console.error(SyntaxError + "Could not load note json: " + noteString);
     }
+}
+
+function addSaveButton(id) {
+    const saveBtn = document.getElementById("saveBtn");
+    saveBtn.onclick = () => {
+        const url = PATH + "/api/"
+        fetch()
+    };
+    saveBtn.removeAttribute("style");
+
 }
 
 /*

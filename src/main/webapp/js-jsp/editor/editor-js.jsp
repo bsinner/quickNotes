@@ -72,10 +72,24 @@ function loadContents(noteString) {
 
 function addSaveButton(id) {
     const saveBtn = document.getElementById("saveBtn");
+
     saveBtn.onclick = () => {
-        const url = PATH + "/api/"
-        fetch()
+        const url = PATH + "/api/saveNote?id=" + id;
+        const props = {
+            credentials : "same-origin"
+            , method : "POST"
+            , headers : { "note-contents" : JSON.stringify(editor.getContents()) }
+        };
+
+        fetch(url, props)
+                .then(res => {
+                    if (!res.ok) {
+                        console.error("Error saving note: " + res.status);
+                    }
+                    // TODO: gray out save button temporarily
+                });
     };
+
     saveBtn.removeAttribute("style");
 
 }

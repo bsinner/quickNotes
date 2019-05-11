@@ -4,9 +4,7 @@ import com.blakesinner.quickNotes.entity.Note;
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
@@ -33,11 +31,11 @@ public class SaveNote {
      * @param contents the contents, can be null
      * @return         response indicating update success
      */
-    @GET //TODO: change to post
+    @POST
     public Response saveNote(
             @QueryParam("id") String id
-            , @QueryParam("title") String title
-            , @QueryParam("contents") String contents) {
+            , @HeaderParam("note-title") String title
+            , @HeaderParam("note-contents") String contents) {
 
         User user = getUser();
         Note note = getNote(id);

@@ -1,6 +1,6 @@
 <script>
 
-const REGEX = /note=([0-9]+)/;
+const REGEX = /id=([0-9]+)/;
 
 /*
  * Load the editor

@@ -1,5 +1,7 @@
 <script>
 
+    // context path changes between local host and AWS
+    const contextPath = "<%=request.getContextPath()%>";
 
     // Display if the user is logged in or logged out
     initMenu();
@@ -15,8 +17,8 @@
      */
     $("#rightMenu").on("click", "#logout", () => {
         $.ajax({
-            method: "POST"
-            , url: "<%=request.getContextPath()%>/api/logout"
+            method : "POST"
+            , url : contextPath + "/api/logout"
         }).done(() => {
             window.sessionStorage.removeItem("username");
             showLoggedOut();
@@ -39,7 +41,7 @@
 
         // Login
         $.ajax({method: "POST"
-                , url: "<%=request.getContextPath()%>/api/login?email=" + emailInput.value + "&password=" + passwordInput.value
+                , url: contextPath + "/api/login?email=" + emailInput.value + "&password=" + passwordInput.value
         }).done(data => {
             window.sessionStorage.setItem("username", data);
             showLoggedIn(data);
@@ -51,20 +53,36 @@
     /*
      * Create modal event handlers
      */
-    createModal
-    .on("click", "#createSubmit", () => {
-
+    createModal.on("click", "#createSubmit", () => {
         const title = $("#title");
 
         if (title.val().length > 1) {
+            const url = contextPath + "/api/createNote?title=" + title.val();
+            const props = { credentials : "same-origin", method : "PUT" };
+
+            fetch(url, props)
+                    .then(res => {
+                        if (res.ok) {
+                            res.text().then(t => {
+                                window.location = contextPath + "/editor?id=" + t;
+                            });
+                        } else if (res.status === 422) {
+                            createNoteInputError("Note " + title.val() + " already exists");
+                        }
+                        // TODO: handle user not signed in
+                    });
 
         } else {
-            showCreateNoteInputError(title);
+            createNoteInputError(title, "Note must have title");
         }
 
     })
     .on("click", "#createCancel", () => { closeCreateModal(); })
     .on("click", "#createExit", () => { closeCreateModal(); });
+
+    createModal.keydown(k => {
+        if (k === 13) {alert("enter key pressed");k.preventDefault();}
+    });
 
     /*
      * Create menu that displays if the user is logged in or
@@ -100,18 +118,18 @@
     /*
      * Show create note input error
      */
-    function showCreateNoteInputError(title) {
-        const titleDiv = $("#titleDiv");
-        const titleErrMsg = document.getElementById("titleError");
+    function createNoteInputError(msg) {
+        const title = $("#title");
+        const div = $("#titleDiv");
+        const errorMsg = document.getElementById("titleError");
 
-        titleDiv.addClass("error");
-        titleErrMsg.removeAttribute("style");
+        div.addClass("error");
+        $("#titleError > p").text(msg);
+        errorMsg.removeAttribute("style");
 
         title.on("input", () => {
-            if (title.val().length > 1) {
-                titleErrMsg.setAttribute("style", "display: none;");
-                titleDiv.removeClass("error");
-            }
+            errorMsg.setAttribute("style", "display: none;");
+            div.removeClass("error");
         });
     }
 

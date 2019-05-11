@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * @author bsinner
  */
 @Secured(roles = {"USER", "ADMIN"})
-@Path("/create")
+@Path("/createNote")
 public class CreateNote {
 
     @Context

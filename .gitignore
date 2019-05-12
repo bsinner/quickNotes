@@ -11,6 +11,7 @@
 sshLogin.sh
 *accessTokenPw.txt*
 *databaseUtility.properties*
+*translateKey.txt*
 
 # User-specific stuff:
 # .idea/workspace.xml

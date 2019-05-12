@@ -17,6 +17,7 @@ public class JspFilter {
     private Cookie[] cookies;
     private static final String NAME = "access_token";
     private final Logger logger = LogManager.getLogger(this.getClass());
+    private static final String SECRET = "/accessTokenPw.txt";
 
     /**
      * Instantiates a new JspFilter.
@@ -32,13 +33,12 @@ public class JspFilter {
      */
     public boolean isValid() {
         Optional<String> token = getToken();
-        byte[] key = new JwtSecretLoader().getSecret().getBytes();
 
         if (!token.isPresent()) return false;
 
         try {
             Jwts.parser()
-                .setSigningKey(key)
+                .setSigningKey(new KeyLoader().getKeyBytes(SECRET))
                 .parseClaimsJws(token.get());
         } catch (JwtException je) {
             logger.info("Invalid access token found: " + token.get());

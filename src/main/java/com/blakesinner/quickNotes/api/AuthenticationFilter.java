@@ -1,6 +1,6 @@
 package com.blakesinner.quickNotes.api;
 
-import com.blakesinner.quickNotes.util.JwtSecretLoader;
+import com.blakesinner.quickNotes.util.KeyLoader;
 import io.jsonwebtoken.*;
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
@@ -27,6 +27,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
     private static final String REALM = "Quick Notes";
     private static final String CHARSET = "UTF-8";
+    private static final String SECRET = "/accessTokenPw.txt";
 
     /**
      * If an access token was included in the request, call a method to validate it,
@@ -61,7 +62,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             String tokenString = token.getValue();
 
             Jws<Claims> parsedClaims = Jwts.parser()
-                    .setSigningKey(getKey())
+                    .setSigningKey(new KeyLoader().getKeyBytes(SECRET))
                     .parseClaimsJws(tokenString);
 
             Claims claims = parsedClaims.getBody();
@@ -128,10 +129,4 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         });
     }
 
-    /**
-     * Get the current JWT secret key being used to validate tokens.
-     *
-     * @return the key
-     */
-    private byte[] getKey() { return new JwtSecretLoader().getSecret().getBytes(); }
 }

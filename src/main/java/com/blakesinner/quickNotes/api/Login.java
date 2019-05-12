@@ -2,12 +2,11 @@ package com.blakesinner.quickNotes.api;
 
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
-import com.blakesinner.quickNotes.util.JwtSecretLoader;
+import com.blakesinner.quickNotes.util.KeyLoader;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-
 import javax.servlet.ServletContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -25,6 +24,7 @@ public class Login {
     private static final String ISSUER = "Quick Notes";
     private static final String REALM = "Quick Notes";
     private static final String CHARSET = "UTF-8";
+    private static final String SECRET = "/accessTokenPw.txt";
 
     /**
      * Search for the email and password in the database and send an access
@@ -97,7 +97,7 @@ public class Login {
                 .setExpiration(expiry);
 
         accessToken.signWith(
-                Keys.hmacShaKeyFor(getKey())
+                Keys.hmacShaKeyFor(new KeyLoader().getKeyBytes(SECRET))
                 , SignatureAlgorithm.HS256
         );
 
@@ -123,12 +123,5 @@ public class Login {
                         , " realm=\"" + REALM + "\", charset=\"" + CHARSET + "\"")
                 .build();
     }
-
-    /**
-     * Get the current secret key used to sign tokens.
-     *
-     * @return the key
-     */
-    private byte[] getKey() { return new JwtSecretLoader().getSecret().getBytes(); }
 
 }

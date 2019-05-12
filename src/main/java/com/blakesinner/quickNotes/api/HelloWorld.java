@@ -2,8 +2,7 @@ package com.blakesinner.quickNotes.api;
 
 import javax.ws.rs.*;
 
-@Secured(roles = {"USER", "ADMIN"})
-@Path("/helloworld")
+@Path("/hello")
 public class HelloWorld {
 
     @GET

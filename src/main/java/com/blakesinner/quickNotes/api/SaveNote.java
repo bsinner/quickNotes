@@ -22,6 +22,7 @@ public class SaveNote {
     @Context
     private SecurityContext securityContext;
     private final static GenericDAO<Note> dao = new GenericDAO<>(Note.class);
+    private final static int MAX_HEADER = 32768;
 
     /**
      * Save passed in note contents and title to database.
@@ -40,7 +41,7 @@ public class SaveNote {
         User user = getUser();
         Note note = getNote(id);
 
-        Response error = errorCheck(user, note);
+        Response error = errorSearch(user, note, contents);
 
         if (error != null) {
             return error;
@@ -63,22 +64,23 @@ public class SaveNote {
         }
 
         if (contents != null) {
-            note.setContents(contents);
+            note.setContents(replaceNewLines(contents));
         }
 
         dao.saveOrUpdate(note);
     }
 
     /**
-     * Check if the note exists and if the user is permitted to
-     * update it.
+     * Check if the note exists, if the user is permitted to
+     * update it, and if the note is within the max file size.
      *
-     * @param user the current user
-     * @param note the note to update
-     * @return     response indicating the error, or null if no error
-     *             was found
+     * @param user     the current user
+     * @param note     the note to update
+     * @param contents the note contents
+     * @return         response indicating the error, or null
+     *                 if no error was found
      */
-    private Response errorCheck(User user, Note note) {
+    private Response errorSearch(User user, Note note, String contents) {
         if (note == null) {
             return Response.status(404)
                     .entity("Error 404: Note not found")
@@ -90,6 +92,12 @@ public class SaveNote {
 
             return Response.status(403)
                     .entity("Error 403: Note does not belong to user")
+                    .build();
+        }
+
+        if (contents.getBytes().length > MAX_HEADER) {
+            return Response.status(431)
+                    .entity("Error 431: Note must smaller than " + (MAX_HEADER / 1024) + "kb")
                     .build();
         }
 
@@ -120,6 +128,17 @@ public class SaveNote {
                         "id"
                         , securityContext.getUserPrincipal().getName())
                 .get(0);
+    }
+
+    /**
+     * Replace newlines written as "\\n" with "\\\\n" because the database
+     * converts "\\n" into "\n" and javascript needs two escape characters.
+     *
+     * @param contents the String to edit
+     * @return         the edited String
+     */
+    private String replaceNewLines(String contents) {
+        return contents.replaceAll("\\n", "\\\\n");
     }
 
 }

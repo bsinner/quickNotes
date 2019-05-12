@@ -74,6 +74,7 @@ function addSaveButton(id) {
     const saveBtn = document.getElementById("saveBtn");
 
     saveBtn.onclick = () => {
+        console.log(JSON.stringify(editor.getContents())); //   <-- DELETE
         const url = PATH + "/api/saveNote?id=" + id;
         const props = {
             credentials : "same-origin"
@@ -115,5 +116,5 @@ function loadEditor() {
         , theme: "snow"
     });
 }
-
+//<i class="fas fa-language"></i>
 </script>

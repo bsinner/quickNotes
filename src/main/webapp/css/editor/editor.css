@@ -1,6 +1,6 @@
 a#homeLink { color: rgba(0,0,0,.87); }
 a#homeLink:hover { color: rgba(0,0,0,.70); }
-#editorContainer { margin: 0 2em 0 2em; }
+#editorContainer { margin: 2em 2em 0 2em; }
 #editor { height: 300px; }
 #saveBtn { float: right; }
 #viewBtn { float: left; }

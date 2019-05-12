@@ -68,3 +68,40 @@
     </div>
 </div>
 
+<!-- Translate modal -->
+<div class="ui tiny modal" id="translateModal">
+
+    <i class="icon-cancel" id="translateEdit"></i>
+    <div class="header">
+        Translate
+    </div>
+
+    <div class="content">
+
+        <form class="ui form">
+
+            <div class="field">
+                <label>Source Language</label>
+                <select id="sourceLang" class="ui fluid dropdown">
+                    <%@include file="langDropdown.jsp"%>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Destination Language</label>
+                <select id="destLang" class="ui fluid dropdown">
+                    <%@include file="langDropdownDest.jsp"%>
+                </select>
+            </div>
+
+        </form>
+
+        <br>
+        <button class="ui right floated green button leftButtonMargin" id="translateSubmit">Translate</button>
+        <button class="ui right floated button" id="translateCancel">Cancel</button>
+        <br><br>
+
+    </div>
+
+</div>
+

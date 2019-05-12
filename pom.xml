@@ -95,6 +95,11 @@
       <artifactId>jersey-container-servlet-core</artifactId>
       <version>2.25.1</version>
     </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>2.25.1</version>
+    </dependency>
     <!--java jwt-->
     <dependency>
       <groupId>io.jsonwebtoken</groupId>

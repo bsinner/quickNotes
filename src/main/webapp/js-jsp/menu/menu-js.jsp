@@ -94,13 +94,13 @@
                                 window.location = contextPath + "/editor?id=" + t;
                             });
                         } else if (res.status === 422) {
-                            createNoteInputError("Note " + title.val() + " already exists");
+                            createNoteInputError("Note " + title.val().toString() + " already exists");
                         }
                         // TODO: handle user not signed in
                     });
 
         } else {
-            createNoteInputError(title, "Note must have title");
+            createNoteInputError("Note must have title");
         }
 
     })

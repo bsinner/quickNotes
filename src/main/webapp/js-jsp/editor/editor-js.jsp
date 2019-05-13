@@ -8,7 +8,6 @@ const MAX_CHARS = 15000;
 const PER_REQUEST = 5000;
 const REQ_MAX_ELEMENTS = 100;
 
-
 /*
  * Load the editor, load the current note, if no note is detected
  * id is null

@@ -21,14 +21,17 @@
 
         <form class="ui form" id="loginForm">
 
-            <div class="field">
+            <div class="field" id="emailDiv">
                 <label>E-mail</label>
                 <input type="text" id="email" name="email">
             </div>
 
-            <div class="field">
+            <div class="field" id="passDiv">
                 <label>Password</label>
                 <input type="password" id="password" name="password">
+                <div class="ui compact small negative message" id="loginError" style="display: none;">
+                    <p>Email and password must not be left blank</p>
+                </div>
             </div>
 
         </form>

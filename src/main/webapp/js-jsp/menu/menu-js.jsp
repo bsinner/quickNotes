@@ -35,13 +35,16 @@
 
         if (emailInput.value < 1
                 || passwordInput.value < 1) {
-            // highlight form fields if they are empty
+            showLoginError("Email and password must not be left blank");
             return;
         }
 
         // Login
-        $.ajax({method: "POST"
-                , url: contextPath + "/api/login?email=" + emailInput.value + "&password=" + passwordInput.value
+        $.ajax({method : "POST"
+                , url : contextPath + "/api/login?email=" + emailInput.value + "&password=" + passwordInput.value
+                , statusCode : {
+                    401 : () => { showLoginError("Email and/or password are incorrect"); }
+                }
         }).done(data => {
             window.sessionStorage.setItem("username", data);
             showLoggedIn(data);
@@ -49,6 +52,30 @@
         })}
 
     ).on("click", "#loginExit", () => { loginModal.modal("hide"); });
+
+    // TODO: clear the error state on modal close
+    function showLoginError(msg) {
+        const email = $("#email");
+        const pass = $("#password");
+        const emailDiv = $("#emailDiv");
+        const passDiv = $("#passDiv");
+        const errorMsg = document.getElementById("loginError");
+
+        emailDiv.addClass("error");
+        passDiv.addClass("error");
+        $("#loginError > p").text(msg);
+        errorMsg.removeAttribute("style");
+
+        email.on("input", () => {
+            errorMsg.setAttribute("style", "display: none;");
+            emailDiv.removeClass("error");
+        });
+
+        pass.on("input", () => {
+            errorMsg.setAttribute("style", "display: none;");
+            passDiv.removeClass("error");
+        });
+    }
 
     /*
      * Create modal event handlers

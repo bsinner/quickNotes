@@ -166,15 +166,22 @@ document.getElementById("translateSubmit").onclick = () => {
     }
 };
 
+/*
+ * Make requests and combine the output into one array of objects
+ */
 function translateText(original, formatted) {
+
+    // Get values from dropdowns
     const s = document.getElementById("sourceLang");
     const d = document.getElementById("destLang");
     const source = s.options[s.selectedIndex].value;
     const dest = d.options[d.selectedIndex].value;
+
+    // Output
     let results = [];
 
+    // After the results are merged into one array, fetch will call the output method
     formatted.forEach((item, index) => {
-
         const url = PATH + "/api/translate?from=" + source + "&to=" + dest;
         const props = { body : JSON.stringify(item), method : "POST" };
 
@@ -183,7 +190,7 @@ function translateText(original, formatted) {
                 if (res.ok) {
                     return res.json();
                 }
-                console.error("Error: " + res.status);// TODO: error message for user
+                console.error("Error: " + res.status);// TODO: error message for user?
             })
             .then(data => {
                 results = results.concat(data);
@@ -196,7 +203,9 @@ function translateText(original, formatted) {
 
 }
 
-// TODO: move is translatable check to loopJson
+/*
+ * Put output from the translate api in the editor, close the modal
+ */
 function applyChanges(original, results) {
     let tracker = 0;
 
@@ -210,13 +219,13 @@ function applyChanges(original, results) {
     });
 
     editor.setContents(original);
+    translateModal.modal("hide");
 }
 
 /*
  * Helper functions for translating text
  */
-
-// Loop through Quill JSON
+// Wrapper for looping an array
 function loopJson(length, callback) {
     for (let i = 0; i < length; i++) {
         callback(i);
@@ -226,7 +235,7 @@ function loopJson(length, callback) {
 // Determine if an element should be translated,
 // trim filters elements with only newlines and tabs
 function isTranslatable(obj) {
-    return obj !== undefined && obj.trim().length > 1;
+    return obj !== undefined && obj.trim().length >= 1;
 }
 
 /*

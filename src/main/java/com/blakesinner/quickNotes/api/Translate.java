@@ -1,7 +1,7 @@
 package com.blakesinner.quickNotes.api;
 
 import com.blakesinner.quickNotes.util.KeyLoader;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.Client;
@@ -38,7 +38,7 @@ public class Translate {
      * @param to   the destination abbreviation
      * @return     the translated text, in json
      */
-    @GET
+    @POST
     public Response translateNoteText(String text
             , @QueryParam("from") String from
             , @QueryParam("to") String to) {

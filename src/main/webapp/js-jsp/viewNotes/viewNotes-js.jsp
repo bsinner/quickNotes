@@ -71,13 +71,11 @@
             var promises = [];
 
             $(".note").each(function(i) {
-
                 const currElement = $(this);
 
                 if (currElement.find(".delCheckbox:input:checked").length > 0) {
 
                     promises.push(deleteNote(currElement.attr("data-id")).then(wasDeleted => {
-
                         if (wasDeleted) {
                             delCount += 1;
                             currElement.transition({
@@ -85,7 +83,6 @@
                                 , onComplete : () => { currElement.remove(); }
                             })
                         }
-
                     }));
 
                 }

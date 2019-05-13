@@ -8,6 +8,7 @@ const MAX_CHARS = 15000;
 const PER_REQUEST = 5000;
 const REQ_MAX_ELEMENTS = 100;
 
+
 /*
  * Load the editor, load the current note, if no note is detected
  * id is null
@@ -170,9 +171,45 @@ function translateText(original, formatted) {
     const d = document.getElementById("destLang");
     const source = s.options[s.selectedIndex].value;
     const dest = d.options[d.selectedIndex].value;
+    let results = [];
 
-    const url = PATH + "/api/translate?from=" + source + "&to=" + dest;
-    const props = {  }
+    formatted.forEach((item, index) => {
+
+        const url = PATH + "/api/translate?from=" + source + "&to=" + dest;
+        const props = { body : JSON.stringify(item), method : "POST" };
+
+        fetch(url, props)
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+                console.error("Error: " + res.status);// TODO: error message for user
+            })
+            .then(data => {
+                results = results.concat(data);
+                if (index === formatted.length - 1) {
+                    applyChanges(original, results);
+                }
+            });
+
+    });
+
+}
+
+// TODO: move is translatable check to loopJson
+function applyChanges(original, results) {
+    let tracker = 0;
+
+    loopJson(original.length, i => {
+
+        if (isTranslatable(original[i]["insert"])) {
+            original[i]["insert"] = results[tracker].translations[0]["text"];
+            tracker++;
+        }
+
+    });
+
+    editor.setContents(original);
 }
 
 /*

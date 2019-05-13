@@ -71,7 +71,7 @@
 <!-- Translate modal -->
 <div class="ui tiny modal" id="translateModal">
 
-    <i class="icon-cancel" id="translateEdit"></i>
+    <i class="icon-cancel" id="translateExit"></i>
     <div class="header">
         Translate
     </div>

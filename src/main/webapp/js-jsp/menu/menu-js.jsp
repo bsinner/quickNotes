@@ -80,10 +80,6 @@
     .on("click", "#createCancel", () => { closeCreateModal(); })
     .on("click", "#createExit", () => { closeCreateModal(); });
 
-    createModal.keydown(k => {
-        if (k === 13) {alert("enter key pressed");k.preventDefault();}
-    });
-
     /*
      * Create menu that displays if the user is logged in or
      * logged out

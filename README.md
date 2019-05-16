@@ -1,16 +1,43 @@
-# Blake Sinner Individual Project
+# Quick Notes Enterprise Java Spring 2019 Project
 
 ### Problem Statement
-When users make notes they often use word processors or a 
-notebook/sticky notes. Although these methods work, they have their
-drawbacks. Word processors need to be downloaded, require users to 
-remember where their files are saved, and sometimes have learning 
-curves. Notebooks and sticky notes on the other hand can be lost and 
-don't have the functionality of word processors. 
+When people take notes they often use word processors or a 
+pen and paper. Although these methods work, they have
+drawbacks. Programs need to be downloaded, require users to 
+remember they saved their notes, and sometimes have more 
+features than are needed for simply taking notes. Although 
+notebooks and sticky notes are simple, they can be lost or 
+misplaced and they are bad for the environment.
 
-With this project I would like to solve the problems of desktop word
-processors by making a website that's simple and easy to use, and that 
-allows users to save their files to a common location. I also think that
-this website will be an improvement over notebooks and sticky notes 
-because it will have formatting features, such as changing font size and
-embeding links, and because it will allow users to save their notes.
+In this project I would like to make a website that combines 
+the simplicity of pens and paper and the eco-friendliness of
+taking notes on a computer. 
+
+### Project Technologies
+
+* Database
+  * MySQL
+* ORM Framework
+  * Hibernate 5
+* Authentication 
+  * JWT tokens in cookies
+* Front End
+  * Semantic UI
+  * jQuery
+  * Quill JS
+* Hosting
+  * AWS
+* Consumed Web Service
+  * Microsoft Translator Text API 3.0
+* Logging
+  * Exceptions logged with Log4J2
+* Unit Testing
+  * JUnit 5
+* Build Tool
+  * Maven
+* IDE
+ * IntelliJ IDEA
+
+
+
+

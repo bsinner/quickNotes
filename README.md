@@ -1,5 +1,7 @@
 # Quick Notes Enterprise Java Spring 2019 Project
 
+Enterprise Java Spring 2019 Individual Project
+
 ### Problem Statement
 When people take notes they often use word processors or a 
 pen and paper. Although these methods work, they have

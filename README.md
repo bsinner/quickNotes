@@ -1,4 +1,4 @@
-# Quick Notes Enterprise Java Spring 2019 Project
+# Quick Notes
 
 Enterprise Java Spring 2019 Individual Project
 

@@ -2,6 +2,8 @@
 
 Enterprise Java Spring 2019 Individual Project
 
+Currently Hosted On: [18.221.180.234:8080/quickNotes/](http://18.221.180.234:8080/quickNotes/)
+
 ### Problem Statement
 When people take notes they often use word processors or a 
 pen and paper. Although these methods work, they have

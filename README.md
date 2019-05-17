@@ -6,10 +6,10 @@ Enterprise Java Spring 2019 Individual Project
 When people take notes they often use word processors or a 
 pen and paper. Although these methods work, they have
 drawbacks. Programs need to be downloaded, require users to 
-remember they saved their notes, and sometimes have more 
+remember where they save their notes, and sometimes have more 
 features than are needed for simply taking notes. Although 
 notebooks and sticky notes are simple, they can be lost or 
-misplaced and they are bad for the environment.
+misplaced and are bad for the environment.
 
 In this project I would like to make a website that combines 
 the simplicity of pens and paper and the eco-friendliness of
@@ -17,6 +17,8 @@ taking notes on a computer.
 
 ### Project Technologies
 
+* Back End
+  * Java 8
 * Database
   * MySQL
 * ORM Framework
@@ -38,7 +40,7 @@ taking notes on a computer.
 * Build Tool
   * Maven
 * IDE
- * IntelliJ IDEA
+  * IntelliJ IDEA
 
 
 

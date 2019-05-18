@@ -1,4 +1,4 @@
-### Setting up git-ignored config files
+### Setting up git-ignored files
 
 1. Add file named translateKey.txt to src/main/resources with the Microsoft translate api key.
 

@@ -14,6 +14,8 @@ sshLogin.sh
 *src/main/resources/hibernate.cfg.xml
 *src/test/resources/databaseUtility.properties
 *src/main/java/com/blakesinner/quickNotes/api/HelloWorld.java
+*src/main/resources/mailLogin.properties
+
 # User-specific stuff:
 # .idea/workspace.xml
 # .idea/tasks.xml

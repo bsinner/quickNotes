@@ -19,7 +19,7 @@ public class PropLoader {
      * Load the passed in properties file.
      *
      * @param path the properties file path, absolute path not needed,
-     *             /file.properties will work
+     *             /file.properties will work if props are in resource folder
      * @return     the properties object
      */
     public Properties load(String path) {

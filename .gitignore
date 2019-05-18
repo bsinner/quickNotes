@@ -13,7 +13,7 @@ sshLogin.sh
 *src/main/resources/log4j2.properties
 *src/main/resources/hibernate.cfg.xml
 *src/test/resources/databaseUtility.properties
-
+*src/main/java/com/blakesinner/quickNotes/api/HelloWorld.java
 # User-specific stuff:
 # .idea/workspace.xml
 # .idea/tasks.xml

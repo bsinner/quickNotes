@@ -6,7 +6,7 @@ import javax.ws.rs.*;
 public class HelloWorld {
 
     @GET
-    public String ping() {
-        return "Hello World from Jersey!";
+    public String ping() throws NamingException {
+        return "Hello World!";
     }
 }

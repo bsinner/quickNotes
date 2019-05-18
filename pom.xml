@@ -118,12 +118,20 @@
       <version>0.10.5</version>
       <scope>runtime</scope>
     </dependency>
-    <!--Jackson-->
+    <!-- Jackson -->
     <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>2.9.8</version>
+    </dependency>
+    <!-- Mail API -->
+    <!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
+    <dependency>
+      <groupId>com.sun.mail</groupId>
+      <artifactId>javax.mail</artifactId>
+      <version>1.6.2</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 

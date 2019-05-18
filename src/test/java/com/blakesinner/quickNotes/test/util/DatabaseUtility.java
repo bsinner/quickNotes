@@ -54,11 +54,13 @@ public class DatabaseUtility {
             stmt.executeBatch();
 
         } catch (FileNotFoundException fe) {
-            logger.error(fe);
+            logger.trace(fe);
         } catch (SQLException se) {
-            logger.error(se);
-        } catch (Exception e) {
-            logger.error(e);
+            logger.trace(se);
+        } catch (IOException ioe) {
+            logger.trace(ioe);
+        } catch (ClassNotFoundException cnf) {
+            logger.trace(cnf);
         }
 
     }

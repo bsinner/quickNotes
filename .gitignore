@@ -6,12 +6,13 @@
 .idea/
 .idea/misc.xml
 *.log
-*hibernate.cfg.xml*
 *.pem
 sshLogin.sh
 *accessTokenPw.txt*
-*databaseUtility.properties*
 *translateKey.txt*
+*src/main/resources/log4j2.properties
+*src/main/resources/hibernate.cfg.xml
+*src/test/resources/databaseUtility.properties
 
 # User-specific stuff:
 # .idea/workspace.xml

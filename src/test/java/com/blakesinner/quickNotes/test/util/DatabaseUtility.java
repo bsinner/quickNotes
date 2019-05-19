@@ -1,6 +1,6 @@
 package com.blakesinner.quickNotes.test.util;
 
-import com.blakesinner.quickNotes.util.PropLoader;
+import com.blakesinner.quickNotes.util.PropertiesLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,7 +29,7 @@ public class DatabaseUtility {
         Connection conn = null;
         Statement stmt = null;
 
-        Properties props = new PropLoader().load(PROPS_PATH);
+        Properties props = new PropertiesLoader().load(PROPS_PATH);
 
         try (BufferedReader br = new BufferedReader(new FileReader(sqlFile))) {
 

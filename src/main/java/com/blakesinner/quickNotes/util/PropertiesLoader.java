@@ -11,7 +11,7 @@ import java.util.Properties;
  *
  * @author bsinner
  */
-public class PropLoader {
+public class PropertiesLoader {
 
     private final Logger logger = LogManager.getLogger(this.getClass());
 

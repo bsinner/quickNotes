@@ -41,6 +41,50 @@
     </div>
 </div>
 
+<!-- Sign up modal -->
+<div class="ui tiny modal" id="signUpModal">
+
+    <i class="icon-cancel" id="signUpExit"></i>
+    <div class="header">Sign Up</div>
+
+    <div class="content">
+
+        <form class="ui form" id="signUpForm">
+
+            <div class="field" id="signUpEmailDiv">
+                <label>Email</label>
+                <input type="text" id="signUpEmail">
+                <div class="ui compact small negative message" id="signUpEmailErr" style="display: none;"></div>
+            </div>
+
+            <div class="field" id="signUpUNameDiv">
+                <label>Username</label>
+                <input type="text" id="signUpUName">
+                <div class="ui compact small negative message" id="signUpUNameErr" style="display: none;"></div>
+            </div>
+
+            <div class="field" id="signUpPassDiv">
+                <label>Password</label>
+                <input type="password" id="signUpPass">
+            </div>
+
+            <div class="field" id="signUpPassDiv2">
+                <label>Password (Re-enter)</label>
+                <input type="password" id="signUpPass2">
+                <div class="ui compact small negative message" id="signUpPassOrAllErr" style="display: none;"></div>
+            </div>
+
+        </form>
+
+        <br>
+        <button class="ui button right floated green leftButtonMargin" id="signUpBtn">Sign Up</button>
+        <button class="ui button right floated" id="signUpCancel">Cancel</button>
+        <br><br>
+
+    </div>
+
+</div>
+
 <!-- Create modal -->
 <div class="ui tiny modal" id="createModal">
 

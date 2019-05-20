@@ -6,6 +6,7 @@
     // Modal elements
     const loginModal = $("#loginModal");
     const createModal = $("#createModal");
+    const signUpModal = $("#signUpModal");
 
     // Display if the user is logged in or logged out
     initMenu();
@@ -25,7 +26,7 @@
     })
     .on("click", "#create", () => { createModal.modal("show"); })
     .on("click", "#signIn", () => { loginModal.modal("show"); })
-    .on("click", "$signUp", () => { /* ... */ });
+    .on("click", "#signUp", () => { signUpModal.modal("show"); });
 
     /*
      * Login modal event handlers

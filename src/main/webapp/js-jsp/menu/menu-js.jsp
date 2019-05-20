@@ -125,7 +125,7 @@
         const rMenu = $("#rightMenu");
         rMenu.empty();
         rMenu.append("<a class='item' id='signIn'>Sign In</a>"
-                + "<a class='item' id='signUp' data-content='Under Construction' data-position='bottom-center'>Sign Up</a>");
+                + "<a class='item' id='signUp' data-content='Under Construction' data-position='bottom center'>Sign Up</a>");
         $("#signUp").popup();
 
         // TODO: remove when complete

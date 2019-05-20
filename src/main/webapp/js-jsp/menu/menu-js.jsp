@@ -52,29 +52,13 @@
         })}
 
     ).on("click", "#loginExit", () => { loginModal.modal("hide"); });
-
-    // TODO: clear the error state on modal close
+    
     function showLoginError(msg) {
-        const email = $("#email");
-        const pass = $("#password");
-        const emailDiv = $("#emailDiv");
-        const passDiv = $("#passDiv");
-        const errorMsg = document.getElementById("loginError");
-
-        emailDiv.addClass("error");
-        passDiv.addClass("error");
-        $("#loginError > p").text(msg);
-        errorMsg.removeAttribute("style");
-
-        email.on("input", () => {
-            errorMsg.setAttribute("style", "display: none;");
-            emailDiv.removeClass("error");
-        });
-
-        pass.on("input", () => {
-            errorMsg.setAttribute("style", "display: none;");
-            passDiv.removeClass("error");
-        });
+        const errMsg = { name : "loginError", text : msg };
+        showFormError([
+            { div : "emailDiv", input : "email", msg : errMsg }
+            , { div : "passDiv", input : "password", msg : errMsg }
+        ]);
     }
 
     /*
@@ -94,13 +78,13 @@
                                 window.location = contextPath + "/editor?id=" + t;
                             });
                         } else if (res.status === 422) {
-                            createNoteInputError("Note " + title.val().toString() + " already exists");
+                            showCreateInputError("Note " + title.val().toString() + " already exists");
                         }
                         // TODO: handle user not signed in
                     });
 
         } else {
-            createNoteInputError("Note must have title");
+            showCreateInputError("Note must have title");
         }
 
     })
@@ -139,24 +123,12 @@
     }
 
     /*
-     * Show create note input error
+     * Wrapper function for showing a create form error state
      */
-    function createNoteInputError(msg) {
-        // const title = $("#title");
-        // const div = $("#titleDiv");
-        // const errorMsg = document.getElementById("titleError");
-        //
-        // div.addClass("error");
-        // $("#titleError > p").text(msg);
-        // errorMsg.removeAttribute("style");
-        //
-        // title.on("input", () => {
-        //     errorMsg.setAttribute("style", "display: none;");
-        //     div.removeClass("error");
-        // });
-
-        const inputs = [{ div : "titleDiv", input : "title" , msg : { name : "titleError", text : msg } }];
-        showFormError(inputs);
+    function showCreateInputError(msg) {
+        showFormError([{ div : "titleDiv", input : "title"
+                , msg : { name : "titleError", text : msg } }]
+        );
     }
 
     /*

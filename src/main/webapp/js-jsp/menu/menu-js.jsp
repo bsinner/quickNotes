@@ -3,17 +3,15 @@
     // context path changes between local host and AWS
     const contextPath = "<%=request.getContextPath()%>";
 
-    // Display if the user is logged in or logged out
-    initMenu();
-
     // Modal elements
     const loginModal = $("#loginModal");
     const createModal = $("#createModal");
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
+
+    // Display if the user is logged in or logged out
+    initMenu();
 
     /*
-     * Event handlers
+     * Logout, create, and sign button event handlers
      */
     $("#rightMenu").on("click", "#logout", () => {
         $.ajax({
@@ -26,20 +24,24 @@
 
     })
     .on("click", "#create", () => { createModal.modal("show"); })
-    .on("click", "#signIn", () => { loginModal.modal("show"); });
+    .on("click", "#signIn", () => { loginModal.modal("show"); })
+    .on("click", "$signUp", () => { /* ... */ });
 
     /*
      * Login modal event handlers
      */
     loginModal.on("click", "#loginBtn", () => {
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
 
+        // If the login info is missing show an error
         if (emailInput.value < 1
                 || passwordInput.value < 1) {
             showLoginError("Email and password must not be left blank");
             return;
         }
 
-        // Login
+        // Login, or show error if invalid credentials
         $.ajax({method : "POST"
                 , url : contextPath + "/api/login?email=" + emailInput.value + "&password=" + passwordInput.value
                 , statusCode : {
@@ -48,16 +50,26 @@
         }).done(data => {
             window.sessionStorage.setItem("username", data);
             showLoggedIn(data);
-            loginModal.modal("hide")
+            loginClose();
         })}
 
-    ).on("click", "#loginExit", () => { loginModal.modal("hide"); });
-    
+    ).on("click", "#loginExit", () => { loginClose(); });
+
+    // Show form error state on login fail
     function showLoginError(msg) {
         const errMsg = { name : "loginError", text : msg };
         showFormError([
             { div : "emailDiv", input : "email", msg : errMsg }
             , { div : "passDiv", input : "password", msg : errMsg }
+        ]);
+    }
+
+    // Close the login modal and clear it's error state
+    function loginClose() {
+        loginModal.modal("hide");
+        clearFormErrState([
+            { div : "emailDiv", msg : { name : "loginError" } }
+            , { div : "passDiv", msg : { name : "loginError" } }
         ]);
     }
 
@@ -67,6 +79,8 @@
     createModal.on("click", "#createSubmit", () => {
         const title = $("#title");
 
+        // Create the note and close the modal, or show an error state if no note
+        // title is present, or if a note with the same name exists
         if (title.val().length > 1) {
             const url = contextPath + "/api/createNote?title=" + title.val();
             const props = { credentials : "same-origin", method : "PUT" };
@@ -88,15 +102,39 @@
         }
 
     })
-    .on("click", "#createCancel", () => { closeCreateModal(); })
-    .on("click", "#createExit", () => { closeCreateModal(); });
+    .on("click", "#createCancel", () => { createClose(); })
+    .on("click", "#createExit", () => { createClose(); });
+
 
     /*
-     * Create menu that displays if the user is logged in or
-     * logged out
+    * Show error state on create note modal
+    */
+    function showCreateInputError(msg) {
+        showFormError([{ div : "titleDiv", input : "title"
+            , msg : { name : "titleError", text : msg } }]
+        );
+    }
+
+    /*
+    * Close the create modal and clear any error states
+    */
+    function createClose() {
+        createModal.modal("hide");
+        clearFormErrState([{ div : "titleDiv", msg : { name : "titleError" } }]);
+    }
+
+    /*
+     * Sign up event handlers
+     */
+    //...
+
+    /*
+     * Show if the user is logged in, initialize modals
      */
     function initMenu() {
         const username = sessionStorage.getItem("username");
+        loginModal.modal({ onHidden : () => { loginClose(); } });
+        createModal.modal({ onHidden : () => { createClose(); } })
 
         if (username == null) {
             showLoggedOut();
@@ -105,6 +143,9 @@
         }
     }
 
+    /*
+     * Update the menu to show that no user is logged in
+     */
     function showLoggedOut() {
         const rMenu = $("#rightMenu");
         rMenu.empty();
@@ -112,6 +153,9 @@
                 + "<a class='item' id='signUp'>Sign Up</a>");
     }
 
+    /*
+     * Update the menu to show that a user is logged in
+     */
     function showLoggedIn(username) {
         const rMenu = $("#rightMenu");
         rMenu.empty();
@@ -119,15 +163,6 @@
                 + "<a class='item' id='logout'>Sign Out</a>"
                 + "<a href='viewNotes' class='item'>View Saved Notes</a>"
                 + "<a class='item' id='create'>Create</a>"
-        );
-    }
-
-    /*
-     * Wrapper function for showing a create form error state
-     */
-    function showCreateInputError(msg) {
-        showFormError([{ div : "titleDiv", input : "title"
-                , msg : { name : "titleError", text : msg } }]
         );
     }
 
@@ -159,12 +194,23 @@
     }
 
     /*
-     * Close the create modal and clear any error states
+     * Generic clear form error state method, input format from showFormError
+     * can be used, or the following shortened format can be used:
+     * [
+     *     { div : "input div id", msg : { name : "err msg id" } }
+     * ]
      */
-    function closeCreateModal() {
-        createModal.modal("hide");
-        $("#titleDiv").removeClass("error");
-        document.getElementById("titleError").setAttribute("style", "display: none");
+    function clearFormErrState(inputs) {
+        // TODO: clear input text as part of clearing the form
+        inputs.forEach(i => {
+            const div = $("#" + i.div);
+            const msg = document.getElementById(i.msg.name);
+
+            div.removeClass("error");
+            msg.setAttribute("style","display: none;");
+        });
     }
+
+
 
 </script>

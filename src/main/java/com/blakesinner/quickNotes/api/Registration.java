@@ -3,7 +3,6 @@ package com.blakesinner.quickNotes.api;
 import com.blakesinner.quickNotes.util.PropertiesLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -45,7 +44,7 @@ public class Registration {
                         + "Account Created"
                     + "</h3>"
                     + "<h5 style=\"font-family:Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;\">"
-                        + "Your Quick Notes account has been created, click here to activate"
+                        + "Your Quick Notes account has been created, click here to activate."
                     + "</h5>"
                     + "<a class=\"ui button\" style=\"cursor: pointer;display: inline-block;min-height: 1em;outline: 0;border: none;vertical-align: baseline;background: #e0e1e2 none;color: rgba(0,0,0,.6);font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;margin: 0 .25em 0 0;padding: .78571429em 1.5em .78571429em;font-weight: 700;line-height: 1em;font-style: normal;text-align: center;border-radius: .28571429rem;margin-left: auto; margin-right: auto;\">"
                         + "Confirm Account"

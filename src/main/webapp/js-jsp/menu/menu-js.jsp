@@ -125,10 +125,7 @@
         const rMenu = $("#rightMenu");
         rMenu.empty();
         rMenu.append("<a class='item' id='signIn'>Sign In</a>"
-                + "<a class='item' id='signUp' data-content='Under Construction' data-position='bottom center'>Sign Up</a>");
-        $("#signUp").popup();
-
-        // TODO: remove when complete
+                + "<a class='item' id='signUp'>Sign Up</a>");
     }
 
     function showLoggedIn(username) {
@@ -145,17 +142,47 @@
      * Show create note input error
      */
     function createNoteInputError(msg) {
-        const title = $("#title");
-        const div = $("#titleDiv");
-        const errorMsg = document.getElementById("titleError");
+        // const title = $("#title");
+        // const div = $("#titleDiv");
+        // const errorMsg = document.getElementById("titleError");
+        //
+        // div.addClass("error");
+        // $("#titleError > p").text(msg);
+        // errorMsg.removeAttribute("style");
+        //
+        // title.on("input", () => {
+        //     errorMsg.setAttribute("style", "display: none;");
+        //     div.removeClass("error");
+        // });
 
-        div.addClass("error");
-        $("#titleError > p").text(msg);
-        errorMsg.removeAttribute("style");
+        const inputs = [{ div : "titleDiv", input : "title" , msg : { name : "titleError", text : msg } }];
+        showFormError(inputs);
+    }
 
-        title.on("input", () => {
-            errorMsg.setAttribute("style", "display: none;");
-            div.removeClass("error");
+    /*
+     * Generic show form error state method.
+     * Input must be an array in the following format:
+     * [
+     *     { div : "div id", in : "input id"
+     *         , msg { name : "err msg id", text : "error msg text to show" }
+     *     }
+     * ]
+     */
+    function showFormError(inputs) {
+        inputs.forEach(i => {
+            const div = $("#" + i.div);
+            const input = $("#" + i.input);
+            const msg = document.getElementById(i.msg.name);
+
+            div.addClass("error");
+
+            msg.innerText = i.msg.text;
+            msg.removeAttribute("style");
+
+            input.on("input", () => {
+               msg.setAttribute("style", "display: none;");
+               div.removeClass("error");
+            });
         });
     }
 

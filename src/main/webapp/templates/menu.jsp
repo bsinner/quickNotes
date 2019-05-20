@@ -1,5 +1,5 @@
 <!-- Menu bar -->
-<div class="ui huge menu">
+<div class="ui menu">
     <div class="header item">
         <a href="editor" id="homeLink">Quick Notes</a>
     </div>

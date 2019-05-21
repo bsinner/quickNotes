@@ -157,7 +157,7 @@ public class User {
     }
 
     /**
-     * Gets a space seperated string of user roles.
+     * Gets a space separated string of user roles.
      *
      * @return the user roles string
      */

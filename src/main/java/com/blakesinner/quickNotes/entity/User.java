@@ -31,6 +31,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<UserRole> userRoles = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<ActivationToken> tokens = new HashSet<>();
+
     /**
      * No argument constructor.
      */
@@ -155,6 +158,7 @@ public class User {
 
     /**
      * Gets a space seperated string of user roles.
+     *
      * @return the user roles string
      */
     public String getUserRolesString() {
@@ -187,6 +191,7 @@ public class User {
 
     /**
      * Add note to notes.
+     *
      * @param note note to add
      */
     public void addNote(Note note) {
@@ -196,6 +201,7 @@ public class User {
 
     /**
      * Remove note from notes
+     *
      * @param note note to remove
      */
     public void removeNote(Note note) {
@@ -204,10 +210,29 @@ public class User {
     }
 
     /**
+     * Gets activation tokens.
+     *
+     * @return the tokens
+     */
+    public Set<ActivationToken> getTokens() {
+        return tokens;
+    }
+
+    /**
+     * Sets activation tokens.
+     *
+     * @param tokens the tokens
+     */
+    public void setTokens(Set<ActivationToken> tokens) {
+        this.tokens = tokens;
+    }
+
+    /**
      * Compares a passed in object to the current user object.
+     *
      * @param o object to compare the current user to
-     * @return true if the passed in object represents the current user, false if it
-     * isn't identical
+     * @return  true if the passed in object represents the current user, false if it
+     *          isn't identical
      */
     @Override
     public boolean equals(Object o) {

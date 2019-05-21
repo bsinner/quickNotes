@@ -20,7 +20,7 @@
         <mapping class="com.blakesinner.quickNotes.entity.User"/>
         <mapping class="com.blakesinner.quickNotes.entity.UserRole"/>
         <mapping class="com.blakesinner.quickNotes.entity.ActivationToken"/>
-        
+
     </session-factory>
 
 </hibernate-configuration>

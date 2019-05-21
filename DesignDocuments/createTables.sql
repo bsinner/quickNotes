@@ -28,7 +28,7 @@ CREATE TABLE user_roles (
 );
 
 CREATE TABLE activation_tokens (
-    id INT NOT NULL PRIMARY KEY
+    id VARCHAR(255) NOT NULL PRIMARY KEY
     , user_id INT NOT NULL
     , creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
     , CONSTRAINT users_activation_tokens_fk FOREIGN KEY (user_id) REFERENCES users(id)

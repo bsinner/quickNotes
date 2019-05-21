@@ -1,25 +1,61 @@
 package com.blakesinner.quickNotes.api;
 
+import com.blakesinner.quickNotes.entity.User;
+import com.blakesinner.quickNotes.persistence.GenericDAO;
 import com.blakesinner.quickNotes.util.PropertiesLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Properties;
-
 import static javax.mail.Message.RecipientType.TO;
 
 @Path("/register")
 public class Registration {
 
     private final Logger logger = LogManager.getLogger(this.getClass());
+    private final GenericDAO<User> dao = new GenericDAO<>(User.class);
 
     @GET // TODO: make POST
-    public String sendRegistration() {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response sendRegistration(@QueryParam("user") String username
+            , @QueryParam("pass") String password
+            , @QueryParam("email") String email) {
+
+        if (username == null || password == null || email == null) {
+            return Response.status(400).build();
+        }
+
+        if (!validEmail(email)) {
+            return Response.status(422).entity("{err : 'email'}").build();
+        }
+
+        if (!validUsername(username)) {
+            return Response.status(422).entity("{err : 'username'}").build();
+        }
+
+
+
+        return Response.accepted().build();
+
+    }
+
+    private boolean validEmail(String email) {
+        List<User> users = dao.getByPropertyEqual("email", email);
+        return users.size() == 0;
+    }
+
+    private boolean validUsername(String username) {
+        List<User> users = dao.getByPropertyEqual("usrname", username);
+        return users.size() == 0;
+    }
+
+    private boolean sendEmail() {
         PropertiesLoader loader = new PropertiesLoader();
         Properties mailProps = loader.load("/mail.properties");
         Properties authProps = loader.load("/mailLogin.properties");
@@ -39,25 +75,25 @@ public class Registration {
             message.setRecipient(TO, new InternetAddress(authProps.getProperty("user")));
             message.setSubject("Confirm Account");
             message.setContent(
-                "<div style=\"margin: 1em, 1em, 1em, 1em;\">"
-                    + "<h3 style=\"font-family:Lato,'Helvetica Neue',Arial,Helvetica,sans-serif\">"
-                        + "Account Created"
-                    + "</h3>"
-                    + "<h5 style=\"font-family:Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;\">"
-                        + "Your Quick Notes account has been created, click here to activate."
-                    + "</h5>"
-                    + "<a class=\"ui button\" style=\"cursor: pointer;display: inline-block;min-height: 1em;outline: 0;border: none;vertical-align: baseline;background: #e0e1e2 none;color: rgba(0,0,0,.6);font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;margin: 0 .25em 0 0;padding: .78571429em 1.5em .78571429em;font-weight: 700;line-height: 1em;font-style: normal;text-align: center;border-radius: .28571429rem;margin-left: auto; margin-right: auto;\">"
-                        + "Confirm Account"
-                    + "</a>"
-                + " </div>"
-            , "text/html");
+                    "<div style=\"margin: 1em, 1em, 1em, 1em;\">"
+                            + "<h3 style=\"font-family:Lato,'Helvetica Neue',Arial,Helvetica,sans-serif\">"
+                            + "Account Created"
+                            + "</h3>"
+                            + "<h5 style=\"font-family:Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;\">"
+                            + "Your Quick Notes account has been created, click here to activate."
+                            + "</h5>"
+                            + "<a class=\"ui button\" style=\"cursor: pointer;display: inline-block;min-height: 1em;outline: 0;border: none;vertical-align: baseline;background: #e0e1e2 none;color: rgba(0,0,0,.6);font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;margin: 0 .25em 0 0;padding: .78571429em 1.5em .78571429em;font-weight: 700;line-height: 1em;font-style: normal;text-align: center;border-radius: .28571429rem;margin-left: auto; margin-right: auto;\">"
+                            + "Confirm Account"
+                            + "</a>"
+                            + " </div>"
+                    , "text/html");
 
             Transport.send(message);
+            return true;
         } catch (MessagingException me) {
             logger.trace(me);
         }
 
-        return "...";
+        return false;
     }
-
 }

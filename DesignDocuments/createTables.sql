@@ -5,6 +5,7 @@ CREATE TABLE users (
     , username VARCHAR(30) NOT NULL UNIQUE
     , email VARCHAR(100) NOT NULL UNIQUE
     , password VARCHAR(25) NOT NULL
+    , activated BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE notes (

@@ -150,6 +150,9 @@
             showFormError([signUpData.pass.elems, signUpData.pass2.elems]);
             return;
         }
+
+        // Send an xhr request
+        // ...
     })
     .on("click", "#signUpCancel", () => { signUpClose(); })
     .on("click", "#signUpExit", () => { signUpClose(); });

@@ -32,6 +32,11 @@ public class GenericDAO<T> {
     }
 
     /**
+     * No argument constructor.
+     */
+    public GenericDAO() { }
+
+    /**
      * Gets all entities.
      *
      * @return all found entities
@@ -162,5 +167,14 @@ public class GenericDAO<T> {
         query.select(root).where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 
         return session.createQuery(query).getResultList();
+    }
+
+    /**
+     * Set the dao type.
+     *
+     * @param type the dao entity type
+     */
+    public void setType(Class<T> type) {
+        this.type = type;
     }
 }

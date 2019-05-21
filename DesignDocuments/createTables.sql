@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS user_roles, notes, users;
+DROP TABLE IF EXISTS user_roles, activation_tokens, notes, users;
 
 CREATE TABLE users (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
@@ -13,7 +13,7 @@ CREATE TABLE notes (
     , title VARCHAR(40) DEFAULT NULL
     , contents TEXT
     , creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
-    , CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES users(id)
+    , CONSTRAINT users_notes_fk FOREIGN KEY (user_id) REFERENCES users(id)
         ON DELETE CASCADE ON UPDATE CASCADE
     , UNIQUE (user_id, title)
 );
@@ -22,7 +22,15 @@ CREATE TABLE user_roles (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
     , user_id INT NOT NULL
     , role ENUM ("USER", "ADMIN") DEFAULT "USER"
-    , CONSTRAINT user_roles_fk FOREIGN KEY (user_id) REFERENCES users(id)
+    , CONSTRAINT users_user_roles_fk FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE activation_tokens (
+    id INT NOT NULL PRIMARY KEY
+    , user_id INT NOT NULL
+    , creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
+    , CONSTRAINT users_activation_tokens_fk FOREIGN KEY (user_id) REFERENCES users(id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 

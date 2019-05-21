@@ -128,6 +128,7 @@
      * Sign up functions
      */
     signUpModal.on("click", "#signUpBtn", () => {
+        clearSignUp();
         let error = false;
 
         // Loop through the inputs, if any are left blank show an error state
@@ -142,8 +143,11 @@
         // If any of the inputs where found to be blank, exit the function
         if (error) return;
 
-        if (signUpData.pass.value !== signUpData.pass2.value) {
-            showFormError([signUpData.pass, signUpData.pass2]);
+        // If passwords don't match show an error, exit the function
+        if (signUpData.pass.input.value !== signUpData.pass2.input.value) {
+            signUpData.pass.elems.msg.text = "";
+            signUpData.pass2.elems.msg.text = "Passwords do not match";
+            showFormError([signUpData.pass.elems, signUpData.pass2.elems]);
             return;
         }
     })
@@ -151,17 +155,31 @@
     .on("click", "#signUpExit", () => { signUpClose(); });
 
     /*
+     * Clear error states from sign up modal
+     */
+    function clearSignUp() {
+        clearFormErrState([signUpData.email.elems, signUpData.uname.elems
+                , signUpData.pass2.elems, signUpData.pass.elems
+        ]);
+    }
+
+    /*
      * Close the sign up modal and clear any error states
      */
-    function signUpClose() { signUpModal.modal("hide"); }
+    function signUpClose() {
+        signUpModal.modal("hide");
+        clearSignUp();
+    }
 
     /*
      * Show if the user is logged in, initialize modals
      */
     function initMenu() {
         const username = sessionStorage.getItem("username");
+
         loginModal.modal({ onHidden : () => { loginClose(); } });
         createModal.modal({ onHidden : () => { createClose(); } });
+        signUpModal.modal({ onHidden : () => { signUpClose(); } });
 
         if (username == null) {
             showLoggedOut();
@@ -195,7 +213,7 @@
 
     /*
      * Generic show form error state method, If an error message's text
-     * property is set to an empty string no message will be shown.
+     * property is passed an empty string no message will be shown.
      *
      * Input must be an array of the following format:
      * [

@@ -125,9 +125,35 @@
     }
 
     /*
-     * Sign up event handlers
+     * Sign up functions
      */
-    //...
+    signUpModal.on("click", "#signUpBtn", () => {
+        let error = false;
+
+        // Loop through the inputs, if any are left blank show an error state
+        for (let i in signUpData) {
+            if (signUpData[i].input.value.length < 1) {
+                signUpData[i].elems.msg.text = signUpData[i].title + " must not be left blank";
+                showFormError([signUpData[i].elems]);
+                error = true;
+            }
+        }
+
+        // If any of the inputs where found to be blank, exit the function
+        if (error) return;
+
+        if (signUpData.pass.value !== signUpData.pass2.value) {
+            showFormError([signUpData.pass, signUpData.pass2]);
+            return;
+        }
+    })
+    .on("click", "#signUpCancel", () => { signUpClose(); })
+    .on("click", "#signUpExit", () => { signUpClose(); });
+
+    /*
+     * Close the sign up modal and clear any error states
+     */
+    function signUpClose() { signUpModal.modal("hide"); }
 
     /*
      * Show if the user is logged in, initialize modals
@@ -135,7 +161,7 @@
     function initMenu() {
         const username = sessionStorage.getItem("username");
         loginModal.modal({ onHidden : () => { loginClose(); } });
-        createModal.modal({ onHidden : () => { createClose(); } })
+        createModal.modal({ onHidden : () => { createClose(); } });
 
         if (username == null) {
             showLoggedOut();
@@ -168,11 +194,13 @@
     }
 
     /*
-     * Generic show form error state method.
-     * Input must be an array in the following format:
+     * Generic show form error state method, If an error message's text
+     * property is set to an empty string no message will be shown.
+     *
+     * Input must be an array of the following format:
      * [
-     *     { div : "div id", in : "input id"
-     *         , msg { name : "err msg id", text : "error msg text to show" }
+     *     { div : "div id", input : "input id"
+     *         , msg : { name : "err msg id", text : "error msg text to show" }
      *     }
      * ]
      */
@@ -184,8 +212,10 @@
 
             div.addClass("error");
 
-            msg.innerText = i.msg.text;
-            msg.removeAttribute("style");
+            if (i.msg.text !== "") {
+                msg.innerText = i.msg.text;
+                msg.removeAttribute("style");
+            }
 
             input.on("input", () => {
                msg.setAttribute("style", "display: none;");
@@ -212,6 +242,38 @@
         });
     }
 
+    // Sign up form data, input properties are used for getting values of inputs,
+    // elems properties are sent to error state displaying functions
+    const signUpData = {
+        email : {
+            input : document.getElementById("signUpEmail")
+            , elems : { div : "signUpEmailDiv", input : "signUpEmail"
+                    , msg : { name : "signUpEmailErr", text : "" }
+            }
+            , title : "Email"
+        },
+        uname : {
+            input : document.getElementById("signUpUName")
+            , elems : { div : "signUpUNameDiv", input : "signUpUName"
+                    , msg : { name : "signUpUNameErr", text : "" }
+            }
+            , title : "Username"
+        },
+        pass : {
+            input : document.getElementById("signUpPass")
+            , elems : { div : "signUpPassDiv", input : "signUpPass"
+                    , msg : { name : "signUpPassErr", text : "" }
+            }
+            , title : "Password"
+        },
+        pass2 : {
+            input : document.getElementById("signUpPass2")
+            , elems : { div : "signUpPassDiv2", input : "signUpPass2"
+                    , msg : { name : "signUpPass2OrAllErr", text : "" }
+            }
+            , title : "Password"
+        }
+    };
 
 
 </script>

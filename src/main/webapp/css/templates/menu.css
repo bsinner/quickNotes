@@ -13,6 +13,6 @@ i:hover {
     margin-left: .7em !important;
 }
 
-#titleError, #loginError {
-    padding: .4em .65em .4em .65em;
+.compactPadding {
+    padding: .4em .65em .4em .65em !important;
 }

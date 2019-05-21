@@ -29,7 +29,7 @@
             <div class="field" id="passDiv">
                 <label>Password</label>
                 <input type="password" id="password" name="password">
-                <div class="ui compact small negative message" id="loginError" style="display: none;">
+                <div class="ui compact small negative message compactPadding" id="loginError" style="display: none;">
                     <p>Email and password must not be left blank</p>
                 </div>
             </div>
@@ -54,24 +54,25 @@
             <div class="field" id="signUpEmailDiv">
                 <label>Email</label>
                 <input type="text" id="signUpEmail">
-                <div class="ui compact small negative message" id="signUpEmailErr" style="display: none;"></div>
+                <div class="ui compact small negative message compactPadding" id="signUpEmailErr" style="display: none;"></div>
             </div>
 
             <div class="field" id="signUpUNameDiv">
                 <label>Username</label>
                 <input type="text" id="signUpUName">
-                <div class="ui compact small negative message" id="signUpUNameErr" style="display: none;"></div>
+                <div class="ui compact small negative message compactPadding" id="signUpUNameErr" style="display: none;"></div>
             </div>
 
             <div class="field" id="signUpPassDiv">
                 <label>Password</label>
                 <input type="password" id="signUpPass">
+                <div class="ui compact small negative message compactPadding" id="signUpPassErr" style="display: none;"></div>
             </div>
 
             <div class="field" id="signUpPassDiv2">
                 <label>Password (Re-enter)</label>
                 <input type="password" id="signUpPass2">
-                <div class="ui compact small negative message" id="signUpPassOrAllErr" style="display: none;"></div>
+                <div class="ui compact small negative message compactPadding" id="signUpPass2OrAllErr" style="display: none;"></div>
             </div>
 
         </form>
@@ -100,7 +101,7 @@
             <div class="field" id="titleDiv">
                 <label>Title</label>
                 <input id="title" type="text" maxlength="40">
-                <div class="ui compact small negative message" id="titleError" style="display: none;">
+                <div class="ui compact small negative message compactPadding" id="titleError" style="display: none;">
                     <p>Note must have title</p>
                 </div>
             </div>

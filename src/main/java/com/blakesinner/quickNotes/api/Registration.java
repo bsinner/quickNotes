@@ -27,9 +27,22 @@ public class Registration {
 
     @GET // TODO: make POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response sendRegistration(@QueryParam("user") String username
+    public Response sendRegistration(
+            @QueryParam("user") String username
             , @QueryParam("pass") String password
             , @QueryParam("email") String email) {
+
+        Response error = findError(username, password, email);
+        if(error != null) return error;
+
+        String activationToken = createAccount(email, password, username);
+        sendEmail(activationToken);
+
+        return Response.status(201).entity("{}").build();
+    }
+
+    private Response findError(String username, String password, String email) {
+        Response response = null;
 
         if (username == null || password == null || email == null) {
             return Response.status(400).build();
@@ -43,41 +56,23 @@ public class Registration {
             return Response.status(422).entity("{\"err\" : \"username\"}").build();
         }
 
-        return createAccount(email, password, username);
-
-
+        return response;
     }
 
-    private Response createAccount(String email, String password, String username) {
+    private String createAccount(String email, String password, String username) {
         User user = new User(username, password, email);
         int id = dao.insert(user);
         User foundUser = dao.getByPropertyEqual("id", String.valueOf(id)).get(0);
 
         ActivationTokenDAO tDao = new ActivationTokenDAO();
         ActivationToken token = new ActivationToken(user);
-//        UUID uuid =
-                String tid  = tDao.insertToken(token);
-//        ActivationToken foundToken = tDao.getByPropertyEqual("id", uuid.toString()).get(0);
+        String tId  = tDao.insertToken(token);
+        ActivationToken foundToken = tDao.getByPropertyEqual("id", tId).get(0);
 
-//        UUID t = foundToken.getId();
-        // insert the token into the database
-        // ...
-//        http://localhost:8080/quickNotes_war/api/register?user=a&pass=b&email=cc
-
-        return Response.status(200).entity(tDao.getByPropertyEqual("id", tid).get(0).getId()).build();
+        return foundToken.getId();
     }
 
-    private boolean validEmail(String email) {
-        List<User> users = dao.getByPropertyEqual("email", email);
-        return users.size() == 0;
-    }
-
-    private boolean validUsername(String username) {
-        List<User> users = dao.getByPropertyEqual("username", username);
-        return users.size() == 0;
-    }
-
-    private boolean sendEmail() {
+    private boolean sendEmail(String token) {
         PropertiesLoader loader = new PropertiesLoader();
         Properties mailProps = loader.load("/mail.properties");
         Properties authProps = loader.load("/mailLogin.properties");
@@ -118,4 +113,15 @@ public class Registration {
 
         return false;
     }
+
+    private boolean validEmail(String email) {
+        List<User> users = dao.getByPropertyEqual("email", email);
+        return users.size() == 0;
+    }
+
+    private boolean validUsername(String username) {
+        List<User> users = dao.getByPropertyEqual("username", username);
+        return users.size() == 0;
+    }
+
 }

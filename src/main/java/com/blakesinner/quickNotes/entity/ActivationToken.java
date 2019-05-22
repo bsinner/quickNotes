@@ -1,10 +1,7 @@
 package com.blakesinner.quickNotes.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * The account activation token entity.

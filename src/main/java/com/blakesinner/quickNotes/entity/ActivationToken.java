@@ -101,4 +101,18 @@ public class ActivationToken {
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
+
+    /**
+     * Get toString of token properties.
+     *
+     * @return the token string
+     */
+    @Override
+    public String toString() {
+        return "ActivationToken{" +
+                "id='" + id + '\'' +
+                ", user=" + user +
+                ", creationDate=" + creationDate +
+                '}';
+    }
 }

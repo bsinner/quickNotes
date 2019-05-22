@@ -1,6 +1,8 @@
 package com.blakesinner.quickNotes.api;
 
+import com.blakesinner.quickNotes.entity.ActivationToken;
 import com.blakesinner.quickNotes.entity.User;
+import com.blakesinner.quickNotes.persistence.ActivationTokenDAO;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
 import com.blakesinner.quickNotes.util.PropertiesLoader;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +15,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
+
 import static javax.mail.Message.RecipientType.TO;
 
 @Path("/register")
@@ -32,17 +36,35 @@ public class Registration {
         }
 
         if (!validEmail(email)) {
-            return Response.status(422).entity("{err : 'email'}").build();
+            return Response.status(422).entity("{\"err\" : \"email\"}").build();
         }
 
         if (!validUsername(username)) {
-            return Response.status(422).entity("{err : 'username'}").build();
+            return Response.status(422).entity("{\"err\" : \"username\"}").build();
         }
 
+        return createAccount(email, password, username);
 
 
-        return Response.accepted().build();
+    }
 
+    private Response createAccount(String email, String password, String username) {
+        User user = new User(username, password, email);
+        int id = dao.insert(user);
+        User foundUser = dao.getByPropertyEqual("id", String.valueOf(id)).get(0);
+
+        ActivationTokenDAO tDao = new ActivationTokenDAO();
+        ActivationToken token = new ActivationToken(user);
+//        UUID uuid =
+                String tid  = tDao.insertToken(token);
+//        ActivationToken foundToken = tDao.getByPropertyEqual("id", uuid.toString()).get(0);
+
+//        UUID t = foundToken.getId();
+        // insert the token into the database
+        // ...
+//        http://localhost:8080/quickNotes_war/api/register?user=a&pass=b&email=cc
+
+        return Response.status(200).entity(tDao.getByPropertyEqual("id", tid).get(0).getId()).build();
     }
 
     private boolean validEmail(String email) {
@@ -51,7 +73,7 @@ public class Registration {
     }
 
     private boolean validUsername(String username) {
-        List<User> users = dao.getByPropertyEqual("usrname", username);
+        List<User> users = dao.getByPropertyEqual("username", username);
         return users.size() == 0;
     }
 

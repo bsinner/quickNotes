@@ -1,5 +1,7 @@
 package com.blakesinner.quickNotes.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,9 +13,11 @@ import java.util.UUID;
 @Table(name = "activation_tokens")
 public class ActivationToken {
 
+//    @Id
+//    @GeneratedValue(generator = "UUID")
+//    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Id
-    @GeneratedValue
-    private UUID id;
+    private String id;
 
     @ManyToOne
     private User user;
@@ -42,7 +46,7 @@ public class ActivationToken {
      * @param user         the user
      * @param creationDate the creation date
      */
-    public ActivationToken(UUID id, User user, LocalDateTime creationDate) {
+    public ActivationToken(String id, User user, LocalDateTime creationDate) {
         this.id = id;
         this.user = user;
         this.creationDate = creationDate;
@@ -53,7 +57,7 @@ public class ActivationToken {
      *
      * @return the id
      */
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
@@ -62,7 +66,7 @@ public class ActivationToken {
      *
      * @param id the id
      */
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 

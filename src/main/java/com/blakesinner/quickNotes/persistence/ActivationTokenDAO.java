@@ -15,12 +15,13 @@ public class ActivationTokenDAO extends GenericDAO<ActivationToken> {
         setType(ActivationToken.class);
     }
 
-    public UUID insertToken(ActivationToken token) {
+    public String insertToken(ActivationToken token) {
         Session session = sessionFactory.openSession();
-        UUID id = null;
+        String id = null;
+        token.setId(UUID.randomUUID().toString());
 
         Transaction transaction = session.beginTransaction();
-        id = (UUID)session.save(token);
+        id = (String)session.save(token);
         transaction.commit();
 
         session.close();

@@ -8,14 +8,13 @@ import java.util.UUID;
 
 /**
  * The account activation token entity.
+ *
+ * @author bsinner
  */
 @Entity(name = "ActivationToken")
 @Table(name = "activation_tokens")
 public class ActivationToken {
 
-//    @Id
-//    @GeneratedValue(generator = "UUID")
-//    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Id
     private String id;
 

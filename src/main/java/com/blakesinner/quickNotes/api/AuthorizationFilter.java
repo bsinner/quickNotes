@@ -49,10 +49,10 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     }
 
     /**
-     * Check if the user has one of the roles listed in the resources
+     * Check if the user has one of the roles listed in the resource's
      * Secured annotation.
      *
-     * @param roles the endpoint allowed roles
+     * @param roles the endpoint's allowed roles
      * @return      true if the user is authorized, false otherwise
      */
     private boolean checkPermissions(List<String> roles) {

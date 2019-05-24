@@ -18,7 +18,7 @@ public class ActivateAccount extends HttpServlet {
     /**
      * Forward to the account activation page, send the query string in an request
      * attribute so it can be used by JavaScript.
-     * 
+     *
      * @param req               the HTTP Request
      * @param res               the HTTP Response
      * @throws IOException      if an I/O Exception occurs

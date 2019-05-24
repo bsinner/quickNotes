@@ -12,11 +12,22 @@ import org.apache.logging.log4j.Logger;
 import javax.ws.rs.core.Cookie;
 import java.util.List;
 
+/**
+ * Class with utilities for parsing cookies with access tokens.
+ *
+ * @author bsinner
+ */
 public class CookieUtil {
 
     private static final Logger LOGGER = LogManager.getLogger(CookieUtil.class);
     private static final String PATH = "/accessTokenPw.txt";
 
+    /**
+     * Get the user object from the cookie.
+     *
+     * @param cookie the cookie to parse
+     * @return       the found user, or null if no user could be found
+     */
     public static User jaxRsGetUser(Cookie cookie) {
         String id = jaxRsGetId(cookie);
 
@@ -33,6 +44,12 @@ public class CookieUtil {
         return null;
     }
 
+    /**
+     * Get the user ID from the cookie.
+     *
+     * @param cookie the cookie to parse
+     * @return       the found ID, or null if none could be found
+     */
     public static String jaxRsGetId(Cookie cookie) {
         if (cookie != null) {
             String token = cookie.getValue();
@@ -51,6 +68,12 @@ public class CookieUtil {
         return null;
     }
 
+    /**
+     * Get claims in the JWT token.
+     *
+     * @param token the token to parse
+     * @return      the found claims, or null if the token couldn't be parsed
+     */
     private static Jws<Claims> parseToken(String token) {
         try {
             return Jwts.parser()

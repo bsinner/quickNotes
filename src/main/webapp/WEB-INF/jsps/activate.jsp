@@ -2,7 +2,15 @@
 
 </head>
 <body>
-<h3>${params}</h3>
-<%--TODO: put the menu in static login in a template and use here?--%>
+
+<%@include file="../../templates/staticMenu.jsp"%>
+
+
+<div class="ui column centered grid">
+    <div class="four wide column">
+        <br>
+        <h3>${params}</h3>
+    </div>
+</div>
 
 </body>

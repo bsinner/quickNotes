@@ -38,7 +38,7 @@ public class Registration {
      * @param email    the email
      * @return         the Ok response or an error response
      */
-    @GET // TODO: make POST
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response sendRegistration(
             @QueryParam("user") String username

@@ -21,6 +21,9 @@ public class ActivationToken {
     @Column(name = "creation_date", insertable = false)
     private LocalDateTime creationDate;
 
+    @Column(name = "expire_date")
+    private LocalDateTime expireDate;
+
     /**
      * Zero argument constructor.
      */
@@ -100,6 +103,24 @@ public class ActivationToken {
      */
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    /**
+     * Gets expire date.
+     *
+     * @return the expire date
+     */
+    public LocalDateTime getExpireDate() {
+        return expireDate;
+    }
+
+    /**
+     * Sets expire date.
+     *
+     * @param expireDate the expire date
+     */
+    public void setExpireDate(LocalDateTime expireDate) {
+        this.expireDate = expireDate;
     }
 
     /**

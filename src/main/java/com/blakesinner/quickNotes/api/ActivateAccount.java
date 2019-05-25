@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Endpoint for activating accounts with activation tokens.
  *
- * @author bsinner 
+ * @author bsinner
  */
 @Path("activate")
 public class ActivateAccount {

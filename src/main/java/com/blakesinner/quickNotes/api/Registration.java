@@ -95,6 +95,7 @@ public class Registration {
 
         ActivationTokenDAO tDao = new ActivationTokenDAO();
         ActivationToken token = new ActivationToken(foundUser);
+
         String tId  = tDao.insertToken(token);
         ActivationToken foundToken = tDao.getByPropertyEqual("id", tId).get(0);
 

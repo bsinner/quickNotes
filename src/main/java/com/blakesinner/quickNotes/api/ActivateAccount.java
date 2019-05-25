@@ -100,7 +100,7 @@ public class ActivateAccount {
         }
 
         deleteToken(token);
-git 
+
         return Response.ok("Account activated").build();
     }
 

@@ -51,38 +51,47 @@ public class CookieUtil {
      * @return       the found ID, or null if none could be found
      */
     public static String jaxRsGetId(Cookie cookie) {
-        if (cookie != null) {
-            String token = cookie.getValue();
+        Jws<Claims> claims = parseToken(cookie);
 
-            if (token != null) {
-                Jws<Claims> claims = parseToken(token);
-
-                if (claims != null) {
-                    return claims.getBody().getSubject();
-                }
-
-            }
-
+        if (claims != null) {
+            return claims.getBody().getSubject();
         }
 
         return null;
     }
 
     /**
+     * Get if a user is logged in.
+     *
+     * @param cookie the cookie to parse
+     * @return       true if a user is logged in, false if no
+     *               user can be found
+     */
+    public static boolean isLoggedInJaxRs(Cookie cookie) { return parseToken(cookie) != null; }
+
+    /**
      * Get claims in the JWT token.
      *
-     * @param token the token to parse
-     * @return      the found claims, or null if the token couldn't be parsed
+     * @param cookie the access cookie to parse
+     * @return       the found claims, or null if the cookie contains
+     *               no access token, or if it can't be parsed
      */
-    private static Jws<Claims> parseToken(String token) {
-        try {
-            return Jwts.parser()
-                    .setSigningKey(new KeyLoader().getKeyBytes(PATH))
-                    .parseClaimsJws(token);
-        } catch (JwtException je) {
-            LOGGER.trace(je);
-        }
+    private static Jws<Claims> parseToken(Cookie cookie) {
 
+        if (cookie != null) {
+            String token = cookie.getValue();
+
+            if (token != null) {
+                try {
+                    return Jwts.parser()
+                            .setSigningKey(new KeyLoader().getKeyBytes(PATH))
+                            .parseClaimsJws(token);
+                } catch (JwtException je) {
+                    LOGGER.trace(je);
+                }
+
+            }
+        }
         return null;
     }
 

@@ -100,7 +100,7 @@ public class ActivateAccount {
         }
 
         deleteToken(token);
-
+git 
         return Response.ok("Account activated").build();
     }
 
@@ -118,5 +118,5 @@ public class ActivateAccount {
      * @param token the token to delete
      */
     private void deleteToken(ActivationToken token) { new GenericDAO<>(ActivationToken.class).delete(token); }
-    
+
 }

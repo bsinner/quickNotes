@@ -1,7 +1,8 @@
 <script>
 
     // context path changes between local host and AWS
-    const contextPath = "<%=request.getContextPath()%>";
+    const CXT_PATH = "<%=request.getContextPath()%>";
+    const JS_COOKIE = "access_token_data";
 
     // Modal elements
     const loginModal = $("#loginModal");
@@ -17,9 +18,11 @@
     $("#rightMenu").on("click", "#logout", () => {
         $.ajax({
             method : "POST"
-            , url : contextPath + "/api/logout"
+            , url : CXT_PATH + "/api/logout"
         }).done(() => {
-            window.sessionStorage.removeItem("username");
+            document.cookie = JS_COOKIE + "= ; "
+                    + "Path=" + CXT_PATH + "; "
+                    + "Expires=Thu, 01 Jan 1970 00:00:00 GMT";
             showLoggedOut();
         });
 
@@ -44,12 +47,13 @@
 
         // Login, or show error if invalid credentials
         $.ajax({method : "POST"
-                , url : contextPath + "/api/login?email=" + emailInput.value + "&password=" + passwordInput.value
+                , url : CXT_PATH + "/api/login?email=" + emailInput.value + "&password=" + passwordInput.value
                 , statusCode : {
                     401 : () => { showLoginError("Email and/or password are incorrect"); }
                 }
         }).done(data => {
             window.sessionStorage.setItem("username", data);
+            document.cookie = "access_token_data=" + data + "; Path=" + CXT_PATH;
             showLoggedIn(data);
             loginClose();
         })}
@@ -83,14 +87,14 @@
         // Create the note and close the modal, or show an error state if no note
         // title is present, or if a note with the same name exists
         if (title.val().length > 1) {
-            const url = contextPath + "/api/createNote?title=" + title.val();
+            const url = CXT_PATH + "/api/createNote?title=" + title.val();
             const props = { credentials : "same-origin", method : "PUT" };
 
             fetch(url, props)
                     .then(res => {
                         if (res.ok) {
                             res.text().then(t => {
-                                window.location = contextPath + "/editor?id=" + t;
+                                window.location = CXT_PATH + "/editor?id=" + t;
                             });
                         } else if (res.status === 422) {
                             showCreateInputError("Note " + title.val().toString() + " already exists");
@@ -158,7 +162,7 @@
     .on("click", "#signUpExit", () => { signUpClose(); });
 
     /*
-     * Clear error states from sign up modal
+     * Wrapper function for clearing sign up form error state
      */
     function clearSignUp() {
         clearFormErrState([signUpData.email.elems, signUpData.uname.elems
@@ -178,17 +182,21 @@
      * Show if the user is logged in, initialize modals
      */
     function initMenu() {
-        const username = sessionStorage.getItem("username");
+        const cookieArray = document.cookie.split(";")
+                .filter(c => c.trim().startsWith(JS_COOKIE + "="));
 
+        if (cookieArray.length === 0) {
+            showLoggedOut();
+        } else {
+            showLoggedIn(cookieArray[0].split("=")[1]);
+        }
+
+        // Initialize modals to call their form's close methods
+        // to clear error states when modals are closed by clicking
+        // somewhere else on the screen
         loginModal.modal({ onHidden : () => { loginClose(); } });
         createModal.modal({ onHidden : () => { createClose(); } });
         signUpModal.modal({ onHidden : () => { signUpClose(); } });
-
-        if (username == null) {
-            showLoggedOut();
-        } else {
-            showLoggedIn(username);
-        }
     }
 
     /*
@@ -216,7 +224,7 @@
 
     /*
      * Generic show form error state method, If an error message's text
-     * property is passed an empty string no message will be shown.
+     * property is passed an empty string, no message will be shown.
      *
      * Input must be an array of the following format:
      * [
@@ -263,8 +271,11 @@
         });
     }
 
-    // Sign up form data, input properties are used for getting values of inputs,
-    // elems properties are sent to error state displaying functions
+    /*
+     * Sign up form data, input properties are used for getting values of inputs,
+     * elems properties are sent to error state displaying functions, title is needed
+     * for displaying form error messages
+     */
     const signUpData = {
         email : {
             input : document.getElementById("signUpEmail")
@@ -295,6 +306,5 @@
             , title : "Password"
         }
     };
-
 
 </script>

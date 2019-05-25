@@ -3,17 +3,15 @@ package com.blakesinner.quickNotes.api;
 import com.blakesinner.quickNotes.entity.ActivationToken;
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
-import javax.ws.rs.CookieParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Cookie;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * Endpoint for activating accounts with activation tokens.
+ *
+ * @author bsinner 
  */
 @Path("activate")
 public class ActivateAccount {
@@ -22,11 +20,10 @@ public class ActivateAccount {
      * Activate the account linked to the activation token.
      *
      * @param activateToken the activate token
-     * @param cookie        the cookie
      * @return              the response indicating success of activating account
      */
-    @GET //TODO: should this stay GET, is cookie needed?
-    public Response activate(@QueryParam("t") String activateToken, @CookieParam("access_token") Cookie cookie) {
+    @POST
+    public Response activate(@QueryParam("t") String activateToken) {
 
         if (activateToken == null) {
             return Response.status(400).build();

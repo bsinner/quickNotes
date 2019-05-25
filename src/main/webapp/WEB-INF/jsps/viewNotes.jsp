@@ -42,5 +42,5 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-<%@include file="../../js-jsp/viewNotes/viewNotes-js.jsp"%>
+<%@include file="../../js-jsp/viewNotes-js.jsp"%>
 <%@include file="../../templates/footer.jsp"%>

@@ -13,4 +13,7 @@
     </div>
 </div>
 
+<%@include file="../../js-jsp/activate-js.jsp"%>
+
 </body>
+</html>

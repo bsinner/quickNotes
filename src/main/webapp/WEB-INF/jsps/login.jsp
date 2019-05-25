@@ -32,7 +32,7 @@
     </div>
 </div>
 
-<%@include file="/js-jsp/staticLogin/staticLogin-js.jsp"%>
+<%@include file="/js-jsp/staticLogin-js.jsp"%>
 
 </body>
 </html>

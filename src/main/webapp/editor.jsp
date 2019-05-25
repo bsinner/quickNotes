@@ -20,4 +20,4 @@
 <script type="text/javascript" src="js/editor/quill.min.js"></script>
 
 <%@include file="templates/footer.jsp"%>
-<%@include file="js-jsp/editor/editor-js.jsp"%>
+<%@include file="js-jsp/editor-js.jsp"%>

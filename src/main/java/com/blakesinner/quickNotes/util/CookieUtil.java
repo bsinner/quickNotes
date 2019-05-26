@@ -15,6 +15,9 @@ import java.util.List;
 /**
  * Class with utilities for parsing cookies with access tokens.
  *
+ * TODO: this class may not be needed anymore because of the
+ *       switch from session storage to JS cookies
+ *
  * @author bsinner
  */
 public class CookieUtil {

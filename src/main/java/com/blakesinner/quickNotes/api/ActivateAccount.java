@@ -4,6 +4,7 @@ import com.blakesinner.quickNotes.entity.ActivationToken;
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
 import java.util.List;

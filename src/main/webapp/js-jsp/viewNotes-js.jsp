@@ -1,16 +1,11 @@
 <script>
 
     /*
-     * Add event handlers to note list
+     * Add event handlers for the note elements to be loaded,
+     * load the list of notes
      */
     setUpForm();
-
-    /*
-     * Fetch user notes when the page loads
-     */
-    fetch("<%=request.getContextPath()%>/api/note/list", { credentials: "same-origin" })
-            .then((res) => res.json())
-            .then((data) => outputData(data));
+    loadNotes();
 
     /*
      * Display found user notes
@@ -61,14 +56,13 @@
 
         });
 
-        // Deletes the selected notes, displays success message,
-        // deactivates delete button. Promise.all() is used so
-        // the page will wait and display the number of notes
-        // deleted instead of 0
+        // Deletes the selected notes, display success message. Promise.all
+        // is used so the page will wait to display the number of notes deleted
+        // instead of displaying "0 notes deleted"
         btn.click(() => {
             let delCount = 0;
 
-            var promises = [];
+            const promises = [];
 
             $(".note").each(function(i) {
                 const currElement = $(this);
@@ -95,6 +89,15 @@
                 });
 
         });
+    }
+
+    /*
+     * Load a list of notes
+     */
+    function loadNotes() {
+        fetch("<%=request.getContextPath()%>/api/note/list", { credentials: "same-origin" })
+            .then((res) => res.json())
+            .then((data) => outputData(data));
     }
 
     /*
@@ -140,10 +143,10 @@
     }
 
     /*
-     * Display if none are found
+     * Display if no notes where found
      */
     function displayNoneFound() {
-        // TODO: create link to create note
+        // TODO: add HTML 
     }
 
 </script>

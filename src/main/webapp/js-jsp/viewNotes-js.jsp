@@ -146,7 +146,7 @@
      * Display if no notes where found
      */
     function displayNoneFound() {
-        // TODO: add HTML 
+        // TODO: add HTML
     }
 
 </script>

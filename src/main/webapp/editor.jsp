@@ -1,8 +1,8 @@
 <%@include file="templates/header.jsp"%>
 <%--quill css--%>
-<link rel="stylesheet" href="css/editor/quill.snow.min.css">
+<link rel="stylesheet" href="css/quill.snow.min.css">
 <%--custom css--%>
-<link rel="stylesheet" href="css/editor/editor.css">
+<link rel="stylesheet" href="css/editor.css">
 </head>
 <body>
 <%@include file="templates/menu.jsp"%>

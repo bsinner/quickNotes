@@ -1,0 +1,41 @@
+#actImgContainer {
+    height: 5em;
+    width: 5em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#actImg {
+    width: 100%;
+    height: auto;
+}
+
+.sHeader {
+    text-transform: none !important;
+}
+
+#activateFooter {
+    margin-left: 3em;
+}
+
+#bodyDiv {
+    position: relative;
+    min-height: 100vh;
+}
+
+#contentDiv {
+    padding-bottom: 2.5em;
+}
+
+#footerDiv {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+
+#footerMsg {
+    padding-bottom: 2em;
+}
+
+#homeLink { color: rgba(0, 0, 0, .87); }
+#homeLink:hover { color: rgba(0, 0, 0, .70); }

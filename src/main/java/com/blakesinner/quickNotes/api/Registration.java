@@ -55,8 +55,15 @@ public class Registration {
         return okResponse();
     }
 
+    /**
+     * Create a new activation token and send it to the users email, user must be logged in
+     * to use this endpoint.
+     *
+     * @param cookie the user access token
+     * @return       the Ok response or error response
+     */
     @PUT
-    @Path("/register")
+    @Path("/resend")
     @Produces(MediaType.APPLICATION_JSON)
     public Response resendRegistration(@CookieParam("access_token") Cookie cookie) {
         User user = findValidUser(cookie);
@@ -67,7 +74,7 @@ public class Registration {
             return Response.status(403).entity("{}").build();
         }
 
-        resendEmail(user);
+        sendEmail(createToken(user));
 
         return okResponse();
     }
@@ -98,6 +105,12 @@ public class Registration {
         return null;
     }
 
+    /**
+     * Try to find the user in the access token in the database.
+     *
+     * @param cookie the user access cookie
+     * @return       the found user, or null if no user could be found
+     */
     private User findValidUser(Cookie cookie) {
         if (cookie != null) {
             String id = CookieUtil.jaxRsGetId(cookie);
@@ -130,6 +143,12 @@ public class Registration {
         return createToken(createdUser);
     }
 
+    /**
+     * Create an activation token.
+     *
+     * @param user the user activated by the token
+     * @return     the token ID
+     */
     private String createToken(User user) {
         ActivationTokenDAO tDao = new ActivationTokenDAO();
         ActivationToken token = new ActivationToken(user);
@@ -167,11 +186,6 @@ public class Registration {
         } catch (MessagingException me) {
             logger.trace(me);
         }
-    }
-
-
-    private void resendEmail(User user) {
-        sendEmail(createToken(user));
     }
 
     /**

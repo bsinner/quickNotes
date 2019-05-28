@@ -24,18 +24,30 @@
 }
 
 #contentDiv {
-    padding-bottom: 2.5em;
+    padding-bottom: 3.5em;
 }
 
 #footerDiv {
     position: absolute;
     width: 100%;
     bottom: 0;
+    height: 3.5em;
+    border-top: rgba(0, 0, 0, .3) 1px solid;
+    vertical-align: middle;
+    padding: 1em 0 0 1em;
+    color: rgba(0, 0, 0, .55);
 }
 
-#footerMsg {
-    padding-bottom: 2em;
+#footerDiv a {
+    text-decoration: none;
+    color: inherit;
 }
+
+#footerDiv a:hover {
+    text-decoration: underline;
+    color: rgba(0, 0, 0, .65);
+}
+
 
 #homeLink { color: rgba(0, 0, 0, .87); }
 #homeLink:hover { color: rgba(0, 0, 0, .70); }

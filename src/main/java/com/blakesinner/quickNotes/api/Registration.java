@@ -11,11 +11,11 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Properties;
-
 import static javax.mail.Message.RecipientType.TO;
 
 /**
@@ -51,7 +51,25 @@ public class Registration {
         String activationToken = createAccount(email, password, username);
         sendEmail(activationToken);
 
-        return Response.status(200).entity("{}").build();
+        return okResponse();
+    }
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response resendRegistration(@CookieParam("access_token") Cookie cookie) {
+        User user = findValidUser(cookie);
+
+        if (user == null) {
+            return badRequest();
+        } else if (user.isActivated()) {
+            return null; /* change to forbidden */
+        }
+
+        return okResponse();
+    }
+
+    private User findValidUser(Cookie cookie) {
+        return null;
     }
 
     /**
@@ -66,7 +84,7 @@ public class Registration {
     private Response findError(String username, String password, String email) {
 
         if (username == null || password == null || email == null) {
-            return Response.status(400).build();
+            return badRequest();
         }
 
         if (!validEmail(email)) {
@@ -175,9 +193,34 @@ public class Registration {
                     + "Your Quick Notes account has been created, click here to activate."
                 + "</h5>"
                 + "<a class=\"ui button\" href=\"" + token + "\""
-                        + "style=\"cursor: pointer;display: inline-block;min-height: 1em;outline: 0;border: none;vertical-align: baseline;background: #e0e1e2 none;color: rgba(0,0,0,.6);font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;margin: 0 .25em 0 0;padding: .78571429em 1.5em .78571429em;font-weight: 700;line-height: 1em;font-style: normal;text-align: center;border-radius: .28571429rem;margin-left: auto; margin-right: auto;\">"
+                        + "style=8\"cursor: pointer;display: inline-block;min-height: 1em;outline: 0;border: none;vertical-align: baseline;background: #e0e1e2 none;color: rgba(0,0,0,.6);font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;margin: 0 .25em 0 0;padding: .78571429em 1.5em .78571429em;font-weight: 700;line-height: 1em;font-style: normal;text-align: center;border-radius: .28571429rem;margin-left: auto; margin-right: auto;\">"
                     + "Confirm Account"
                 + "</a>"
                 + " </div>";
+    }
+
+    /**
+     * Get an Error 400 Bad Request response.
+     *
+     * @return the error response
+     */
+    private Response badRequest() { return Response.status(400).entity("{}").build(); }
+
+    /**
+     * Get a 200 Ok response.
+     *
+     * @return the Ok response
+     */
+    private Response okResponse() { return Response.status(200).entity("{}").build(); }
+
+    /**
+     * Get a 422 Unprocessable Entity response for when an account is
+     * already registered under the new user's username or email.
+     *
+     * @param msg message indicating whether the username or email is taken
+     * @return    the error response
+     */
+    private Response acctTakenResponse(String msg) {
+        return Response.status(422).entity("{\"err\" : \"" + msg + "\"}").build();
     }
 }

@@ -19,7 +19,7 @@
                 <h3 class="ui center aligned header" id="statusTitle"></h3>
                 <div class="ui center aligned sub header" id="statusDesc"></div>
 
-                <button id="statusBtn" class="ui teal btn">Return to Editor</button>
+                <a id="statusBtn" class="ui primary button">Return to Editor</a>
             </div>
         </div>
     </div>

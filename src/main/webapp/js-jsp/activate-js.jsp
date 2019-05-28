@@ -7,30 +7,33 @@
     const S_IMG = document.getElementById("statusImg");
     const S_TITLE = document.getElementById("statusTitle");
     const S_DESC = document.getElementById("statusDesc");
+    const S_BTN = document.getElementById("statusBtn");
+    const INVALID = ["Invalid Link", "The account activation link is invalid"];
+    const EXPIRED = ["Expired Link", "The account activation link has expired"];
 
     (function init() {
         if (Q_STRING.length > 1) {
             activateAccount();
+        } else {
+            showFailed(...INVALID);
         }
     })();
 
     function activateAccount() {
         const url = CXT + "/api/activate" + Q_STRING;
         const props = { method : "POST" };
-        const invalid = ["Invalid Link", "The account activation link is invalid"];
-        const expired = ["Expired Link", "The account activation link has expired"];
 
         fetch(url, props)
                 .then(r => {
                     if (r.ok) {
                         showSuccess();
                     } else if (r.status === 410) {
-                        showFailed(...expired);
+                        showFailed(...EXPIRED);
                     } else if (r.status === 403) {
                         // Show success because 403 indicates user is already activated
                         showSuccess();
                     } else {
-                        showFailed(...invalid);
+                        showFailed(...INVALID);
                     }
                 });
     }
@@ -39,6 +42,9 @@
         showStatus("images/success.svg", "Account Activated"
             , "Your account has been activated, you may now save and create notes"
         );
+
+        S_BTN.innerText = "Return to editor";
+        S_BTN.setAttribute("href", "/");
     }
 
     function showFailed(title, desc) {
@@ -47,6 +53,11 @@
         const cookies = document.cookie.split(";")
             .filter(c => c.trim().startsWith(JS_COOKIE + "="));
 
+        if (cookies.length > 0) {
+            S_BTN.innerText = "Resend Email";
+        } else {
+            S_BTN.innerText = "Login and Resend";
+        }
 
     }
 

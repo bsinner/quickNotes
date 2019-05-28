@@ -18,6 +18,8 @@
                 </div>
                 <h3 class="ui center aligned header" id="statusTitle"></h3>
                 <div class="ui center aligned sub header" id="statusDesc"></div>
+
+                <button id="statusBtn" class="ui teal btn">Return to Editor</button>
             </div>
         </div>
     </div>

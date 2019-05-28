@@ -1,6 +1,7 @@
 <script>
     const CXT = "<%=request.getContextPath()%>";
     const Q_STRING = "?${params}";
+    const JS_COOKIE = "access_token_data";
 
     // Elements to hold output
     const S_IMG = document.getElementById("statusImg");
@@ -41,6 +42,11 @@
     }
 
     function showFailed(title, desc) {
+        showStatus("images/fail.svg", title, desc);
+
+        const cookies = document.cookie.split(";")
+            .filter(c => c.trim().startsWith(JS_COOKIE + "="));
+
 
     }
 

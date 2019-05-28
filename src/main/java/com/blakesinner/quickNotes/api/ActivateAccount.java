@@ -40,7 +40,13 @@ public class ActivateAccount {
 
     }
 
-    public boolean alreadyActivated(Cookie cookie) {
+    /**
+     * Check if the user identified in the cookie is already activated.
+     *
+     * @param cookie the user cookie, null if not logged in
+     * @return       true if the user is activated, false if they aren't activated
+     */
+    private boolean alreadyActivated(Cookie cookie) {
         if (cookie != null) {
             List<User> users = uDao.getByPropertyEqual("username", cookie.getValue());
             return users.size() > 0 && users.get(0).isActivated();

@@ -14,6 +14,15 @@
     text-transform: none !important;
 }
 
+#statusBtn {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2em;
+    float: none;
+    display: block;
+    width: 13em;
+}
+
 #activateFooter {
     margin-left: 3em;
 }

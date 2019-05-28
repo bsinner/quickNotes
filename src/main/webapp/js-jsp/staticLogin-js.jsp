@@ -3,16 +3,17 @@
     window.onload = () => {
 
         // Inputs
-        const email = document.getElementById("email");
-        const password = document.getElementById("password");
+        const EMAIL = document.getElementById("email");
+        const PASSWORD = document.getElementById("password");
         
         // Root Url
-        const root = "<%=request.getContextPath()%>";
+        const CXT = "<%=request.getContextPath()%>";
 
+        // Submit event handler
         document.getElementById("submit").onclick = () => {
-            fetch(root + "/api/login"
-                    + "?email=" + email.value
-                    + "&password=" + password.value,
+            fetch(CXT + "/api/login"
+                    + "?email=" + EMAIL.value
+                    + "&password=" + PASSWORD.value,
                     { method: "POST" })
             .then((res) => {
                 if(res.status === 401) {
@@ -28,15 +29,15 @@
          * the request attribute needs to be set so the submit
          * function can send users to the right page
          */
-        const submit = () => {
+        function submit() {
             const form = document.getElementById("form");
-            form.setAttribute("action", root + "${servlet}");
+            form.setAttribute("action", CXT + "${servlet}");
             form.submit();
-        };
+        }
 
-        const showError = () => {
+        function showError() {
             // TODO: add error handleing
-        };
+        }
     };
 
 </script>

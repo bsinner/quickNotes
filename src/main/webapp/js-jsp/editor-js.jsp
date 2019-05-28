@@ -12,7 +12,7 @@ const REQ_MAX_ELEMENTS = 100;
  * Load the editor, load the current note, if no note is detected
  * id is null
  */
-const editor = loadEditor();
+const EDITOR = loadEditor();
 loadNote();
 
 /*
@@ -77,7 +77,7 @@ async function fetchNote(id) {
 function loadContents(noteString) {
     try {
         const noteJson = JSON.parse(noteString);
-            editor.setContents(noteJson);
+            EDITOR.setContents(noteJson);
     } catch (SyntaxError) {
         console.error(SyntaxError + "Could not load note json: " + noteString);
     }
@@ -95,7 +95,7 @@ function addSaveButton(id) {
         const props = {
             credentials : "same-origin"
             , method : "POST"
-            , headers : { "note-contents" : JSON.stringify(editor.getContents()) }
+            , headers : { "note-contents" : JSON.stringify(EDITOR.getContents()) }
         };
 
         fetch(url, props)
@@ -127,7 +127,7 @@ document.getElementById("translateButton").onclick = () => { translateModal.moda
 document.getElementById("translateSubmit").onclick = () => {
 
     // Original text and text to send to the api
-    const original = editor.getContents().ops;
+    const original = EDITOR.getContents().ops;
     const formatted = [[]];
 
     // Used to split text into multiple requests to stay within the api limits
@@ -217,13 +217,14 @@ function applyChanges(original, results) {
 
     });
 
-    editor.setContents(original);
+    EDITOR.setContents(original);
     translateModal.modal("hide");
 }
 
 /*
  * Helper functions for translating text
  */
+
 // Wrapper for looping an array
 function loopJson(length, callback) {
     for (let i = 0; i < length; i++) {

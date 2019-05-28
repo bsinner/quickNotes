@@ -69,8 +69,8 @@
             .filter(c => c.trim().startsWith(JS_COOKIE + "="));
 
         if (cookies.length > 0) {
-            setButton("Resend Email", "api/register/resend");
-        } else {
+            setButton("Resend Email", "...");
+        } else {                                    /* go to a static page that says resent */
             setButton("Login and Resend", "...");
         }
 

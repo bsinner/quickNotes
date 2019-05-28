@@ -17,6 +17,8 @@ import java.util.List;
 @Path("activate")
 public class ActivateAccount {
 
+    private final GenericDAO<User> uDao = new GenericDAO<>(User.class);
+
     /**
      * Activate the account linked to the activation token.
      *
@@ -24,7 +26,11 @@ public class ActivateAccount {
      * @return              the response indicating success of activating account
      */
     @POST
-    public Response activate(@QueryParam("t") String activateToken) {
+    public Response activate(@QueryParam("t") String activateToken, @CookieParam("access_token_data") Cookie cookie) {
+
+        if (alreadyActivated(cookie)) {
+            return Response.status(403).build();
+        }
 
         if (activateToken == null) {
             return Response.status(400).build();
@@ -32,6 +38,14 @@ public class ActivateAccount {
 
         return activateUser(activateToken);
 
+    }
+
+    public boolean alreadyActivated(Cookie cookie) {
+        if (cookie != null) {
+            List<User> users = uDao.getByPropertyEqual("username", cookie.getValue());
+            return users.size() > 0 && users.get(0).isActivated();
+        }
+        return false;
     }
 
     /**
@@ -84,13 +98,13 @@ public class ActivateAccount {
      *              could not be updated
      */
     private Response updateUser(ActivationToken token) {
-        GenericDAO<User> dao = new GenericDAO<>(User.class);
+        GenericDAO<User> uDao = new GenericDAO<>(User.class);
         User user = token.getUser();
         user.setActivated(true);
 
-        dao.saveOrUpdate(user);
+        uDao.saveOrUpdate(user);
 
-        List<User> updatedUsers = dao
+        List<User> updatedUsers = uDao
                 .getByPropertyEqual("id", String.valueOf(user.getId()));
 
         if (updatedUsers.size() < 1 || !updatedUsers.get(0).isActivated()) {

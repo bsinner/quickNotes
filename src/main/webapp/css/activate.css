@@ -5,12 +5,12 @@
     margin-right: auto;
 }
 
-#actImg {
+#statusImg {
     width: 100%;
     height: auto;
 }
 
-.sHeader {
+#statusDesc {
     text-transform: none !important;
 }
 

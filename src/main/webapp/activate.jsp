@@ -14,10 +14,10 @@
             <div class="six wide column">
                 <br>
                 <div id="actImgContainer">
-                    <img id="actImg">
+                    <img id="statusImg">
                 </div>
-                <h3 class="ui center aligned header" id=""></h3>
-                <div class="sHeader ui center aligned sub header"></div>
+                <h3 class="ui center aligned header" id="statusTitle"></h3>
+                <div class="ui center aligned sub header" id="statusDesc"></div>
             </div>
         </div>
     </div>

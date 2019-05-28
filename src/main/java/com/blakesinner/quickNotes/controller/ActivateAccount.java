@@ -27,7 +27,7 @@ public class ActivateAccount extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         req.setAttribute("params", req.getQueryString());
-        req.getRequestDispatcher("/WEB-INF/jsps/activate.jsp")
+        req.getRequestDispatcher("/activate.jsp")
                 .forward(req, res);
     }
 

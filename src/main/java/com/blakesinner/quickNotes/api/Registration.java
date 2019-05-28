@@ -4,6 +4,7 @@ import com.blakesinner.quickNotes.entity.ActivationToken;
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.ActivationTokenDAO;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
+import com.blakesinner.quickNotes.util.CookieUtil;
 import com.blakesinner.quickNotes.util.PropertiesLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,6 +56,7 @@ public class Registration {
     }
 
     @PUT
+    @Path("/register")
     @Produces(MediaType.APPLICATION_JSON)
     public Response resendRegistration(@CookieParam("access_token") Cookie cookie) {
         User user = findValidUser(cookie);
@@ -62,14 +64,12 @@ public class Registration {
         if (user == null) {
             return badRequest();
         } else if (user.isActivated()) {
-            return null; /* change to forbidden */
+            return Response.status(403).entity("{}").build();
         }
 
-        return okResponse();
-    }
+        resendEmail(user);
 
-    private User findValidUser(Cookie cookie) {
-        return null;
+        return okResponse();
     }
 
     /**
@@ -88,11 +88,27 @@ public class Registration {
         }
 
         if (!validEmail(email)) {
-            return Response.status(422).entity("{\"err\" : \"email\"}").build();
+            return accountTaken("email");
         }
 
         if (!validUsername(username)) {
-            return Response.status(422).entity("{\"err\" : \"username\"}").build();
+            return accountTaken("username");
+        }
+
+        return null;
+    }
+
+    private User findValidUser(Cookie cookie) {
+        if (cookie != null) {
+            String id = CookieUtil.jaxRsGetId(cookie);
+
+            if (id != null) {
+                List<User> users = dao.getByPropertyEqual("id", id);
+
+                if (users.size() > 0) {
+                    return users.get(0);
+                }
+            }
         }
 
         return null;
@@ -109,24 +125,24 @@ public class Registration {
     private String createAccount(String email, String password, String username) {
         User user = new User(username, password, email);
         int id = dao.insert(user);
-        User foundUser = dao.getByPropertyEqual("id", String.valueOf(id)).get(0);
+        User createdUser = dao.getByPropertyEqual("id", String.valueOf(id)).get(0);
 
+        return createToken(createdUser);
+    }
+
+    private String createToken(User user) {
         ActivationTokenDAO tDao = new ActivationTokenDAO();
-        ActivationToken token = new ActivationToken(foundUser);
+        ActivationToken token = new ActivationToken(user);
 
-        String tId  = tDao.insertToken(token);
-        ActivationToken foundToken = tDao.getByPropertyEqual("id", tId).get(0);
-
-        return foundToken.getId();
+        return tDao.insertToken(token);
     }
 
     /**
      * Send an email with an account activation link.
      *
      * @param token the activation token ID
-     * @return      true if the email was sent, false if an exception occurred while sending
      */
-    private boolean sendEmail(String token) {
+    private void sendEmail(String token) {
         PropertiesLoader loader = new PropertiesLoader();
         Properties mailProps = loader.load("/mail.properties");
         Properties authProps = loader.load("/mailLogin.properties");
@@ -148,12 +164,14 @@ public class Registration {
             message.setContent(getHtml(token), "text/html");
 
             Transport.send(message);
-            return true;
         } catch (MessagingException me) {
             logger.trace(me);
         }
+    }
 
-        return false;
+
+    private void resendEmail(User user) {
+        sendEmail(createToken(user));
     }
 
     /**
@@ -220,7 +238,7 @@ public class Registration {
      * @param msg message indicating whether the username or email is taken
      * @return    the error response
      */
-    private Response acctTakenResponse(String msg) {
+    private Response accountTaken(String msg) {
         return Response.status(422).entity("{\"err\" : \"" + msg + "\"}").build();
     }
 }

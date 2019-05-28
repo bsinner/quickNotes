@@ -43,8 +43,7 @@
             , "Your account has been activated, you may now save and create notes"
         );
 
-        S_BTN.innerText = "Return to editor";
-        S_BTN.setAttribute("href", "/");
+        setButton("Return to Editor", "editor");
     }
 
     function showFailed(title, desc) {
@@ -54,9 +53,9 @@
             .filter(c => c.trim().startsWith(JS_COOKIE + "="));
 
         if (cookies.length > 0) {
-            S_BTN.innerText = "Resend Email";
+            setButton("Resend Email", "...")
         } else {
-            S_BTN.innerText = "Login and Resend";
+            setButton("Login and Resend", "...");
         }
 
     }
@@ -65,6 +64,11 @@
         S_IMG.setAttribute("src", img);
         S_TITLE.innerText = title;
         S_DESC.innerText = desc;
+    }
+
+    function setButton(text, action) {
+        S_BTN.innerText = text;
+        S_BTN.setAttribute("href", action);
     }
 
 </script>

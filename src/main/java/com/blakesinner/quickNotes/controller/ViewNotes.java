@@ -32,9 +32,9 @@ public class ViewNotes extends HttpServlet {
         RequestDispatcher rd = null;
 
         if (filter.isValid()) {
-            rd = req.getRequestDispatcher("/WEB-INF/jsps/viewNotes.jsp");
+            rd = req.getRequestDispatcher("/viewNotes.jsp");
         } else {
-            rd = req.getRequestDispatcher("/WEB-INF/jsps/login.jsp");
+            rd = req.getRequestDispatcher("/login.jsp");
         }
 
         req.setAttribute("servlet", "/viewNotes");

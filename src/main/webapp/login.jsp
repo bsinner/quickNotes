@@ -1,10 +1,10 @@
-<%@include file="../../templates/header.jsp"%>
+<%@include file="templates/header.jsp"%>
 <title>Login</title>
 
 </head>
 <body>
 
-<%@include file="../../templates/staticMenu.jsp"%>
+<%@include file="templates/staticMenu.jsp"%>
 
 <div class="ui column centered grid">
     <div class="four wide column">
@@ -15,14 +15,15 @@
 
         <form class="ui form" id="form">
 
-            <div class="field">
+            <div class="field" id="emailDiv">
                 <label>E-mail</label>
                 <input type="text" id="email">
             </div>
 
-            <div class="field">
+            <div class="field" id="passDiv">
                 <label>Password</label>
                 <input type="password" id="password">
+                <div class="ui compact small negative message compactPadding" id="loginError" style="display: none;">asdf</div>
             </div>
 
         </form>

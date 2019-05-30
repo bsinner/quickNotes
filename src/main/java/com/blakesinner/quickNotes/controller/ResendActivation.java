@@ -32,10 +32,10 @@ public class ResendActivation extends HttpServlet {
         RequestDispatcher rd = null;
 
         if (filter.isValid()) {
-            rd = req.getRequestDispatcher("/WEB-INF/jsps/resend.jsp");
+            rd = req.getRequestDispatcher("/resend.jsp");
         } else {
             req.setAttribute("servlet", "/resend");
-            rd = req.getRequestDispatcher("/WEB-INF/jsps/login.jsp");
+            rd = req.getRequestDispatcher("/login.jsp");
         }
 
         rd.forward(req, res);

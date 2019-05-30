@@ -16,3 +16,6 @@ i:hover {
 .compactPadding {
     padding: .4em .65em .4em .65em !important;
 }
+
+a#homeLink { color: rgba(0,0,0,.87); }
+a#homeLink:hover { color: rgba(0,0,0,.70); }

@@ -17,6 +17,10 @@
 
         // Submit event handler
         document.getElementById("submit").onclick = () => {
+            if (EMAIL.value.length < 1 || PASSWORD.value.length < 1) {
+                showError("")
+            }
+
             LOGIN_REQ.login(EMAIL.value, PASSWORD.value);
         };
 
@@ -33,8 +37,8 @@
         }
 
         function showError() {
-            // TODO: add error handleing
-        }
+            // TODO: create generic error highlighter and share between menu js and this js
 
+        }
 
 </script>

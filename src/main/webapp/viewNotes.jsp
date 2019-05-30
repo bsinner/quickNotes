@@ -1,10 +1,10 @@
-<%@include file="../../templates/header.jsp"%>
+<%@include file="templates/header.jsp"%>
 <title>View Notes</title>
 
 </head>
 <body>
 
-<%@include file="../../templates/menu.jsp"%>
+<%@include file="templates/menu.jsp"%>
 
 <!-- Hidden table of found notes -->
 <br>
@@ -44,5 +44,5 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-<%@include file="../../js-jsp/viewNotes-js.jsp"%>
-<%@include file="../../templates/footer.jsp"%>
+<%@include file="js-jsp/viewNotes-js.jsp"%>
+<%@include file="templates/footer.jsp"%>

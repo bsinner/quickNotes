@@ -52,8 +52,8 @@
         const passwordInput = document.getElementById("password");
 
         // If the login info is missing show an error
-        if (emailInput.value < 1
-            || passwordInput.value < 1) {
+        if (emailInput.value.length < 1
+            || passwordInput.value.length < 1) {
             showLoginError("Email and password must not be left blank");
             return;
         }

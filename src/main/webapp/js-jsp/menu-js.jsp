@@ -1,9 +1,21 @@
+<script src="js/loginRequest.js" type="application/javascript"></script>
+
 <script>
 // TODO: use objects to store data for all forms
 
     // context path changes between local host and AWS
     const CXT_PATH = "<%=request.getContextPath()%>";
     const JS_COOKIE = "access_token_data";
+    const LOGIN_REQUEST = new LoginRequest({
+        basePath : CXT_PATH
+        , onComplete : data => {
+            showLoggedIn(data);
+            loginClose();
+        }
+        , onError : () => {
+            showLoginError("Email and/or password are incorrect");
+        }
+    });
 
     // Modal elements
     const loginModal = $("#loginModal");
@@ -41,25 +53,14 @@
 
         // If the login info is missing show an error
         if (emailInput.value < 1
-                || passwordInput.value < 1) {
+            || passwordInput.value < 1) {
             showLoginError("Email and password must not be left blank");
             return;
         }
 
-        // Login, or show error if invalid credentials
-        $.ajax({method : "POST"
-                , url : CXT_PATH + "/api/login?email=" + emailInput.value + "&password=" + passwordInput.value
-                , statusCode : {
-                    401 : () => { showLoginError("Email and/or password are incorrect"); }
-                }
-        }).done(data => {
-            window.sessionStorage.setItem("username", data);
-            document.cookie = "access_token_data=" + data + "; Path=" + CXT_PATH;
-            showLoggedIn(data);
-            loginClose();
-        })}
+        LOGIN_REQUEST.login(emailInput.value, passwordInput.value);
 
-    ).on("click", "#loginExit", () => { loginClose(); });
+    }).on("click", "#loginExit", () => { loginClose(); });
 
     // Show form error state on login fail
     function showLoginError(msg) {

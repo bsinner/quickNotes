@@ -1,27 +1,23 @@
-<script>
+<script src="js/loginRequest.js" type="application/javascript"></script>
 
-    window.onload = () => {
+<script>
 
         // Inputs
         const EMAIL = document.getElementById("email");
         const PASSWORD = document.getElementById("password");
         
-        // Root Url
+        // Root url, js current user cookie name
         const CXT = "<%=request.getContextPath()%>";
+        const JS_COOKIE = "access_token_data";
+        const LOGIN_REQ = new LoginRequest({
+            basePath : CXT
+            , onComplete : () => { submit(); }
+            , onError : () => { showError(); }
+        });
 
         // Submit event handler
         document.getElementById("submit").onclick = () => {
-            fetch(CXT + "/api/login"
-                    + "?email=" + EMAIL.value
-                    + "&password=" + PASSWORD.value,
-                    { method: "POST" })
-            .then((res) => {
-                if(res.status === 401) {
-                    showError();
-                } else {
-                    submit()
-                }
-            });
+            LOGIN_REQ.login(EMAIL.value, PASSWORD.value);
         };
 
         /*
@@ -31,6 +27,7 @@
          */
         function submit() {
             const form = document.getElementById("form");
+
             form.setAttribute("action", CXT + "${servlet}");
             form.submit();
         }
@@ -38,6 +35,6 @@
         function showError() {
             // TODO: add error handleing
         }
-    };
+
 
 </script>

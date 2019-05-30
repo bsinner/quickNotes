@@ -29,6 +29,8 @@ public class JspFilter {
     /**
      * Check if the cookies contain a valid access token.
      *
+     * TODO: When refresh tokens are added, check the expiration date
+     *
      * @return true or false depending on if the access token is valid
      */
     public boolean isValid() {

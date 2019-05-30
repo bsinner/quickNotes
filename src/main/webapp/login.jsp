@@ -23,7 +23,7 @@
             <div class="field" id="passDiv">
                 <label>Password</label>
                 <input type="password" id="password">
-                <div class="ui compact small negative message compactPadding" id="loginError" style="display: none;">asdf</div>
+                <div class="ui compact small negative message compactPadding" id="loginError" style="display: none;"></div>
             </div>
 
         </form>

@@ -1,4 +1,5 @@
 <%@include file="../../templates/header.jsp"%>
+<title>Login</title>
 
 </head>
 <body>

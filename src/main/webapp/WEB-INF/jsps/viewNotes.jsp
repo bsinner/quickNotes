@@ -1,4 +1,6 @@
 <%@include file="../../templates/header.jsp"%>
+<title>View Notes</title>
+
 </head>
 <body>
 

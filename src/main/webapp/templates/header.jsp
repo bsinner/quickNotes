@@ -3,7 +3,6 @@
 
 <html>
 <head>
-    <title>Title</title>
     <%--Semantic UI css--%>
     <link rel="stylesheet" href="css/semantic.min.css">
     <link rel="stylesheet" href="css/templates/menu.css">

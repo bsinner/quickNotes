@@ -1,5 +1,6 @@
 <%@include file="templates/header.jsp"%>
 <link rel="stylesheet" href="css/activate.css">
+<title>Activate Account</title>
 
 </head>
 <body>

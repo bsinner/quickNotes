@@ -1,4 +1,5 @@
 <script>
+// TODO: use objects to store data for all forms
 
     // context path changes between local host and AWS
     const CXT_PATH = "<%=request.getContextPath()%>";

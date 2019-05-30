@@ -12,13 +12,13 @@
         const LOGIN_REQ = new LoginRequest({
             basePath : CXT
             , onComplete : () => { submit(); }
-            , onError : () => { showError(); }
+            , onError : () => { showError("Email and/or password are incorrect"); }
         });
 
         // Submit event handler
         document.getElementById("submit").onclick = () => {
             if (EMAIL.value.length < 1 || PASSWORD.value.length < 1) {
-                showError("")
+                showError("Email and password must not be blank");
             }
 
             LOGIN_REQ.login(EMAIL.value, PASSWORD.value);
@@ -36,9 +36,25 @@
             form.submit();
         }
 
-        function showError() {
-            // TODO: create generic error highlighter and share between menu js and this js
+        /*
+         * Show an error state on the form, remove it if one of the
+         * inputs is changed
+         */
+        function showError(msg) {
+            const divs =[$("#emailDiv"), $("#passDiv")];
+            const msgDiv = document.getElementById("loginError");
 
+            divs.forEach(div => { div.addClass("error"); });
+            msgDiv.innerText = msg;
+            msgDiv.removeAttribute("style");
+
+            const removeErr = () => {
+                msgDiv.setAttribute("style", "display: none;");
+                divs.forEach(div => { div.removeClass("error"); });
+            };
+
+            EMAIL.oninput = removeErr;
+            PASSWORD.oninput = removeErr;
         }
 
 </script>

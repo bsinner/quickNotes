@@ -4,10 +4,16 @@
 
     sendEmail();
 
+    // Event handler for resend button
     document.getElementById("resend").onclick = () => {
        sendEmail();
     };
 
+    /*
+     * Try to send an activation email, if no access token cookie is
+     * present status 400 is returned and the user is redirected to the
+     * login page.
+     */
     function sendEmail() {
         const url = CXT + "/api/register/resend";
         const props = { method : "PUT",  credentials : "same-origin"};

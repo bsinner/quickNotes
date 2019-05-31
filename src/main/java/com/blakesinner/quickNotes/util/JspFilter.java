@@ -57,9 +57,11 @@ public class JspFilter {
      * @return cookie value, or null of no matching token is found
      */
     private Optional<String> getToken() {
-        for (Cookie c : cookies) {
-            if (c.getName().equals(NAME)) {
-                return Optional.of(c.getValue());
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if (c.getName().equals(NAME)) {
+                    return Optional.of(c.getValue());
+                }
             }
         }
 

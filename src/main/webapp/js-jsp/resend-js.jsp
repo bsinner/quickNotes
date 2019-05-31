@@ -4,6 +4,10 @@
 
     sendEmail();
 
+    document.getElementById("resend").onclick = () => {
+       sendEmail();
+    };
+
     function sendEmail() {
         const url = CXT + "/api/register/resend";
         const props = { method : "PUT",  credentials : "same-origin"};

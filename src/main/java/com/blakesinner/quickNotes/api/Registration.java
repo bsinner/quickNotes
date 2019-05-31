@@ -219,7 +219,7 @@ public class Registration {
     private String getHtml(String token) {
         return "<div style=\"margin: 1em, 1em, 1em, 1em;\">"
                 + "<h3 style=\"font-family:Lato,'Helvetica Neue',Arial,Helvetica,sans-serif\">"
-                    + "Account Created"
+                    + "Account Created&nbsp;"
                 + "</h3>"
                 + "<h5 style=\"font-family:Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;\">"
                     + "Your Quick Notes account has been created, click here to activate."

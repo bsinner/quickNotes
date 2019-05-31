@@ -21,7 +21,7 @@
         fetch(url, props)
             .then(res => {
                if(res.status === 400) {
-                   window.location = CXT + "/resend";
+                   window.location.href = CXT + "/resend";
                }
             });
     }

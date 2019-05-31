@@ -95,8 +95,8 @@
 
     <div class="content">
         <p>
-            Your account has been created and an email containing an activation link has been sent,
-            if you did not receive an email click here to resend.
+            Your account has been created and an email containing an activation link has been sent
+            to your inbox, if you did not receive an email click here to resend.
         </p>
     </div>
 

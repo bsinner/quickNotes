@@ -179,7 +179,7 @@
                     return res.json();
                 } else {
                     LOGIN_REQUEST.login(email, pass);
-                    showConfirmation();
+                    confirmModal.modal("show");
                 }
             }).then(json => {
 
@@ -197,11 +197,25 @@
             });
     }
 
-    function showConfirmation() {
-        confirmModal.modal("show");
-        document.getElementById("exitRegConfirm").onclick = () => { confirmClose(); };
-    }
+    // Confirm modal resend email event handler
+    document.getElementById("resendActivation").onclick = () => {
+        const url = CXT_PATH + "/api/register/resend";
+        const props = { method : "PUT", credentials : "same-origin" };
 
+        fetch(url, props)
+            .then(res => {
+               if(res.status === 400) {
+                   window.location.href = CXT_PATH + "/resend";
+               }
+            });
+    };
+
+    // Confirm modal close button event handler
+    document.getElementById("exitRegConfirm").onclick = () => { confirmClose(); };
+
+    /*
+     * Hide the confirmation modal
+     */
     function confirmClose() {
         confirmModal.modal("hide");
     }

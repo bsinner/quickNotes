@@ -86,6 +86,24 @@
 
 </div>
 
+<div class="ui tiny modal" id="regConfirmModal">
+
+    <i class="icon-cancel" id="exitRegConfirm"></i>
+    <div class="header">
+        Check your Inbox
+    </div>
+
+    <div class="content">
+        <p>
+            Your account has been created and an email containing an activation link has been sent,
+            if you did not receive an email click here to resend.
+        </p>
+    </div>
+    
+    <button class="ui button" id="resendActivation">Resend Email</button>
+    <br>
+</div>
+
 <!-- Create modal -->
 <div class="ui tiny modal" id="createModal">
 

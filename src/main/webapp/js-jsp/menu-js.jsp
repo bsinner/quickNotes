@@ -21,6 +21,7 @@
     const loginModal = $("#loginModal");
     const createModal = $("#createModal");
     const signUpModal = $("#signUpModal");
+    const confirmModal = $("#regConfirmModal");
 
     // Display if the user is logged in or logged out
     initMenu();
@@ -197,7 +198,12 @@
     }
 
     function showConfirmation() {
+        confirmModal.modal("show");
+        document.getElementById("exitRegConfirm").onclick = () => { confirmClose(); };
+    }
 
+    function confirmClose() {
+        confirmModal.modal("hide");
     }
 
     /*
@@ -236,6 +242,7 @@
         loginModal.modal({ onHidden : () => { loginClose(); } });
         createModal.modal({ onHidden : () => { createClose(); } });
         signUpModal.modal({ onHidden : () => { signUpClose(); } });
+        confirmModal.modal({ onHidden : () => { confirmClose(); } });
     }
 
     /*

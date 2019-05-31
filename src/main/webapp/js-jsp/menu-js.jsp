@@ -164,6 +164,9 @@
     .on("click", "#signUpCancel", () => { signUpClose(); })
     .on("click", "#signUpExit", () => { signUpClose(); });
 
+    /*
+     * Send a request to the endpoint to register and email a new user
+     */
     function createUser(email, user, pass) {
         const url = CXT_PATH + "/api/register?user=" + user
                 + "&pass=" + pass + "&email=" + email;
@@ -174,9 +177,12 @@
                 if (!res.ok) {
                     return res.json();
                 } else {
+                    LOGIN_REQUEST.login(email, pass);
                     showConfirmation();
                 }
             }).then(json => {
+
+                // if username or email is taken highlight form field
                 if ("err" in json) {
                     if (json["err"] === "email") {
                         signUpData.email.elems.msg.text = "Email already signed up";
@@ -186,6 +192,7 @@
                         showFormError([signUpData.uname.elems]);
                     }
                 }
+
             });
     }
 

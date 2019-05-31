@@ -21,5 +21,7 @@
     </div>
 </div>
 
+<%@include file="js-jsp/resend-js.jsp"%>
+
 </body>
 </html>

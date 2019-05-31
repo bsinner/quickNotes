@@ -69,9 +69,9 @@
             .filter(c => c.trim().startsWith(JS_COOKIE + "="));
 
         if (cookies.length > 0) {
-            setButton("Resend Email", "...");
+            setButton("Resend Email", "/resend");
         } else {                                    /* go to a static page that says resent */
-            setButton("Login and Resend", "...");
+            setButton("Login and Resend", "/resend");
         }
 
     }

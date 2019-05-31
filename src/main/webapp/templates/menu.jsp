@@ -99,7 +99,7 @@
             if you did not receive an email click here to resend.
         </p>
     </div>
-    
+
     <button class="ui button" id="resendActivation">Resend Email</button>
     <br>
 </div>

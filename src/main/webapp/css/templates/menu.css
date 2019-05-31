@@ -17,5 +17,12 @@ i:hover {
     padding: .4em .65em .4em .65em !important;
 }
 
+#resendActivation {
+    margin-left: auto;
+    margin-right: auto;
+    float: none;
+    display: block;
+}
+
 a#homeLink { color: rgba(0,0,0,.87); }
 a#homeLink:hover { color: rgba(0,0,0,.70); }

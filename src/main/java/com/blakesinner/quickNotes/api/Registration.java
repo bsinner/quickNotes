@@ -12,11 +12,10 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.util.List;
 import java.util.Properties;
+
 import static javax.mail.Message.RecipientType.TO;
 
 /**
@@ -29,6 +28,7 @@ public class Registration {
 
     private final Logger logger = LogManager.getLogger(this.getClass());
     private final GenericDAO<User> dao = new GenericDAO<>(User.class);
+    private final String BASE_PATH = "/api/";
 
     /**
      * Create the new user and send a confirmation email, if the
@@ -37,6 +37,8 @@ public class Registration {
      * @param username the username
      * @param password the password
      * @param email    the email
+     * @param uri      the uri info, needed for sending link back to application
+     *                 in confirmation email
      * @return         the Ok response or an error response
      */
     @PUT
@@ -44,13 +46,14 @@ public class Registration {
     public Response sendRegistration(
             @QueryParam("user") String username
             , @QueryParam("pass") String password
-            , @QueryParam("email") String email) {
+            , @QueryParam("email") String email
+            , @Context UriInfo uri) {
 
         Response error = findError(username, password, email);
         if(error != null) return error;
 
         String activationToken = createAccount(email, password, username);
-        sendEmail(activationToken);
+        sendEmail(activationToken, uri, email);
 
         return okResponse();
     }
@@ -60,12 +63,13 @@ public class Registration {
      * to use this endpoint.
      *
      * @param cookie the user access token
+     * @param uri    the uri info
      * @return       the Ok response or error response
      */
     @PUT
     @Path("/resend")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response resendRegistration(@CookieParam("access_token") Cookie cookie) {
+    public Response resendRegistration(@CookieParam("access_token") Cookie cookie, @Context UriInfo uri) {
         User user = findValidUser(cookie);
 
         if (user == null) {
@@ -74,7 +78,7 @@ public class Registration {
             return Response.status(403).entity("{}").build();
         }
 
-        sendEmail(createToken(user));
+        sendEmail(createToken(user), uri, user.getEmail());
 
         return okResponse();
     }
@@ -160,8 +164,9 @@ public class Registration {
      * Send an email with an account activation link.
      *
      * @param token the activation token ID
+     * @param uri   the uri info
      */
-    private void sendEmail(String token) {
+    private void sendEmail(String token, UriInfo uri, String recipient) {
         PropertiesLoader loader = new PropertiesLoader();
         Properties mailProps = loader.load("/mail.properties");
         Properties authProps = loader.load("/mailLogin.properties");
@@ -178,9 +183,9 @@ public class Registration {
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(authProps.getProperty("user")));
-            message.setRecipient(TO, new InternetAddress(authProps.getProperty("user")));
+            message.setRecipient(TO, new InternetAddress(recipient));
             message.setSubject("Confirm Account");
-            message.setContent(getHtml(token), "text/html");
+            message.setContent(getHtml(token, uri), "text/html");
 
             Transport.send(message);
         } catch (MessagingException me) {
@@ -213,10 +218,14 @@ public class Registration {
     /**
      * Get the HTML to send in the confirmation email.
      *
+     * @param uri   the uri info
      * @param token the activation token ID
      * @return      the email HTML
      */
-    private String getHtml(String token) {
+    private String getHtml(String token, UriInfo uri) {
+        String url = uri.getBaseUri().toString().replace(BASE_PATH, "")
+                + "/activate?t=" + token;
+
         return "<div style=\"margin: 1em, 1em, 1em, 1em;\">"
                 + "<h3 style=\"font-family:Lato,'Helvetica Neue',Arial,Helvetica,sans-serif\">"
                     + "Account Created&nbsp;"
@@ -224,7 +233,7 @@ public class Registration {
                 + "<h5 style=\"font-family:Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;\">"
                     + "Your Quick Notes account has been created, click here to activate."
                 + "</h5>"
-                + "<a class=\"ui button\" href=\"" + token + "\""
+                + "<a class=\"ui button\" href=\"" + url + "\""
                         + "style=8\"cursor: pointer;display: inline-block;min-height: 1em;outline: 0;border: none;vertical-align: baseline;background: #e0e1e2 none;color: rgba(0,0,0,.6);font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;margin: 0 .25em 0 0;padding: .78571429em 1.5em .78571429em;font-weight: 700;line-height: 1em;font-style: normal;text-align: center;border-radius: .28571429rem;margin-left: auto; margin-right: auto;\">"
                     + "Confirm Account"
                 + "</a>"

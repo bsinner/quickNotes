@@ -157,11 +157,41 @@
             return;
         }
 
-        // Send an xhr request
-        // ...
+        createUser(signUpData.email.input.value
+            , signUpData.uname.input.value
+            , signUpData.pass.input.value);
     })
     .on("click", "#signUpCancel", () => { signUpClose(); })
     .on("click", "#signUpExit", () => { signUpClose(); });
+
+    function createUser(email, user, pass) {
+        const url = CXT_PATH + "/api/register?user=" + user
+                + "&pass=" + pass + "&email=" + email;
+        const props = { method : "PUT" };
+
+        fetch(url, props)
+            .then(res => {
+                if (!res.ok) {
+                    return res.json();
+                } else {
+                    showConfirmation();
+                }
+            }).then(json => {
+                if ("err" in json) {
+                    if (json["err"] === "email") {
+                        signUpData.email.elems.msg.text = "Email already signed up";
+                        showFormError([signUpData.email.elems]);
+                    } else if (json["err"] === "username") {
+                        signUpData.uname.elems.msg.text = "Username taken";
+                        showFormError([signUpData.uname.elems]);
+                    }
+                }
+            });
+    }
+
+    function showConfirmation() {
+
+    }
 
     /*
      * Wrapper function for clearing sign up form error state

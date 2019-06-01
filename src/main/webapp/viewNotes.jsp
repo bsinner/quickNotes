@@ -22,9 +22,11 @@
                 <th>Created</th>
             </tr>
             </thead>
+
+            <!-- Output user notes here -->
             <tbody id="results">
-                <!-- Results -->
             </tbody>
+
             <tfoot class="full-width">
             <tr>
                 <th></th>
@@ -34,6 +36,12 @@
             </tr>
             </tfoot>
         </table>
+
+        <!-- Hidden No Notes Found message -->
+        <div id="notFoundContainer">
+            <h2>No Notes Found</h2>
+            <button id="viewNotesCreate">Create new Note</button>
+        </div>
 
         <!-- Note delete success message is hidden by default -->
         <div class="ui small message" style="display: none;" id="delMessage">

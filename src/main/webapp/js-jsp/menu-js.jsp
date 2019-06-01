@@ -172,9 +172,13 @@
         const url = CXT_PATH + "/api/register?user=" + user
                 + "&pass=" + pass + "&email=" + email;
         const props = { method : "PUT" };
+        const btn = "signUpBtn"
+
+        toggleBtn(btn, false);
 
         fetch(url, props)
             .then(res => {
+                toggleBtn(btn, true);
                 if (!res.ok) {
                     return res.json();
                 } else {
@@ -313,13 +317,28 @@
         });
     }
 
+
     /*
-     * Generic clear form error state method, input format from showFormError
-     * can be used, or the following shortened format can be used:
-     * [
-     *     { div : "input div id", msg : { name : "err msg id" } }
-     * ]
+     * Toggle a button between its regular state, and being disabled and showing a loading icon.
      */
+    function toggleBtn(id, enabled) {
+        const btn = document.getElementById(id);
+        const classes = btn.getAttribute("class");
+
+        if (enabled) {
+            btn.setAttribute("class", classes.replace(/(disabled)|(loading)/gi, ""));
+        } else {
+            btn.setAttribute("class", classes + "disabled loading");
+        }
+    }
+
+/*
+ * Generic clear form error state method, input format from showFormError
+ * can be used, or the following shortened format can be used:
+ * [
+ *     { div : "input div id", msg : { name : "err msg id" } }
+ * ]
+ */
     function clearFormErrState(inputs) {
         // TODO: clear input text as part of clearing the form
         inputs.forEach(i => {

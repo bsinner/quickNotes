@@ -70,7 +70,7 @@
 
         if (cookies.length > 0) {
             setButton("Resend Email", CXT + "/resend");
-        } else {                                    /* go to a static page that says resent */
+        } else {
             setButton("Login and Resend", CXT + "/resend");
         }
 
@@ -80,6 +80,7 @@
      * Change text and image showing to show activation status.
      */
     function showStatus(img, title, desc) {
+        document.getElementById("loader").setAttribute("style", "display: none;");
         S_IMG.setAttribute("src", img);
         S_TITLE.innerText = title;
         S_DESC.innerText = desc;

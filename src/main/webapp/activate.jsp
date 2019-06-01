@@ -1,5 +1,7 @@
 <%@include file="templates/header.jsp"%>
 <link rel="stylesheet" href="css/activate.css">
+<link rel="stylesheet" href="css/icons/loadingSpinner.css">
+
 <title>Activate Account</title>
 
 </head>
@@ -13,12 +15,24 @@
 
         <div class="ui column centered grid">
             <div class="six wide column">
+
+                <!-- Success or fail icon -->
                 <br>
-                <div id="actImgContainer">
-                    <img id="statusImg">
-                </div>
+                <div id="actImgContainer"><img id="statusImg"></div>
+
+                <!-- Description -->
                 <h3 class="ui center aligned header" id="statusTitle"></h3>
                 <div class="ui center aligned sub header" id="statusDesc"></div>
+
+                <!-- CSS only loading symbol, empty divs are needed for it to display properly -->
+                <div id="loader">
+                    <div class="lds-ring">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <p>Activating Account</p>
+                </div>
 
                 <a id="statusBtn" class="ui primary button">Return to Editor</a>
             </div>

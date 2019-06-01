@@ -2,6 +2,9 @@ package com.blakesinner.quickNotes.api;
 
 import com.blakesinner.quickNotes.util.KeyLoader;
 import io.jsonwebtoken.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -28,6 +31,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private static final String REALM = "Quick Notes";
     private static final String CHARSET = "UTF-8";
     private static final String SECRET = "/accessTokenPw.txt";
+    private final Logger LOGGER = LogManager.getLogger(this.getClass());
 
     /**
      * If an access token was included in the request, call a method to validate it,
@@ -41,10 +45,13 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         Cookie accessTokenCookie = context.getCookies().get("access_token");
 
         if (accessTokenCookie != null) {
-            Map<String, String[]> userIdAndRoles = validateAccessToken(accessTokenCookie, context);
+            Claims claims = validateAccessToken(accessTokenCookie, context);
 
-            addSecurityContext(context, userIdAndRoles);
-            return;
+            if (claims != null) {
+                addSecurityContext(context, claims);
+                return;
+            }
+
         }
 
         sendUnauthorized(context);
@@ -56,8 +63,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
      *
      * @param token   the access token
      * @param context the request context
+     * @return        the token claims, or null if the token is invalid
      */
-    private Map<String, String[]> validateAccessToken(Cookie token, ContainerRequestContext context) {
+    private Claims validateAccessToken(Cookie token, ContainerRequestContext context) {
         try {
             String tokenString = token.getValue();
 
@@ -66,14 +74,17 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                     .parseClaimsJws(tokenString);
 
             Claims claims = parsedClaims.getBody();
-            String[] roles = claims.get("rol").toString().split(" ");
-            String id = claims.getSubject();
 
-            if (roles == null || id == null || roles.length < 1 || id.length() < 1) {
-                throw new JwtException("Access token roles or id not found");
+            if (claims == null || claims.get("act") == null
+                    || claims.get("rol") == null || claims.getSubject() == null) {
+
+                JwtException e = new JwtException("Error: An access token with a valid signature and malformed data was found");
+                LOGGER.trace(e);
+                throw e;
             }
 
-            return Collections.singletonMap(id, roles);
+            return claims;
+
         } catch (JwtException e) {
             sendUnauthorized(context);
         }
@@ -97,34 +108,29 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     /**
      * Set the security context to contain the current users's id and roles.
      *
-     * @param context        context of the current request
-     * @param userIdAndRoles user's id and roles
+     * @param context     context of the current request
+     * @param claims      the data stored in the access token
      */
-    private void addSecurityContext(ContainerRequestContext context, Map<String, String[]> userIdAndRoles) {
+    private void addSecurityContext(ContainerRequestContext context, Claims claims) {
         final SecurityContext currentSecurityContext = context.getSecurityContext();
 
         context.setSecurityContext(new SecurityContext() {
 
-            private final String id = userIdAndRoles.keySet().iterator().next();
-            private final String[] roles = userIdAndRoles.get(id);
+            private final List<String> roles = new ArrayList<>(
+                    Arrays.asList(claims.get("rol").toString().split(" "))
+            );
 
             @Override
-            public Principal getUserPrincipal() { return () -> id; }
+            public Principal getUserPrincipal() { return claims::getSubject; }
 
             @Override
-            public boolean isUserInRole(String s) {
-                return Arrays.stream(roles).anyMatch(s::equals);
-            }
+            public boolean isUserInRole(String r) { return roles.contains(r); }
 
             @Override
-            public boolean isSecure() {
-                return currentSecurityContext.isSecure();
-            }
+            public boolean isSecure() { return currentSecurityContext.isSecure(); }
 
             @Override
-            public String getAuthenticationScheme() {
-                return "Bearer";
-            }
+            public String getAuthenticationScheme() { return "Bearer"; }
 
         });
     }

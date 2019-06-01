@@ -332,13 +332,13 @@
         }
     }
 
-/*
- * Generic clear form error state method, input format from showFormError
- * can be used, or the following shortened format can be used:
- * [
- *     { div : "input div id", msg : { name : "err msg id" } }
- * ]
- */
+    /*
+     * Generic clear form error state method, input format from showFormError
+     * can be used, or the following shortened format can be used:
+     * [
+     *     { div : "input div id", msg : { name : "err msg id" } }
+     * ]
+     */
     function clearFormErrState(inputs) {
         // TODO: clear input text as part of clearing the form
         inputs.forEach(i => {

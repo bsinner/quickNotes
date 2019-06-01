@@ -11,8 +11,8 @@
     <div id="editor"></div>
     <br>
     <div>
-        <button id="saveBtn" class="ui green button" style="display: none;">Save</button>
-        <button id="translateButton" class="ui button">Translate</button>
+        <button id="saveBtn" class="ui small green button" style="display: none;">Save</button>
+        <button id="translateButton" class="ui small button">Translate</button>
     </div>
 
 </div>

@@ -36,7 +36,7 @@
 
         </form>
 
-        <button class="ui button" id="loginBtn">Sign In</button>
+        <button class="ui small button" id="loginBtn">Sign In</button>
 
     </div>
 </div>
@@ -78,8 +78,8 @@
         </form>
 
         <br>
-        <button class="ui button right floated green leftButtonMargin" id="signUpBtn">Sign Up</button>
-        <button class="ui button right floated" id="signUpCancel">Cancel</button>
+        <button class="ui button right floated small green leftButtonMargin" id="signUpBtn">Sign Up</button>
+        <button class="ui button right floated small" id="signUpCancel">Cancel</button>
         <br><br>
 
     </div>
@@ -127,8 +127,8 @@
         </form>
 
         <br>
-        <button class="ui right floated green button leftButtonMargin" id="createSubmit">Create</button>
-        <button class="ui right floated button" id="createCancel">Cancel</button>
+        <button class="ui right floated green small button leftButtonMargin" id="createSubmit">Create</button>
+        <button class="ui right floated small button" id="createCancel">Cancel</button>
         <br><br>
 
     </div>
@@ -163,8 +163,8 @@
         </form>
 
         <br>
-        <button class="ui right floated green button leftButtonMargin" id="translateSubmit">Translate</button>
-        <button class="ui right floated button" id="translateCancel">Cancel</button>
+        <button class="ui right floated green small button leftButtonMargin" id="translateSubmit">Translate</button>
+        <button class="ui right floated small button" id="translateCancel">Cancel</button>
         <br><br>
 
     </div>

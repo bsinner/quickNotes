@@ -44,7 +44,7 @@
         <div id="notFoundContainer" style="display: none;">
             <h2>No Notes Found</h2>
             <br>
-            <button id="viewNotesCreate" class="ui primary button">Create new Note</button>
+            <button id="viewNotesCreate" class="ui small primary button">Create new Note</button>
         </div>
 
         <!-- Note delete success message is hidden by default -->

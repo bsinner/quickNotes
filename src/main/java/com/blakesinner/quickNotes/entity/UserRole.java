@@ -7,7 +7,7 @@ import javax.persistence.*;
 /**
  * Represents one user role.
  *
- * @author bsinner 
+ * @author bsinner
  */
 @Entity(name = "UserRole")
 @Table(name = "user_roles")
@@ -23,6 +23,11 @@ public class UserRole {
     private User user;
 
     /**
+     * No argument constructor for UserRole.
+     */
+    public UserRole() { }
+
+    /**
      * Constructs UserRole.
      *
      * @param role the role
@@ -34,52 +39,40 @@ public class UserRole {
      *
      * @return the id
      */
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
 
     /**
      * Sets id.
      *
      * @param id the id
      */
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(int id) { this.id = id; }
 
     /**
      * Gets role.
      *
      * @return the role
      */
-    public String getRole() {
-        return role;
-    }
+    public String getRole() { return role; }
 
     /**
      * Sets role.
      *
      * @param role the role
      */
-    public void setRole(String role) {
-        this.role = role;
-    }
+    public void setRole(String role) { this.role = role; }
 
     /**
      * Gets user.
      *
      * @return the user
      */
-    public User getUser() {
-        return user;
-    }
+    public User getUser() { return user; }
 
     /**
      * Sets user.
      *
      * @param user the user
      */
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public void setUser(User user) { this.user = user; }
 }

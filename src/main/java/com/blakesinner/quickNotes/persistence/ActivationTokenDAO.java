@@ -41,4 +41,6 @@ public class ActivationTokenDAO extends GenericDAO<ActivationToken> {
         session.close();
         return id;
     }
+
+
 }

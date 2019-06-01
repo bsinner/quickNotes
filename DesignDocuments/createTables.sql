@@ -5,7 +5,6 @@ CREATE TABLE users (
     , username VARCHAR(30) NOT NULL UNIQUE
     , email VARCHAR(100) NOT NULL UNIQUE
     , password VARCHAR(25) NOT NULL
-    , activated BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE notes (
@@ -22,7 +21,7 @@ CREATE TABLE notes (
 CREATE TABLE user_roles (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
     , user_id INT NOT NULL
-    , role ENUM ('USER', 'ADMIN') DEFAULT 'USER'
+    , role ENUM ('UNACTIVATED', 'USER', 'ADMIN') NOT NULL
     , CONSTRAINT users_user_roles_fk FOREIGN KEY (user_id) REFERENCES users(id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -38,12 +37,12 @@ CREATE TABLE activation_tokens (
 
 DELIMITER ~~
 
-    -- Give each new user the "USER" role
+    -- Give new users role UNACTIVATED by default
     CREATE TRIGGER newUserInsert AFTER INSERT ON users
         FOR EACH ROW
         BEGIN
             IF 0 = (SELECT COUNT(id) FROM user_roles WHERE user_id = NEW.id) THEN
-               INSERT INTO user_roles (user_id) VALUES (NEW.id);
+               INSERT INTO user_roles (user_id, role) VALUES (NEW.id, 'UNACTIVATED');
             END IF;
         END;~~
 

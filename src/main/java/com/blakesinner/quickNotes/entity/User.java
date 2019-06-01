@@ -18,7 +18,6 @@ public class User {
     private String username;
     private String password;
     private String email;
-    private boolean activated;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -119,24 +118,6 @@ public class User {
      * @param id the id to set
      */
     public void setId(int id) { this.id = id; }
-
-    /**
-     * Get if the user is activated.
-     *
-     * @return true if the user account is activated, false otherwise
-     */
-    public boolean isActivated() {
-        return activated;
-    }
-
-    /**
-     * Set the user account's activation.
-     *
-     * @param activated the activation boolean
-     */
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
 
     /**
      * Gets user roles.

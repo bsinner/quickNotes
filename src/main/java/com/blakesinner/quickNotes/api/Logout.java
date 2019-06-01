@@ -15,7 +15,6 @@ import javax.ws.rs.core.UriInfo;
 public class Logout {
 
     // TODO: revoke access token in the database
-    private static final String BASE_PATH = "/api/";
 
     /**
      * Log the user out by deleting the cookie that stores the access token.

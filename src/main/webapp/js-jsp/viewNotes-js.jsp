@@ -1,5 +1,7 @@
 <script>
 
+    const TABLE = document.getElementById("resultsTable");
+
     /*
      * Add event handlers for the note elements to be loaded,
      * load the list of notes
@@ -18,7 +20,7 @@
         }
 
         const resultsNode = $("#results");
-        document.getElementById("resultsTable").removeAttribute("style");
+        TABLE.removeAttribute("style");
 
         Object.keys(data).forEach(key => {
 
@@ -61,6 +63,7 @@
         // instead of displaying "0 notes deleted"
         btn.click(() => {
             let delCount = 0;
+            let total = document.querySelectorAll(".delCheckbox").length;
 
             const promises = [];
 
@@ -84,6 +87,10 @@
 
             Promise.all(promises)
                 .then(() => {
+                    if (delCount === total) {
+                        TABLE.setAttribute("style", "display: none;");
+                        displayNoneFound();
+                    }
                     btn.attr("class", "ui small disabled button");
                     showMessage(delCount);
                 });
@@ -146,7 +153,7 @@
      * Display if no notes where found
      */
     function displayNoneFound() {
-        // TODO: add HTML
+        document.getElementById("notFoundContainer").removeAttribute("style");
     }
 
 </script>

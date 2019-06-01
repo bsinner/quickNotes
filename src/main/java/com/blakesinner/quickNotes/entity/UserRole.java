@@ -31,8 +31,12 @@ public class UserRole {
      * Constructs UserRole.
      *
      * @param role the role
+     * @param user the user
      */
-    public UserRole(String role) { this.role = role; }
+    public UserRole(String role, User user) {
+        this.role = role;
+        this.user = user;
+    }
 
     /**
      * Gets id.

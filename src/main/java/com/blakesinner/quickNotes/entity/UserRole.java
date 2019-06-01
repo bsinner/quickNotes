@@ -6,6 +6,8 @@ import javax.persistence.*;
 
 /**
  * Represents one user role.
+ *
+ * @author bsinner 
  */
 @Entity(name = "UserRole")
 @Table(name = "user_roles")
@@ -19,6 +21,13 @@ public class UserRole {
 
     @ManyToOne
     private User user;
+
+    /**
+     * Constructs UserRole.
+     *
+     * @param role the role
+     */
+    public UserRole(String role) { this.role = role; }
 
     /**
      * Gets id.

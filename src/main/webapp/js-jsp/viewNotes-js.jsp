@@ -150,6 +150,13 @@
     }
 
     /*
+     * Create note button event handler
+     */
+    document.getElementById("viewNotesCreate").onclick = () => {
+        createModal.modal("show");
+    };
+
+    /*
      * Display if no notes where found
      */
     function displayNoneFound() {

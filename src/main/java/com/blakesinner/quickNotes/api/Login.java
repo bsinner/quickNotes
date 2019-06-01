@@ -32,6 +32,7 @@ public class Login {
      *
      * @param email    the user email
      * @param password the user password
+     * @param context  the request context
      * @return         return Ok response or an Unauthorized response depending
      *                 on if the email and password match
      */
@@ -79,16 +80,35 @@ public class Login {
      * Create a 200 Ok response with an access token set as it's cookie.
      *
      * @param user        the logged in user
-     * @param contextPath the base path of the request
+     * @param contextPath the context path, needed because the default
+     *                    path is the REST base path "quickNotes/api"
      * @return            the response
      */
     private Response buildOkResponse(User user, String contextPath) {
+
+        return Response.status(Response.Status.OK)
+                .header(HttpHeaders.SET_COOKIE,
+                        "access_token=" + getToken(user)
+                        + "; Path=" + contextPath
+                        + "; HttpOnly")
+                .entity(user.getUsername())
+                .build();
+    }
+
+    /**
+     * Create and get the access token.
+     *
+     * @param user the current user
+     * @return     the access token converted to string
+     */
+    private String getToken(User user) {
         Date expiry = new Date();
         expiry.setTime(expiry.getTime() + TOKEN_LIFESPAN);
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", user.getId());
         claims.put("rol", user.getUserRolesString());
+        claims.put("act", user.isActivated());
 
         JwtBuilder accessToken = Jwts.builder()
                 .setIssuer(ISSUER)
@@ -101,15 +121,7 @@ public class Login {
                 , SignatureAlgorithm.HS256
         );
 
-        String tokenString = accessToken.compact();
-
-        return Response.status(Response.Status.OK)
-                .header(HttpHeaders.SET_COOKIE,
-                        "access_token=" + tokenString
-                        + "; Path=" + contextPath
-                        + "; HttpOnly")
-                .entity(user.getUsername())
-                .build();
+        return accessToken.compact();
     }
 
     /**

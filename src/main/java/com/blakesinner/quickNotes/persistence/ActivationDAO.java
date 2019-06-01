@@ -48,6 +48,12 @@ public class ActivationDAO extends GenericDAO<ActivationToken> {
         return id;
     }
 
+    /**
+     * Activate a user's account and delete the activation token.
+     *
+     * @param token the account activation token
+     * @return      the activated user
+     */
     public User activateUser(ActivationToken token) {
         User user = token.getUser();
 
@@ -63,6 +69,13 @@ public class ActivationDAO extends GenericDAO<ActivationToken> {
         return results.isEmpty() ? null : results.get(0);
     }
 
+    /**
+     * Delete a users UNACTIVATED role and add the USER role to show
+     * that they are activated.
+     *
+     * @param user the user to activate
+     * @return     the activated user with updated roles
+     */
     private User updateUser(User user) {
         Set<UserRole> roles = user.getUserRoles();
         roles.add(new UserRole("USER"));

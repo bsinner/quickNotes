@@ -108,7 +108,6 @@ public class Login {
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", user.getId());
         claims.put("rol", user.getUserRolesString());
-        claims.put("act", user.isActivated());
 
         JwtBuilder accessToken = Jwts.builder()
                 .setIssuer(ISSUER)

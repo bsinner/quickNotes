@@ -24,6 +24,7 @@ CREATE TABLE user_roles (
     , role ENUM ('UNACTIVATED', 'USER', 'ADMIN') NOT NULL
     , CONSTRAINT users_user_roles_fk FOREIGN KEY (user_id) REFERENCES users(id)
         ON DELETE CASCADE ON UPDATE CASCADE
+    , CONSTRAINT UNIQUE(user_id, role)
 );
 
 CREATE TABLE activation_tokens (

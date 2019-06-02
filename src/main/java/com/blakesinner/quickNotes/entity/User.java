@@ -123,16 +123,14 @@ public class User {
      *
      * @return the user roles
      */
-    public Set<UserRole> getUserRoles() {
-        return userRoles;
-    }
+    public Set<UserRole> getRoles() { return userRoles; }
 
     /**
      * Sets user roles.
      *
      * @param userRoles the user roles
      */
-    public void setUserRoles(Set<UserRole> userRoles) {
+    public void setRoles(Set<UserRole> userRoles) {
         this.userRoles = userRoles;
     }
 
@@ -141,7 +139,7 @@ public class User {
      *
      * @return the user roles string
      */
-    public String getUserRolesString() {
+    public String getRolesString() {
         String result = "";
 
         for(UserRole role : userRoles) {

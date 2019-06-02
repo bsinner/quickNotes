@@ -3,10 +3,11 @@ package com.blakesinner.quickNotes.persistence;
 import com.blakesinner.quickNotes.entity.ActivationToken;
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.entity.UserRole;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import sun.net.www.content.text.Generic;
 
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class ActivationDAO extends GenericDAO<ActivationToken> {
 
     private final SessionFactory sessionFactory = SessionFactoryProvider.getSessionFactory();
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     /**
      * No argument constructor for ActivationDAO.
@@ -58,6 +60,14 @@ public class ActivationDAO extends GenericDAO<ActivationToken> {
     public User activateUser(ActivationToken token) {
         User user = token.getUser();
 
+        if (isActivated(user)) {
+            logger.info(String.format("%nAccount activation token was issued to already activated user"
+                    + "%nUser ID:" + user.getId()
+                    + "%nToken ID:" + token.getId() + "%n"
+            ));
+            return null;
+        }
+
         User activatedUser = updateUser(user);
         GenericDAO<User> userDao = new GenericDAO<>(User.class);
 
@@ -68,6 +78,7 @@ public class ActivationDAO extends GenericDAO<ActivationToken> {
         super.delete(token);
 
         return results.isEmpty() ? null : results.get(0);
+
     }
 
     /**
@@ -78,17 +89,33 @@ public class ActivationDAO extends GenericDAO<ActivationToken> {
      * @return     the activated user with updated roles
      */
     private User updateUser(User user) {
-
         user.addRole(new UserRole("USER"));
 
-        Set<UserRole> toDelete = user.getUserRoles().stream()
-                .filter(r -> r.getRole().equals("UNACTIVATED"))
-                .collect(Collectors.toCollection(HashSet::new));
+        Set<UserRole> toDelete = findRole(user.getRoles(), "UNACTIVATED");
 
         toDelete.forEach(user::removeRole);
 
         return user;
     }
 
+    /**
+     * Get if the user is already activated
+     *
+     * @param user the user to check
+     * @return     true if the user is activated, false if they are unactivated
+     */
+    private boolean isActivated(User user) { return !findRole(user.getRoles(), "USER").isEmpty(); }
 
+    /**
+     * Find a user's UserRole object.
+     *
+     * @param roles the user's roles
+     * @param role  the role to search for
+     * @return      the found role
+     */
+    private Set<UserRole> findRole(Set<UserRole> roles, String role) {
+        return roles.stream()
+                .filter(r -> r.getRole().equals(role))
+                .collect(Collectors.toCollection(HashSet::new));
+    }
 }

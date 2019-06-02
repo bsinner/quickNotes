@@ -6,6 +6,7 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
@@ -13,8 +14,12 @@ import java.lang.reflect.AnnotatedElement;
 import java.util.*;
 
 /**
- * Filter to determine if a logged in user is authorized to access an
- * api endpoint.
+ * Filter to determine if a logged in user is authorized to access an endpoint.
+ * Error responses contain a JSON body with one of the following error codes to
+ * describe the error:
+ *
+ * 403001: User doesn't have required roles
+ * 403002: User doesn't have required roles, and their account isn't activated
  *
  * @author bsinner
  */
@@ -45,7 +50,12 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             return;
         }
 
-        sendForbidden(context);
+        if(isUnactivated()) {
+            sendForbidden(context, "Users account isn't activated", "403002");
+            return;
+        }
+
+        sendForbidden(context, "User doesn't have the required roles", "403001");
     }
 
     /**
@@ -66,6 +76,13 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     }
 
     /**
+     * Get if user is not yet activated.
+     *
+     * @return true if unactivated, false if user is activated
+     */
+    private boolean isUnactivated() { return securityContext.isUserInRole("UNACTIVATED"); }
+
+    /**
      * Get roles of the secured annotation.
      *
      * @param annotatedElement the element with annotations
@@ -80,11 +97,20 @@ public class AuthorizationFilter implements ContainerRequestFilter {
      * Send 403 forbidden response.
      *
      * @param context the request context
+     * @param msg     the error description
+     * @param code    the error code
      */
-    private void sendForbidden(ContainerRequestContext context) {
+    private void sendForbidden(ContainerRequestContext context, String msg, String code) {
         context.abortWith(
-            Response.status(Response.Status.FORBIDDEN)
-            .build()
+            Response.status(403)
+                    .type(MediaType.APPLICATION_JSON)
+                    .entity("{"
+                                + "\"error\" : {"
+                                    + "\"code\" : \"" + code + "\""
+                                    + ", \"desc\" : \"" + msg + "\""
+                                + "}"
+                            + "}")
+                    .build()
         );
     }
 }

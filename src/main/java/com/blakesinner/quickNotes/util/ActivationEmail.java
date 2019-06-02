@@ -2,21 +2,31 @@ package com.blakesinner.quickNotes.util;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.ws.rs.core.UriInfo;
 import java.util.Properties;
-
 import static javax.mail.Message.RecipientType.TO;
 
+/**
+ * Utility class for sending account activation emails.
+ *
+ * @author bsinner
+ */
 public class ActivationEmail {
 
     private static final Logger LOGGER = LogManager.getLogger(ActivationEmail.class);
     private static final String BASE_PATH = "/api/";
 
-    private static void send(String token, UriInfo uri, String dest) {
+    /**
+     * Send the activation email.
+     *
+     * @param token the activation token id
+     * @param uri   the uri information, used to generate link
+     * @param dest  the recipient
+     */
+    public static void send(String token, UriInfo uri, String dest) {
         PropertiesLoader loader = new PropertiesLoader();
         Properties mailProps = loader.load("/mail.properties");
         Properties authProps = loader.load("/mailLogin.properties");
@@ -37,11 +47,19 @@ public class ActivationEmail {
             message.setSubject("Confirm Account");
             message.setContent(getBody(token, uri), "text/html");
 
+            Transport.send(message);
         } catch (MessagingException me) {
             LOGGER.trace(me);
         }
     }
 
+    /**
+     * Get the email body.
+     *
+     * @param token the activation token
+     * @param uri   the uri information
+     * @return      the body text
+     */
     private static String getBody(String token, UriInfo uri) {
         String url = uri.getBaseUri().toString().replace(BASE_PATH, "")
                 + "/activate?t=" + token;

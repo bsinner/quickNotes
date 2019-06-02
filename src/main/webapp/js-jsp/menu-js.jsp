@@ -187,12 +187,11 @@
                 }
             }).then(json => {
 
-                // if username or email is taken highlight form field
-                if ("err" in json) {
-                    if (json["err"] === "email") {
+                if ("error" in json) {
+                    if (json["error"]["code"] === "422001") {
                         signUpData.email.elems.msg.text = "Email already signed up";
                         showFormError([signUpData.email.elems]);
-                    } else if (json["err"] === "username") {
+                    } else if (json["error"]["code"] === "422002") {
                         signUpData.uname.elems.msg.text = "Username taken";
                         showFormError([signUpData.uname.elems]);
                     }

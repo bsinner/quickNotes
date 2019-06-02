@@ -11,6 +11,11 @@ import java.util.List;
 
 /**
  * Endpoint for creating new users and sending confirmation emails.
+ * If an email or username is taken the response will include JSON containing
+ * one of the following error codes to describe the error.
+ *
+ * 422001: email taken
+ * 422002: username taken
  *
  * @author bsinner
  */
@@ -63,11 +68,11 @@ public class Registration {
         }
 
         if (!validEmail(email)) {
-            return accountTaken("email");
+            return accountTaken("email taken", "422001");
         }
 
         if (!validUsername(username)) {
-            return accountTaken("username");
+            return accountTaken("username taken", "422002");
         }
 
         return null;
@@ -131,7 +136,14 @@ public class Registration {
      * @param msg message indicating whether the username or email is taken
      * @return    the error response
      */
-    private Response accountTaken(String msg) {
-        return Response.status(422).entity("{\"err\" : \"" + msg + "\"}").build();
+    private Response accountTaken(String msg, String code) {
+        return Response.status(422).entity(
+                "{" +
+                    "\"error\" : {" +
+                        "\"code\" : \"" + code + "\"" +
+                        ", \"desc\" : \"" + msg + "\"" +
+                    "}" +
+                "}"
+        ).build();
     }
 }

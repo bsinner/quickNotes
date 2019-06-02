@@ -15,6 +15,9 @@ import java.util.List;
 /**
  * Class with utilities for parsing cookies with access tokens.
  *
+ * TODO: because new accounts are represented with a role instead of an
+ *       instance variable, this class may not be needed
+ *
  * @author bsinner
  */
 public class CookieUtil {

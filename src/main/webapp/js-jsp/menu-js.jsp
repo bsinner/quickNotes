@@ -9,10 +9,12 @@
     const LOGIN_REQUEST = new LoginRequest({
         basePath : CXT_PATH
         , onComplete : data => {
+            toggleBtn("loginBtn", true);
             showLoggedIn(data);
             loginClose();
         }
         , onError : () => {
+            toggleBtn("loginBtn", true);
             showLoginError("Email and/or password are incorrect");
         }
     });
@@ -59,6 +61,7 @@
             return;
         }
 
+        toggleBtn("loginBtn", false);
         LOGIN_REQUEST.login(emailInput.value, passwordInput.value);
 
     }).on("click", "#loginExit", () => { loginClose(); });
@@ -205,8 +208,13 @@
         const url = CXT_PATH + "/api/register/resend";
         const props = { method : "PUT", credentials : "same-origin" };
 
+        const id = "resendActivation";
+        toggleBtn(id, false);
+
         fetch(url, props)
             .then(res => {
+               toggleBtn(id, true);
+
                if(res.status === 400) {
                    window.location.href = CXT_PATH + "/resend";
                }
@@ -321,13 +329,12 @@
      * Toggle a button between its regular state, and being disabled and showing a loading icon.
      */
     function toggleBtn(id, enabled) {
-        const btn = document.getElementById(id);
-        const classes = btn.getAttribute("class");
-
+        const btn = $("#" + id);
         if (enabled) {
-            btn.setAttribute("class", classes.replace(/(disabled)|(loading)/gi, ""));
+            btn.removeClass("disabled");
+            btn.removeClass("loading");
         } else {
-            btn.setAttribute("class", classes + "disabled loading");
+            btn.addClass("disabled loading");
         }
     }
 

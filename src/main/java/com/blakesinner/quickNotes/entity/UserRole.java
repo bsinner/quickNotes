@@ -28,15 +28,11 @@ public class UserRole {
     public UserRole() { }
 
     /**
-     * Constructs UserRole.
+     * Constructs UserRole with only role.
      *
      * @param role the role
-     * @param user the user
      */
-    public UserRole(String role, User user) {
-        this.role = role;
-        this.user = user;
-    }
+    public UserRole(String role) { this.role = role; }
 
     /**
      * Gets id.

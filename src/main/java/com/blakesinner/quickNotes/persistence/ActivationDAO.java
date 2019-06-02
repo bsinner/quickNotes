@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import sun.net.www.content.text.Generic;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -77,14 +78,15 @@ public class ActivationDAO extends GenericDAO<ActivationToken> {
      * @return     the activated user with updated roles
      */
     private User updateUser(User user) {
-        Set<UserRole> roles = user.getUserRoles();
-        roles.add(new UserRole("USER"));
 
-        Set<UserRole> updatedRoles = roles.stream()
-                .filter(r -> !r.getRole().equals("UNACTIVATED"))
-                .collect(Collectors.toSet());
+        user.addRole(new UserRole("USER"));
 
-        user.setUserRoles(updatedRoles);
+        Set<UserRole> toDelete = user.getUserRoles().stream()
+                .filter(r -> r.getRole().equals("UNACTIVATED"))
+                .collect(Collectors.toCollection(HashSet::new));
+
+        toDelete.forEach(user::removeRole);
+
         return user;
     }
 

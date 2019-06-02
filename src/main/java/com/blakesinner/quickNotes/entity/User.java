@@ -1,7 +1,6 @@
 package com.blakesinner.quickNotes.entity;
 
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -173,7 +172,7 @@ public class User {
     /**
      * Add note to notes.
      *
-     * @param note note to add
+     * @param note the note to add
      */
     public void addNote(Note note) {
         notes.add(note);
@@ -181,13 +180,33 @@ public class User {
     }
 
     /**
-     * Remove note from notes
+     * Remove note from notes.
      *
-     * @param note note to remove
+     * @param note the note to remove
      */
     public void removeNote(Note note) {
         notes.remove(note);
         note.setUser(null);
+    }
+
+    /**
+     * Add role to user roles.
+     *
+     * @param role the role to add
+     */
+    public void addRole(UserRole role) {
+        userRoles.add(role);
+        role.setUser(this);
+    }
+
+    /**
+     * Remove user role.
+     *
+     * @param role the role to remove
+     */
+    public void removeRole(UserRole role) {
+        userRoles.remove(role);
+        role.setUser(null);
     }
 
     /**

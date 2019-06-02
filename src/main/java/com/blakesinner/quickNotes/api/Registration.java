@@ -2,21 +2,12 @@ package com.blakesinner.quickNotes.api;
 
 import com.blakesinner.quickNotes.entity.ActivationToken;
 import com.blakesinner.quickNotes.entity.User;
-import com.blakesinner.quickNotes.persistence.ActivationTokenDAO;
+import com.blakesinner.quickNotes.persistence.ActivationDAO;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
-import com.blakesinner.quickNotes.util.CookieUtil;
-import com.blakesinner.quickNotes.util.PropertiesLoader;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import com.blakesinner.quickNotes.util.ActivationEmail;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
-import java.util.Properties;
-
-import static javax.mail.Message.RecipientType.TO;
 
 /**
  * Endpoint for creating new users and sending confirmation emails.
@@ -26,9 +17,7 @@ import static javax.mail.Message.RecipientType.TO;
 @Path("/register")
 public class Registration {
 
-    private final Logger logger = LogManager.getLogger(this.getClass());
     private final GenericDAO<User> dao = new GenericDAO<>(User.class);
-    private final String BASE_PATH = "/api/";
 
     /**
      * Create the new user and send a confirmation email, if the
@@ -53,34 +42,9 @@ public class Registration {
         if(error != null) return error;
 
         String activationToken = createAccount(email, password, username);
-        sendEmail(activationToken, uri, email);
+        ActivationEmail.send(activationToken, uri, email);
 
-        return okResponse();
-    }
-
-    /**
-     * Create a new activation token and send it to the users email, user must be logged in
-     * to use this endpoint.
-     *
-     * @param cookie the user access token
-     * @param uri    the uri info
-     * @return       the Ok response or error response
-     */
-    @PUT
-    @Path("/resend")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response resendRegistration(@CookieParam("access_token") Cookie cookie, @Context UriInfo uri) {
-        User user = findValidUser(cookie);
-
-        if (user == null) {
-            return badRequest();
-        } else if (user.isActivated()) {
-            return Response.status(403).entity("{}").build();
-        }
-
-        sendEmail(createToken(user), uri, user.getEmail());
-
-        return okResponse();
+        return Response.status(200).entity("{}").build();
     }
 
     /**
@@ -95,7 +59,7 @@ public class Registration {
     private Response findError(String username, String password, String email) {
 
         if (username == null || password == null || email == null) {
-            return badRequest();
+            return Response.status(400).entity("{}").build();
         }
 
         if (!validEmail(email)) {
@@ -104,28 +68,6 @@ public class Registration {
 
         if (!validUsername(username)) {
             return accountTaken("username");
-        }
-
-        return null;
-    }
-
-    /**
-     * Try to find the user in the access token in the database.
-     *
-     * @param cookie the user access cookie
-     * @return       the found user, or null if no user could be found
-     */
-    private User findValidUser(Cookie cookie) {
-        if (cookie != null) {
-            String id = CookieUtil.jaxRsGetId(cookie);
-
-            if (id != null) {
-                List<User> users = dao.getByPropertyEqual("id", id);
-
-                if (users.size() > 0) {
-                    return users.get(0);
-                }
-            }
         }
 
         return null;
@@ -154,43 +96,10 @@ public class Registration {
      * @return     the token ID
      */
     private String createToken(User user) {
-        ActivationTokenDAO tDao = new ActivationTokenDAO();
+        ActivationDAO tDao = new ActivationDAO();
         ActivationToken token = new ActivationToken(user);
 
         return tDao.insertToken(token);
-    }
-
-    /**
-     * Send an email with an account activation link.
-     *
-     * @param token the activation token ID
-     * @param uri   the uri info
-     */
-    private void sendEmail(String token, UriInfo uri, String recipient) {
-        PropertiesLoader loader = new PropertiesLoader();
-        Properties mailProps = loader.load("/mail.properties");
-        Properties authProps = loader.load("/mailLogin.properties");
-
-        Session session = Session.getInstance(mailProps, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(
-                        authProps.getProperty("user")
-                        , authProps.getProperty("pass"));
-            }
-        });
-
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(authProps.getProperty("user")));
-            message.setRecipient(TO, new InternetAddress(recipient));
-            message.setSubject("Confirm Account");
-            message.setContent(getHtml(token, uri), "text/html");
-
-            Transport.send(message);
-        } catch (MessagingException me) {
-            logger.trace(me);
-        }
     }
 
     /**
@@ -216,47 +125,8 @@ public class Registration {
     }
 
     /**
-     * Get the HTML to send in the confirmation email.
-     *
-     * @param uri   the uri info
-     * @param token the activation token ID
-     * @return      the email HTML
-     */
-    private String getHtml(String token, UriInfo uri) {
-        String url = uri.getBaseUri().toString().replace(BASE_PATH, "")
-                + "/activate?t=" + token;
-
-        return "<div style=\"margin: 1em, 1em, 1em, 1em;\">"
-                + "<h3 style=\"font-family:Lato,'Helvetica Neue',Arial,Helvetica,sans-serif\">"
-                    + "Account Created&nbsp;"
-                + "</h3>"
-                + "<h5 style=\"font-family:Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;\">"
-                    + "Your Quick Notes account has been created, click here to activate."
-                + "</h5>"
-                + "<a class=\"ui button\" href=\"" + url + "\""
-                        + "style=8\"cursor: pointer;display: inline-block;min-height: 1em;outline: 0;border: none;vertical-align: baseline;background: #e0e1e2 none;color: rgba(0,0,0,.6);font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;margin: 0 .25em 0 0;padding: .78571429em 1.5em .78571429em;font-weight: 700;line-height: 1em;font-style: normal;text-align: center;border-radius: .28571429rem;margin-left: auto; margin-right: auto;\">"
-                    + "Confirm Account"
-                + "</a>"
-                + " </div>";
-    }
-
-    /**
-     * Get an Error 400 Bad Request response.
-     *
-     * @return the error response
-     */
-    private Response badRequest() { return Response.status(400).entity("{}").build(); }
-
-    /**
-     * Get a 200 Ok response.
-     *
-     * @return the Ok response
-     */
-    private Response okResponse() { return Response.status(200).entity("{}").build(); }
-
-    /**
-     * Get a 422 Unprocessable Entity response for when an account is
-     * already registered under the new user's username or email.
+     * Get a 422 Unprocessable Entity for when an account is already
+     * registered under the new user's username or email.
      *
      * @param msg message indicating whether the username or email is taken
      * @return    the error response

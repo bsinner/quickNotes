@@ -75,10 +75,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
             Claims claims = parsedClaims.getBody();
 
-            if (claims == null || claims.get("act") == null
-                    || claims.get("rol") == null || claims.getSubject() == null) {
+            if (claims == null || claims.get("rol") == null || claims.getSubject() == null) {
+                JwtException e = new JwtException("Error: Malformed access token with valid signature found");
 
-                JwtException e = new JwtException("Error: An access token with a valid signature and malformed data was found");
                 LOGGER.trace(e);
                 throw e;
             }

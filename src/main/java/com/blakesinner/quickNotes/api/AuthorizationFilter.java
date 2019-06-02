@@ -41,7 +41,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 
         List<String> contextRoles = getRequestContextRoles(resourceClass);
 
-        if (contextRoles.size() == 0 || checkPermissions(contextRoles)) {
+        if (contextRoles.isEmpty() || isAuthorized(contextRoles)) {
             return;
         }
 
@@ -55,7 +55,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
      * @param roles the endpoint's allowed roles
      * @return      true if the user is authorized, false otherwise
      */
-    private boolean checkPermissions(List<String> roles) {
+    private boolean isAuthorized(List<String> roles) {
         for (String role : roles) {
             if (securityContext.isUserInRole(role)) {
                 return true;

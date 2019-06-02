@@ -2,35 +2,30 @@ package com.blakesinner.quickNotes.api;
 
 import com.blakesinner.quickNotes.entity.ActivationToken;
 import com.blakesinner.quickNotes.entity.User;
-import com.blakesinner.quickNotes.persistence.GenericDAO;
+import com.blakesinner.quickNotes.persistence.ActivationDAO;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Endpoint for activating accounts with activation tokens.
+ * Endpoint for activating a user. Users must have the UNACTIVATED role in the database
+ * and an activation token for the user must be present.
  *
  * @author bsinner
  */
 @Path("activate")
+@Secured(roles = "UNACTIVATED")
 public class ActivateAccount {
-
-    private final GenericDAO<User> uDao = new GenericDAO<>(User.class);
 
     /**
      * Activate the account linked to the activation token.
      *
-     * @param activateToken the activate token
-     * @return              the response indicating success of activating account
+     * @param activateToken the activation token
+     * @return              response showing if the account was activated
      */
     @POST
-    public Response activate(@QueryParam("t") String activateToken, @CookieParam("access_token_data") Cookie cookie) {
-
-        if (alreadyActivated(cookie)) {
-            return Response.status(403).build();
-        }
+    public Response activate(@QueryParam("t") String activateToken) {
 
         if (activateToken == null) {
             return Response.status(400).build();
@@ -38,20 +33,6 @@ public class ActivateAccount {
 
         return activateUser(activateToken);
 
-    }
-
-    /**
-     * Check if the user identified in the cookie is already activated.
-     *
-     * @param cookie the user cookie, null if not logged in
-     * @return       true if the user is activated, false if they aren't activated
-     */
-    private boolean alreadyActivated(Cookie cookie) {
-        if (cookie != null) {
-            List<User> users = uDao.getByPropertyEqual("username", cookie.getValue());
-            return users.size() > 0 && users.get(0).isActivated();
-        }
-        return false;
     }
 
     /**
@@ -63,29 +44,27 @@ public class ActivateAccount {
      *                      response otherwise
      */
     private Response activateUser(String activateToken) {
-        GenericDAO<ActivationToken> tokenDao = new GenericDAO<>(ActivationToken.class);
+        List<ActivationToken> tokens = new ActivationDAO()
+                .getByPropertyEqual("id", activateToken);
 
-        List<ActivationToken> tokens = tokenDao.getByPropertyEqual("id", activateToken);
+        Response error = validateToken(tokens);
 
-        Response tokenErr = validateToken(tokens);
-        if (tokenErr != null) {
-            return tokenErr;
+        if (error != null) {
+            return error;
         }
 
-        ActivationToken token = tokens.get(0);
-
-        return updateUser(token);
+        return updateUser(tokens.get(0));
     }
 
     /**
      * Find if the token exists, then check if the token is expired.
      *
      * @param tokens the activation token
-     * @return       an error response if the token is invalid, null
-     *               if no error was found
+     * @return       error response if the token is invalid, null
+     *               if no errors were found
      */
     private Response validateToken(List<ActivationToken> tokens) {
-        if (tokens.size() < 1) {
+        if (tokens.isEmpty()) {
             return Response.status(404).entity("Error 404: Token not Found").build();
         }
 
@@ -97,29 +76,18 @@ public class ActivateAccount {
     }
 
     /**
-     * Try to activate the user, if the user can be activated delete the activation token.
+     * Try to activate the user.
      *
      * @param token the activation token
      * @return      an Ok response if the user was activated, error response if the user
-     *              could not be updated
+     *              could not be activated
      */
     private Response updateUser(ActivationToken token) {
-        GenericDAO<User> uDao = new GenericDAO<>(User.class);
-        User user = token.getUser();
-        user.setActivated(true);
+        User user = new ActivationDAO().activateUser(token);
 
-        uDao.saveOrUpdate(user);
-
-        List<User> updatedUsers = uDao
-                .getByPropertyEqual("id", String.valueOf(user.getId()));
-
-        if (updatedUsers.size() < 1 || !updatedUsers.get(0).isActivated()) {
-            return Response.status(500).entity("Error 500: Could not activate user").build();
-        }
-
-        deleteToken(token);
-
-        return Response.ok("Account activated").build();
+        return user == null
+                ? Response.status(500).entity("Error 500: Could not activate user").build()
+                : Response.status(200).entity("User activated").build();
     }
 
     /**
@@ -129,12 +97,5 @@ public class ActivateAccount {
      * @return      true if the token is expired, false if it's valid
      */
     private boolean isExpired(ActivationToken token) { return LocalDateTime.now().isAfter(token.getExpireDate()); }
-
-    /**
-     * Delete a token.
-     *
-     * @param token the token to delete
-     */
-    private void deleteToken(ActivationToken token) { new GenericDAO<>(ActivationToken.class).delete(token); }
 
 }

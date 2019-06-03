@@ -7,6 +7,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Endpoint for activating a user. Users must have the UNACTIVATED role in the database
@@ -44,31 +45,31 @@ public class ActivateAccount {
      *                      response otherwise
      */
     private Response activateUser(String activateToken) {
-        List<ActivationToken> tokens = new ActivationDAO()
-                .getByPropertyEqual("id", activateToken);
+        ActivationToken token = new ActivationDAO()
+                .getById(UUID.fromString(activateToken));
 
-        Response error = validateToken(tokens);
+        Response error = validateToken(token);
 
         if (error != null) {
             return error;
         }
 
-        return updateUser(tokens.get(0));
+        return updateUser(token);
     }
 
     /**
      * Find if the token exists, then check if the token is expired.
      *
-     * @param tokens the activation token
+     * @param token the activation token
      * @return       error response if the token is invalid, null
      *               if no errors were found
      */
-    private Response validateToken(List<ActivationToken> tokens) {
-        if (tokens.isEmpty()) {
+    private Response validateToken(ActivationToken token) {
+        if (token == null) {
             return Response.status(404).entity("Error 404: Token not Found").build();
         }
 
-        if (isExpired(tokens.get(0))) {
+        if (isExpired(token)) {
             return Response.status(410).entity("Error 410: Token expired").build();
         }
 

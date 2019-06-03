@@ -20,6 +20,7 @@
         <mapping class="com.blakesinner.quickNotes.entity.User"/>
         <mapping class="com.blakesinner.quickNotes.entity.UserRole"/>
         <mapping class="com.blakesinner.quickNotes.entity.ActivationToken"/>
+        <mapping class="com.blakesinner.quickNotes.entity.RefreshToken"/>
 
     </session-factory>
 

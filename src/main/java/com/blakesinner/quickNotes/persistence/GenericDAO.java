@@ -10,6 +10,7 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Generic DAO with CRUD methods.
@@ -81,6 +82,24 @@ public class GenericDAO<T> {
 
         Transaction transaction = session.beginTransaction();
         id = (int)session.save(entity);
+        transaction.commit();
+
+        session.close();
+        return id;
+    }
+
+    /**
+     * Inserts new entity with UUID primary key.
+     *
+     * @param entity entity to insert
+     * @return id of inserted entity
+     */
+    public UUID insertWithUUID(T entity) {
+        Session session = sessionFactory.openSession();
+        UUID id = null;
+
+        Transaction transaction = session.beginTransaction();
+        id = (UUID)session.save(entity);
         transaction.commit();
 
         session.close();

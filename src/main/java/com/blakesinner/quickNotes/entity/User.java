@@ -30,7 +30,10 @@ public class User {
     private Set<UserRole> userRoles = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<ActivationToken> tokens = new HashSet<>();
+    private Set<ActivationToken> actTokens = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<RefreshToken> refreshTokens = new HashSet<>();
 
     /**
      * No argument constructor.
@@ -212,17 +215,53 @@ public class User {
      *
      * @return the tokens
      */
-    public Set<ActivationToken> getTokens() {
-        return tokens;
+    public Set<ActivationToken> getActTokens() {
+        return actTokens;
     }
 
     /**
      * Sets activation tokens.
      *
-     * @param tokens the tokens
+     * @param actTokens the tokens
      */
-    public void setTokens(Set<ActivationToken> tokens) {
-        this.tokens = tokens;
+    public void setActTokens(Set<ActivationToken> actTokens) {
+        this.actTokens = actTokens;
+    }
+
+    /**
+     * Gets user roles.
+     *
+     * @return the user roles
+     */
+    public Set<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    /**
+     * Sets user roles.
+     *
+     * @param userRoles the user roles
+     */
+    public void setUserRoles(Set<UserRole> userRoles) {
+        this.userRoles = userRoles;
+    }
+
+    /**
+     * Gets refresh tokens.
+     *
+     * @return the refresh tokens
+     */
+    public Set<RefreshToken> getRefreshTokens() {
+        return refreshTokens;
+    }
+
+    /**
+     * Sets refresh tokens.
+     *
+     * @param refreshTokens the refresh tokens
+     */
+    public void setRefreshTokens(Set<RefreshToken> refreshTokens) {
+        this.refreshTokens = refreshTokens;
     }
 
     /**

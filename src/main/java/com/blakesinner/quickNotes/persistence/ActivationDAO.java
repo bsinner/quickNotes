@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @author bsinner
  */
 public class ActivationDAO extends GenericDAO<ActivationToken> {
-    
+
     private final Logger logger = LogManager.getLogger(this.getClass());
 
     /**

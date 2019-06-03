@@ -28,7 +28,7 @@ CREATE TABLE user_roles (
 );
 
 CREATE TABLE activation_tokens (
-    id VARCHAR(255) NOT NULL PRIMARY KEY
+    id BINARY(255) NOT NULL PRIMARY KEY
     , user_id INT NOT NULL
     , creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
     , expire_date DATETIME DEFAULT NULL

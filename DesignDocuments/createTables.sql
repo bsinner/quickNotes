@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS user_roles, activation_tokens, notes, users;
+DROP TABLE IF EXISTS refresh_tokens, user_roles, activation_tokens, notes, users;
 
 CREATE TABLE users (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
@@ -36,6 +36,14 @@ CREATE TABLE activation_tokens (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE refresh_tokens (
+    id BINARY(16) NOT NULL PRIMARY KEY
+    , user_id INT NOT NULL
+    , expire_date DATETIME
+    , CONSTRAINT users_refresh_tokens_fk FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 DELIMITER ~~
 
     -- Give new users role UNACTIVATED by default
@@ -47,12 +55,19 @@ DELIMITER ~~
             END IF;
         END;~~
 
-    -- Set activation tokens to expire in 24 hours
+    -- Set activation tokens to expire in 1 day
     CREATE TRIGGER newActTokenInsert BEFORE INSERT ON activation_tokens
         FOR EACH ROW
         BEGIN
             SET NEW.expire_date = ADDDATE(CURRENT_TIMESTAMP, INTERVAL 1 DAY);
         END;~~
+
+    -- Set refresh tokens to expire in 5 days
+    CREATE TRIGGER newRefreshTokenInsert BEFORE INSERT ON refresh_tokens
+        FOR EACH ROW
+        BEGIN
+            SET NEW.expire_date = ADDDATE(CURRENT_TIMESTAMP, INTERVAL 5 DAY);
+        END; ~~
 
 DELIMITER ;
 

@@ -8,6 +8,7 @@ import com.blakesinner.quickNotes.util.ActivationEmail;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Endpoint for creating new users and sending confirmation emails.
@@ -46,8 +47,8 @@ public class Registration {
         Response error = findError(username, password, email);
         if(error != null) return error;
 
-        String activationToken = createAccount(email, password, username);
-        ActivationEmail.send(activationToken, uri, email);
+        UUID actTokenId = createAccount(email, password, username);
+        ActivationEmail.send(actTokenId.toString(), uri, email);
 
         return Response.status(200).entity("{}").build();
     }
@@ -84,9 +85,9 @@ public class Registration {
      * @param email    the email
      * @param password the password
      * @param username the username
-     * @return         the activation token ID, to be included in the email
+     * @return         the activation token, to be included in the email
      */
-    private String createAccount(String email, String password, String username) {
+    private UUID createAccount(String email, String password, String username) {
         User user = new User(username, password, email);
         int id = dao.insert(user);
         User createdUser = dao.getByPropertyEqual("id", String.valueOf(id)).get(0);
@@ -98,13 +99,13 @@ public class Registration {
      * Create an activation token.
      *
      * @param user the user activated by the token
-     * @return     the token ID
+     * @return     the activation token
      */
-    private String createToken(User user) {
+    private UUID createToken(User user) {
         ActivationDAO tDao = new ActivationDAO();
         ActivationToken token = new ActivationToken(user);
 
-        return tDao.insertToken(token);
+        return tDao.insertWithUUID(token);
     }
 
     /**

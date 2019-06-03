@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Create a new activation token and email a link to activate it to the user.
@@ -70,11 +71,11 @@ public class ResendActivation {
         ActivationToken token = new ActivationToken(user);
         ActivationDAO dao = new ActivationDAO();
 
-        String id = dao.insertToken(token);
+        UUID id = dao.insertWithUUID(token);
 
-        List<ActivationToken> results = dao.getByPropertyEqual("id", id);
+        ActivationToken results = dao.getById(id);
 
-        return results.isEmpty() ? null : results.get(0);
+        return results;
     }
 
     /**

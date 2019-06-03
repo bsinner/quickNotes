@@ -73,7 +73,7 @@ public class GenericDAO<T> {
      * Inserts new entity.
      *
      * @param entity entity to insert
-     * @return id of inserted entity
+     * @return       id of inserted entity
      */
     public int insert(T entity) {
         Session session = sessionFactory.openSession();
@@ -126,7 +126,7 @@ public class GenericDAO<T> {
      *
      * @param propertyName property name
      * @param value        value to search for
-     * @return found entities
+     * @return             found entities
      */
     public List<T> getByPropertyEqual(String propertyName, String value) {
         Session session = sessionFactory.openSession();
@@ -147,7 +147,7 @@ public class GenericDAO<T> {
      *
      * @param propertyName property name
      * @param value        value to search for
-     * @return found entities
+     * @return             found entities
      */
     public List<T> getByPropertyLike(String propertyName, String value) {
         Session session = sessionFactory.openSession();
@@ -168,7 +168,7 @@ public class GenericDAO<T> {
      * Search for entities by multiple properties equal.
      *
      * @param properties map of properties to search for
-     * @return found entities
+     * @return           found entities
      */
     public List<T> getByPropertiesEqual(Map<String, String> properties) {
         Session session = sessionFactory.openSession();
@@ -186,6 +186,39 @@ public class GenericDAO<T> {
         query.select(root).where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 
         return session.createQuery(query).getResultList();
+    }
+
+    /**
+     * Gets by uuid.
+     *
+     * @param id the id
+     * @return   the entity
+     */
+    public T getById(UUID id) {
+        Session session = sessionFactory.openSession();
+
+        T entity = (T)session.get(type, id);
+
+        session.close();
+        return entity;
+    }
+
+    /**
+     * Gets by id.
+     *
+     * TODO: replace usages of getByPropertyEqual("id", id) with
+     *       getById(id)
+     *
+     * @param id the id
+     * @return   the entity
+     */
+    public T getById(int id) {
+        Session session = sessionFactory.openSession();
+
+        T entity = session.get(type, id);
+
+        session.close();
+        return entity;
     }
 
     /**

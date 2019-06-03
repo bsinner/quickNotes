@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * The account activation token entity.
@@ -17,7 +18,7 @@ public class ActivationToken {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    private String id;
+    private UUID id;
 
     @ManyToOne
     private User user;
@@ -43,24 +44,11 @@ public class ActivationToken {
     }
 
     /**
-     * All argument constructor.
-     *
-     * @param id           the id
-     * @param user         the user
-     * @param creationDate the creation date
-     */
-    public ActivationToken(String id, User user, LocalDateTime creationDate) {
-        this.id = id;
-        this.user = user;
-        this.creationDate = creationDate;
-    }
-
-    /**
      * Gets id.
      *
      * @return the id
      */
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -69,7 +57,7 @@ public class ActivationToken {
      *
      * @param id the id
      */
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

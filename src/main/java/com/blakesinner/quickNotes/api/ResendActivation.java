@@ -34,6 +34,7 @@ public class ResendActivation {
     @PUT
     public Response resendActivationEmail(@Context SecurityContext context, @Context UriInfo uri) {
         User user = getUser(context);
+
         if (user == null) {
             return serverError();
         }
@@ -43,7 +44,7 @@ public class ResendActivation {
             return serverError();
         }
 
-        ActivationEmail.send(token.getId(), uri, user.getEmail());
+        ActivationEmail.send(token.getId().toString(), uri, user.getEmail());
 
         return Response.status(200).entity("Email Sent").build();
     }
@@ -51,14 +52,12 @@ public class ResendActivation {
     /**
      * Get the current user.
      *
-     * @param context the secuirty context containing the user id
+     * @param context the security context containing the user id
      * @return        the current user, or null if no user could be found
      */
     private User getUser(SecurityContext context) {
-        List<User> results = new GenericDAO<>(User.class).getByPropertyEqual("id"
-                , context.getUserPrincipal().getName());
-
-        return results.isEmpty() ? null : results.get(0);
+        return new GenericDAO<>(User.class)
+                .getById(Integer.valueOf(context.getUserPrincipal().getName()));
     }
 
     /**
@@ -73,9 +72,7 @@ public class ResendActivation {
 
         UUID id = dao.insertWithUUID(token);
 
-        ActivationToken results = dao.getById(id);
-
-        return results;
+        return dao.getById(id);
     }
 
     /**

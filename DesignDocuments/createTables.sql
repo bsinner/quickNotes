@@ -28,7 +28,7 @@ CREATE TABLE user_roles (
 );
 
 CREATE TABLE activation_tokens (
-    id BINARY(255) NOT NULL PRIMARY KEY
+    id VARCHAR(255) NOT NULL PRIMARY KEY
     , user_id INT NOT NULL
     , creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
     , expire_date DATETIME DEFAULT NULL
@@ -37,7 +37,7 @@ CREATE TABLE activation_tokens (
 );
 
 CREATE TABLE refresh_tokens (
-    id BINARY(16) NOT NULL PRIMARY KEY
+    id VARCHAR(255) NOT NULL PRIMARY KEY
     , user_id INT NOT NULL
     , expire_date DATETIME
     , CONSTRAINT users_refresh_tokens_fk FOREIGN KEY (user_id) REFERENCES users(id)

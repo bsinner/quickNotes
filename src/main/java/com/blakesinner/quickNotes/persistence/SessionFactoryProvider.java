@@ -5,6 +5,9 @@ import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.type.UUIDCharType;
+
+import java.util.UUID;
 
 
 /**
@@ -29,10 +32,15 @@ public class SessionFactoryProvider {
      */
     public static void createSessionFactory() {
 
-        StandardServiceRegistry standardRegistry =
-                new StandardServiceRegistryBuilder().configure().build();
-        Metadata metaData =
-                new MetadataSources(standardRegistry).getMetadataBuilder().build();
+        StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder()
+                .configure()
+                .build();
+
+        Metadata metaData = new MetadataSources(standardRegistry)
+                .getMetadataBuilder()
+                .applyBasicType(UUIDCharType.INSTANCE, UUID.class.getName())
+                .build();
+
         sessionFactory = metaData.getSessionFactoryBuilder().build();
     }
 

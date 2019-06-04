@@ -9,17 +9,19 @@ import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.*;
 import javax.ws.rs.ext.Provider;
 import java.security.Principal;
 import java.util.*;
 
 /**
  * Filter to determine if the user trying to access a given api endpoint has an access
- * token that is signed by this webapp.
+ * token that is signed by this webapp. Error codes include one of the following codes
+ * to describe the error
+ *
+ * 401001: Access token expired
+ * 401002: Token not found
+ * 401003: Invalid token
  *
  * @author bsinner
  */
@@ -54,7 +56,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
         }
 
-        sendUnauthorized(context);
+        sendUnauthorized(context, "401002", "Access token not found, please login to continue");
     }
 
     /**
@@ -82,9 +84,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             }
 
             return claims;
-
-        } catch (JwtException e) {
-            sendUnauthorized(context);
+        } catch (ExpiredJwtException eje){
+            sendUnauthorized(context, "401001", "Access token expired");
+        } catch (JwtException je) {
+            sendUnauthorized(context, "401003", "Invalid access token");
         }
         return null;
     }
@@ -93,13 +96,22 @@ public class AuthenticationFilter implements ContainerRequestFilter {
      * Send unauthorized in the response if the request was invalid.
      *
      * @param context the request context
+     * @param code    the error code
+     * @param desc     the error description
      */
-    private void sendUnauthorized(ContainerRequestContext context) {
+    private void sendUnauthorized(ContainerRequestContext context, String code, String desc) {
         context.abortWith(
-                Response.status(Response.Status.UNAUTHORIZED)
-                .header(HttpHeaders.WWW_AUTHENTICATE
-                        , " realm=\"" + REALM + "\", charset=\"" + CHARSET + "\"")
-                .build()
+            Response.status(401)
+                    .type(MediaType.APPLICATION_JSON)
+                    .entity("{"
+                                + "\"error\" : {"
+                                    + "\"code\" : \"" + code + "\""
+                                    + ", \"desc\" : \"" + desc + "\""
+                                + "}"
+                            + "}")
+                    .header(HttpHeaders.WWW_AUTHENTICATE
+                            , " realm=\"" + REALM + "\", charset=\"" + CHARSET + "\"")
+                    .build()
         );
     }
 

@@ -88,10 +88,7 @@ public class Login {
     private Response buildOkResponse(User user, String contextPath) {
 
         return Response.status(Response.Status.OK)
-                .cookie(NewCookie.valueOf(
-                                "access_token=" + AccessTokenProvider.get(user)
-                                + "; Path=" + contextPath
-                                + "; HttpOnly")
+                .cookie(NewCookie.valueOf(AccessTokenProvider.get(user, contextPath))
                         , NewCookie.valueOf(
                                 "refresh_token=" + getRefreshToken(user)
                                 + "; Path=" + contextPath
@@ -100,7 +97,7 @@ public class Login {
                 .entity(user.getUsername())
                 .build();
     }
-    
+
     /**
      * Create a refresh token.
      *

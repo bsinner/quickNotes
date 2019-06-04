@@ -26,7 +26,7 @@ public class AccessTokenProvider {
      * @param user the user
      * @return     the string
      */
-    public static String get(User user) {
+    public static String getToken(User user) {
         Date expiry = new Date();
         expiry.setTime(expiry.getTime() + LIFESPAN);
 
@@ -44,6 +44,21 @@ public class AccessTokenProvider {
                         Keys.hmacShaKeyFor(new KeyLoader().getKeyBytes(KEY_PATH))
                         , SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    /**
+     * Get the access token cookie string.
+     *
+     * @param user        the user
+     * @param contextPath the context path, needed because the default
+     *                    path may be the base path of the Jersey servlet
+     *                    instead of the application's base path
+     * @return            the
+     */
+    public static String get(User user, String contextPath) {
+        return "access_token=" + getToken(user)
+                + "; Path=" + contextPath
+                + "; HttpOnly";
     }
 
 }

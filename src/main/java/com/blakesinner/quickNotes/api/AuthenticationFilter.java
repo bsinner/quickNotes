@@ -51,9 +51,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
             if (claims != null) {
                 addSecurityContext(context, claims);
-                return;
             }
 
+            return;
         }
 
         sendUnauthorized(context, "401002", "Access token not found, please login to continue");

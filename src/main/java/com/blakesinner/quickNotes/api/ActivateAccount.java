@@ -46,7 +46,7 @@ public class ActivateAccount {
      */
     private Response activateUser(String activateToken) {
         ActivationToken token = new ActivationDAO()
-                .getById(UUID.fromString(activateToken));
+                .getByUUID(activateToken);
 
         Response error = validateToken(token);
 

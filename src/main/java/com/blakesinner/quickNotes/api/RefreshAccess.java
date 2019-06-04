@@ -52,7 +52,7 @@ public class RefreshAccess {
         if (cookie != null) {
 
             GenericDAO<RefreshToken> dao = new GenericDAO<>(RefreshToken.class);
-            RefreshToken token = dao.getById(UUID.fromString(cookie.getValue()));
+            RefreshToken token = dao.getByUUID(cookie.getValue());
 
             if (token != null) {
                 if (token.getExpireDate().isBefore(LocalDateTime.now())) {
@@ -76,7 +76,7 @@ public class RefreshAccess {
     private void deleteToken(RefreshToken token, GenericDAO<RefreshToken> dao) {
         dao.delete(token);
 
-        RefreshToken deleted = dao.getById(token.getId());
+        RefreshToken deleted = dao.getByUUID(token.getId().toString());
 
         if (deleted != null) {
             LOGGER.warn("Error: RefreshToken ID: " + token.getId().toString() + " could not be deleted");

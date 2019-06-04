@@ -53,7 +53,7 @@ public class Logout {
         if (token == null) return;
 
         GenericDAO<RefreshToken> dao = new GenericDAO<>(RefreshToken.class);
-        RefreshToken toDelete = dao.getById(UUID.fromString(token.getValue()));
+        RefreshToken toDelete = dao.getByUUID(token.getValue());
 
         if (toDelete == null) {
             LOGGER.warn(String.format("Error: Refresh token cookie contained token that could not be found"

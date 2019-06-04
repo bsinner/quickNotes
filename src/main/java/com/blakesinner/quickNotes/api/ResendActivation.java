@@ -72,7 +72,7 @@ public class ResendActivation {
 
         UUID id = dao.insertWithUUID(token);
 
-        return dao.getById(id);
+        return dao.getByUUID(id.toString());
     }
 
     /**

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * Generic DAO with CRUD methods.
@@ -19,8 +20,10 @@ import java.util.UUID;
  */
 public class GenericDAO<T> {
 
-    private final Logger logger = LogManager.getLogger(this.getClass());
-    private final SessionFactory sessionFactory = SessionFactoryProvider.getSessionFactory();
+    private final SessionFactory FACTORY = SessionFactoryProvider.getSessionFactory();
+    private final Pattern UUID_FORMAT = Pattern.compile("^\\p{Alnum}{8}"
+            + "-\\p{Alnum}{4}-\\p{Alnum}{4}-\\p{Alnum}{4}"
+            + "-\\p{Alnum}{12}$");
     private Class<T> type;
 
     /**
@@ -28,9 +31,7 @@ public class GenericDAO<T> {
      *
      * @param type the type of entity to use
      */
-    public GenericDAO(Class<T> type) {
-        this.type = type;
-    }
+    public GenericDAO(Class<T> type) { this.type = type; }
 
     /**
      * No argument constructor.
@@ -43,11 +44,10 @@ public class GenericDAO<T> {
      * @return all found entities
      */
     public List<T> getAll() {
-        Session session = sessionFactory.openSession();
+        Session session = FACTORY.openSession();
 
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<T> query = cb.createQuery(type);
-        Root<T> root = query.from(type);
 
         List<T> list = session.createQuery(query).getResultList();
         session.close();
@@ -60,7 +60,7 @@ public class GenericDAO<T> {
      * @param entity entity to save or update
      */
     public void saveOrUpdate(T entity) {
-        Session session = sessionFactory.openSession();
+        Session session = FACTORY.openSession();
 
         Transaction transaction = session.beginTransaction();
         session.saveOrUpdate(entity);
@@ -76,9 +76,9 @@ public class GenericDAO<T> {
      * @return       id of inserted entity
      */
     public int insert(T entity) {
-        Session session = sessionFactory.openSession();
+        Session session = FACTORY.openSession();
 
-        int id = 0;
+        int id;
 
         Transaction transaction = session.beginTransaction();
         id = (int)session.save(entity);
@@ -95,8 +95,8 @@ public class GenericDAO<T> {
      * @return id of inserted entity
      */
     public UUID insertWithUUID(T entity) {
-        Session session = sessionFactory.openSession();
-        UUID id = null;
+        Session session = FACTORY.openSession();
+        UUID id;
 
         Transaction transaction = session.beginTransaction();
         id = (UUID)session.save(entity);
@@ -112,7 +112,7 @@ public class GenericDAO<T> {
      * @param entity deleted entity
      */
     public void delete(T entity) {
-        Session session = sessionFactory.openSession();
+        Session session = FACTORY.openSession();
 
         Transaction transaction = session.beginTransaction();
         session.delete(entity);
@@ -129,7 +129,7 @@ public class GenericDAO<T> {
      * @return             found entities
      */
     public List<T> getByPropertyEqual(String propertyName, String value) {
-        Session session = sessionFactory.openSession();
+        Session session = FACTORY.openSession();
 
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<T> query = cb.createQuery(type);
@@ -150,7 +150,7 @@ public class GenericDAO<T> {
      * @return             found entities
      */
     public List<T> getByPropertyLike(String propertyName, String value) {
-        Session session = sessionFactory.openSession();
+        Session session = FACTORY.openSession();
 
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<T> query = cb.createQuery(type);
@@ -171,7 +171,7 @@ public class GenericDAO<T> {
      * @return           found entities
      */
     public List<T> getByPropertiesEqual(Map<String, String> properties) {
-        Session session = sessionFactory.openSession();
+        Session session = FACTORY.openSession();
 
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<T> query = cb.createQuery(type);
@@ -189,15 +189,21 @@ public class GenericDAO<T> {
     }
 
     /**
-     * Gets by uuid.
+     * Gets by UUID, checks if the id is a valid UUID to prevent exceptions.
      *
      * @param id the id
      * @return   the entity
      */
-    public T getById(UUID id) {
-        Session session = sessionFactory.openSession();
+    public T getByUUID(String id) {
+        UUID uuid = UUID.fromString(id);
 
-        T entity = (T)session.get(type, id);
+        if (!UUID_FORMAT.matcher(id).matches()) {
+            return null;
+        }
+
+        Session session = FACTORY.openSession();
+
+        T entity = session.get(type, uuid);
 
         session.close();
         return entity;
@@ -206,14 +212,13 @@ public class GenericDAO<T> {
     /**
      * Gets by id.
      *
-     * TODO: replace usages of getByPropertyEqual("id", id) with
-     *       getById(id)
+     * TODO: replace usages of getByPropertyEqual("id", id) with getById(id)
      *
      * @param id the id
      * @return   the entity
      */
     public T getById(int id) {
-        Session session = sessionFactory.openSession();
+        Session session = FACTORY.openSession();
 
         T entity = session.get(type, id);
 
@@ -226,7 +231,5 @@ public class GenericDAO<T> {
      *
      * @param type the dao entity type
      */
-    public void setType(Class<T> type) {
-        this.type = type;
-    }
+    public void setType(Class<T> type) { this.type = type; }
 }

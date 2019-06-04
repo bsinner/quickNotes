@@ -3,6 +3,7 @@ package com.blakesinner.quickNotes.api;
 import com.blakesinner.quickNotes.entity.RefreshToken;
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
+import com.blakesinner.quickNotes.util.AccessTokenProvider;
 import com.blakesinner.quickNotes.util.KeyLoader;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -88,7 +89,7 @@ public class Login {
 
         return Response.status(Response.Status.OK)
                 .cookie(NewCookie.valueOf(
-                                "access_token=" + getAccessToken(user)
+                                "access_token=" + AccessTokenProvider.get(user)
                                 + "; Path=" + contextPath
                                 + "; HttpOnly")
                         , NewCookie.valueOf(
@@ -99,35 +100,7 @@ public class Login {
                 .entity(user.getUsername())
                 .build();
     }
-
-    /**
-     * Create and get the access token.
-     *
-     * @param user the current user
-     * @return     the access token converted to string
-     */
-    private String getAccessToken(User user) {
-        Date expiry = new Date();
-        expiry.setTime(expiry.getTime() + TOKEN_LIFESPAN);
-
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", user.getId());
-        claims.put("rol", user.getRolesString());
-
-        JwtBuilder accessToken = Jwts.builder()
-                .setIssuer(ISSUER)
-                .setIssuedAt(new Date())
-                .setClaims(claims)
-                .setExpiration(expiry);
-
-        accessToken.signWith(
-                Keys.hmacShaKeyFor(new KeyLoader().getKeyBytes(SECRET))
-                , SignatureAlgorithm.HS256
-        );
-
-        return accessToken.compact();
-    }
-
+    
     /**
      * Create a refresh token.
      *

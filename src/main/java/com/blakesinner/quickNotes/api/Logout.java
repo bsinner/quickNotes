@@ -1,21 +1,24 @@
 package com.blakesinner.quickNotes.api;
 
+import com.blakesinner.quickNotes.entity.RefreshToken;
+import com.blakesinner.quickNotes.persistence.GenericDAO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.servlet.ServletContext;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import java.util.UUID;
 
 /**
  * Log the user out.
+ *
+ * @author bsinner
  */
 @Path("logout")
 public class Logout {
 
-    // TODO: revoke access token in the database
+    private final Logger LOGGER = LogManager.getLogger(this.getClass());
 
     /**
      * Log the user out by deleting the cookie that stores the access token.
@@ -25,15 +28,42 @@ public class Logout {
      * @return        the response
      */
     @POST
-    @Produces("{text/plain}")
-    public Response logout(@Context ServletContext context) {
+    public Response logout(@Context ServletContext context, @CookieParam("refresh_token") Cookie token) {
+
+        deleteRefreshToken(token);
+
         return Response.status(Response.Status.OK)
-                .header(HttpHeaders.SET_COOKIE
-                        , "access_token=deleted-cookie; "
+                .cookie(NewCookie.valueOf(
+                                "access_token=deleted-cookie; "
                                 + "Expires=Thu, 01 Jan 1970 00:00:00 GMT; "
                                 + "Path=" + context.getContextPath())
-                .entity("")
+                        , NewCookie.valueOf(
+                                "refresh_token=deleted-cookie2; "
+                                + "Expires=Thu, 01 Jan 1970 00:00:00 GMT; "
+                                + "Path=" + context.getContextPath()))
                 .build();
+    }
+
+    /**
+     * Search for the refresh token in the database and delete if found.
+     *
+     * @param token the token to delete
+     */
+    private void deleteRefreshToken(Cookie token) {
+        if (token == null) return;
+
+        GenericDAO<RefreshToken> dao = new GenericDAO<>(RefreshToken.class);
+        RefreshToken toDelete = dao.getById(UUID.fromString(token.getValue()));
+
+        if (toDelete == null) {
+            LOGGER.warn(String.format("Error: Refresh token cookie contained token that could not be found"
+                    + "%nToken ID: " + token.getValue() + "%n"
+            ));
+
+            return;
+        }
+
+        dao.delete(toDelete);
     }
 
 }

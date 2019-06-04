@@ -21,11 +21,8 @@ import java.util.*;
 @Path("login")
 public class Login {
 
-    private static final int TOKEN_LIFESPAN = 60 * 60000;
-    private static final String ISSUER = "Quick Notes";
     private static final String REALM = "Quick Notes";
     private static final String CHARSET = "UTF-8";
-    private static final String SECRET = "/accessTokenPw.txt";
 
     /**
      * Search for the email and password in the database and send an access

@@ -2,12 +2,16 @@ package com.blakesinner.quickNotes.api;
 
 import com.blakesinner.quickNotes.entity.RefreshToken;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
+import com.blakesinner.quickNotes.util.AccessTokenProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.CookieParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -21,21 +25,20 @@ public class RefreshAccess {
     private static final String CHARSET = "UTF-8";
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
 
-    @POST
-    public Response refreshAccessToken(@CookieParam("refresh_token") Cookie cookie) {
+    @GET // TODO: post
+    public Response refreshAccessToken(@CookieParam("refresh_token") Cookie cookie, @Context ServletContext context) {
         RefreshToken refreshToken = getRefreshToken(cookie);
-        
+
         if (refreshToken == null) {
             return unauthorized();
         }
 
-        String accessToken = null;
+        String accessTokenCookie = AccessTokenProvider
+                .get(refreshToken.getUser(), context.getContextPath());
 
-        if (accessToken == null) {
-            return unauthorized();
-        }
-
-        return Response.status(200).build();
+        return Response.status(200)
+                .header(HttpHeaders.SET_COOKIE, accessTokenCookie)
+                .build();
     }
 
     private Response unauthorized() {

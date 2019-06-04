@@ -1,5 +1,6 @@
 package com.blakesinner.quickNotes.api;
 
+import com.blakesinner.quickNotes.entity.RefreshToken;
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
 import com.blakesinner.quickNotes.util.KeyLoader;
@@ -9,9 +10,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import javax.servlet.ServletContext;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
+import java.sql.Ref;
 import java.util.*;
 
 /**
@@ -77,7 +77,7 @@ public class Login {
     }
 
     /**
-     * Create a 200 Ok response with an access token set as it's cookie.
+     * Create a 200 Ok response with access and refresh tokens.
      *
      * @param user        the logged in user
      * @param contextPath the context path, needed because the default
@@ -87,10 +87,15 @@ public class Login {
     private Response buildOkResponse(User user, String contextPath) {
 
         return Response.status(Response.Status.OK)
-                .header(HttpHeaders.SET_COOKIE,
-                        "access_token=" + getToken(user)
-                        + "; Path=" + contextPath
-                        + "; HttpOnly")
+                .cookie(NewCookie.valueOf(
+                                "access_token=" + getAccessToken(user)
+                                + "; Path=" + contextPath
+                                + "; HttpOnly")
+                        , NewCookie.valueOf(
+                                "refresh_token=" + getRefreshToken(user)
+                                + "; Path=" + contextPath
+                                + "; HttpOnly"
+                        ))
                 .entity(user.getUsername())
                 .build();
     }
@@ -101,7 +106,7 @@ public class Login {
      * @param user the current user
      * @return     the access token converted to string
      */
-    private String getToken(User user) {
+    private String getAccessToken(User user) {
         Date expiry = new Date();
         expiry.setTime(expiry.getTime() + TOKEN_LIFESPAN);
 
@@ -121,6 +126,20 @@ public class Login {
         );
 
         return accessToken.compact();
+    }
+
+    /**
+     * Create a refresh token.
+     *
+     * @param user the user account refreshed by the token
+     * @return     the refresh token id
+     */
+    private String getRefreshToken(User user) {
+        GenericDAO<RefreshToken> dao = new GenericDAO<>(RefreshToken.class);
+
+        RefreshToken rt = new RefreshToken(user);
+
+        return dao.insertWithUUID(rt).toString();
     }
 
     /**

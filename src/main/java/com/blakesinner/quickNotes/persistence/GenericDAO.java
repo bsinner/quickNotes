@@ -1,11 +1,8 @@
 package com.blakesinner.quickNotes.persistence;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +21,14 @@ public class GenericDAO<T> {
     private final Pattern UUID_FORMAT = Pattern.compile("^\\p{Alnum}{8}"
             + "-\\p{Alnum}{4}-\\p{Alnum}{4}-\\p{Alnum}{4}"
             + "-\\p{Alnum}{12}$");
-    private Class<T> type;
+    private Class<T> TYPE;
 
     /**
      * Instantiates a new Generic dao.
      *
-     * @param type the type of entity to use
+     * @param TYPE the type of entity to use
      */
-    public GenericDAO(Class<T> type) { this.type = type; }
+    public GenericDAO(Class<T> TYPE) { this.TYPE = TYPE; }
 
     /**
      * No argument constructor.
@@ -47,7 +44,8 @@ public class GenericDAO<T> {
         Session session = FACTORY.openSession();
 
         CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<T> query = cb.createQuery(type);
+        CriteriaQuery<T> query = cb.createQuery(TYPE);
+        query.from(TYPE);
 
         List<T> list = session.createQuery(query).getResultList();
         session.close();
@@ -132,8 +130,8 @@ public class GenericDAO<T> {
         Session session = FACTORY.openSession();
 
         CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<T> query = cb.createQuery(type);
-        Root<T> root = query.from(type);
+        CriteriaQuery<T> query = cb.createQuery(TYPE);
+        Root<T> root = query.from(TYPE);
 
         query.select(root).where(cb.equal(root.get(propertyName), value));
 
@@ -153,8 +151,8 @@ public class GenericDAO<T> {
         Session session = FACTORY.openSession();
 
         CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<T> query = cb.createQuery(type);
-        Root<T> root = query.from(type);
+        CriteriaQuery<T> query = cb.createQuery(TYPE);
+        Root<T> root = query.from(TYPE);
 
         Expression<String> propertyPath = root.get(propertyName);
         query.where(cb.like(propertyPath, "%" + value + "%"));
@@ -174,8 +172,8 @@ public class GenericDAO<T> {
         Session session = FACTORY.openSession();
 
         CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<T> query = cb.createQuery(type);
-        Root<T> root = query.from(type);
+        CriteriaQuery<T> query = cb.createQuery(TYPE);
+        Root<T> root = query.from(TYPE);
 
         List<Predicate> predicates = new ArrayList<>();
 
@@ -203,7 +201,7 @@ public class GenericDAO<T> {
 
         Session session = FACTORY.openSession();
 
-        T entity = session.get(type, uuid);
+        T entity = session.get(TYPE, uuid);
 
         session.close();
         return entity;
@@ -220,7 +218,7 @@ public class GenericDAO<T> {
     public T getById(int id) {
         Session session = FACTORY.openSession();
 
-        T entity = session.get(type, id);
+        T entity = session.get(TYPE, id);
 
         session.close();
         return entity;
@@ -229,7 +227,7 @@ public class GenericDAO<T> {
     /**
      * Set the dao type.
      *
-     * @param type the dao entity type
+     * @param TYPE the dao entity type
      */
-    public void setType(Class<T> type) { this.type = type; }
+    public void setType(Class<T> TYPE) { this.TYPE = TYPE; }
 }

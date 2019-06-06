@@ -193,11 +193,11 @@ public class GenericDAO<T> {
      * @return   the entity
      */
     public T getByUUID(String id) {
-        UUID uuid = UUID.fromString(id);
-
         if (!UUID_FORMAT.matcher(id).matches()) {
             return null;
         }
+
+        UUID uuid = UUID.fromString(id);
 
         Session session = FACTORY.openSession();
 

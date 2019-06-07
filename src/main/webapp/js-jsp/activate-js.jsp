@@ -1,7 +1,10 @@
+<%--<script src="js/loginRequest.js" type="application/javascript"></script>--%>
+<script src="js/QNotesRequests.js" type="application/javascript"></script>
+
 <script>
-    const CXT = "<%=request.getContextPath()%>";
     const Q_STRING = "?${params}";
     const JS_COOKIE = "access_token_data";
+    const REQUESTS = new QNotesRequests("<%=request.getContextPath()%>", null /* TODO logged out handler */);
 
     // Elements to hold output
     const S_IMG = document.getElementById("statusImg");
@@ -29,22 +32,18 @@
      * message with success or failure.
      */
     function activateAccount() {
-        const url = CXT + "/api/activate" + Q_STRING;
-        const props = { method : "POST" };
 
-        fetch(url, props)
-                .then(r => {
-                    if (r.ok) {
-                        showSuccess();
-                    } else if (r.status === 410) {
-                        showFailed(...EXPIRED);
-                    } else if (r.status === 403) {
-                        // Show success because 403 indicates user is already activated
-                        showSuccess();
-                    } else {
-                        showFailed(...INVALID);
-                    }
-                });
+        REQUESTS.activateAcct(Q_STRING, () => { showSuccess() }, err => {
+
+            if (err.status === 410) {
+                showFailed(...EXPIRED);
+            } else if (err.status === 403) {
+                showSuccess(); // show success because 403 means user is already activated
+            } else {
+                showFailed(...INVALID);
+            }
+
+        });
     }
 
     /*

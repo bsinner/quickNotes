@@ -104,7 +104,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             Response.status(401)
                     .type(MediaType.APPLICATION_JSON)
                     .entity("{"
-                                + "\"error\" : {"
+                                + "\"authFilterError\" : {"
                                     + "\"code\" : \"" + code + "\""
                                     + ", \"desc\" : \"" + desc + "\""
                                 + "}"

@@ -6,8 +6,6 @@ import com.blakesinner.quickNotes.persistence.ActivationDAO;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Endpoint for activating a user. Users must have the UNACTIVATED role in the database

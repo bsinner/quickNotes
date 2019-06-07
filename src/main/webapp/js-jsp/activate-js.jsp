@@ -4,7 +4,8 @@
 <script>
     const Q_STRING = "?${params}";
     const JS_COOKIE = "access_token_data";
-    const REQUESTS = new QNotesRequests("<%=request.getContextPath()%>", null /* TODO logged out handler */);
+    const CXT = "<%=request.getContextPath()%>";
+    const REQUESTS = new QNotesRequests(CXT, null /* TODO logged out handler */);
 
     // Elements to hold output
     const S_IMG = document.getElementById("statusImg");

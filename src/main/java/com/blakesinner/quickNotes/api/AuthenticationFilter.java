@@ -20,7 +20,7 @@ import java.util.*;
  * to describe the error
  *
  * 401001: Access token expired
- * 401002: Token not found
+ * 401002: Token not found, no user logged in
  * 401003: Invalid token
  *
  * @author bsinner
@@ -97,7 +97,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
      *
      * @param context the request context
      * @param code    the error code
-     * @param desc     the error description
+     * @param desc    the error description
      */
     private void sendUnauthorized(ContainerRequestContext context, String code, String desc) {
         context.abortWith(

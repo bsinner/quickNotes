@@ -7,7 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletContext;
 import javax.ws.rs.CookieParam;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Cookie;
@@ -36,7 +36,7 @@ public class RefreshAccess {
      * @return        the access token cookie response, or 401 Unauthorized
      *                response if the refresh token is invalid
      */
-    @GET // TODO: post
+    @POST
     public Response refreshAccessToken(@CookieParam("refresh_token") Cookie cookie, @Context ServletContext context) {
         RefreshToken refreshToken = getRefreshToken(cookie);
 

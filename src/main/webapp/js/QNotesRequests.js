@@ -4,7 +4,7 @@ function QNotesRequests (cxt, onLoggedOut) {
     const root = cxt + "/api/";
 
     this.activateAcct = (query, complete, fail) => {
-        ajaxRequest(root + "activate" + query, post, complete, fail);
+        ajaxRequest(root + "activate" + query, post, complete, fail, 0);
     };
 
     this.createNote = (complete, fail) => {};
@@ -16,9 +16,10 @@ function QNotesRequests (cxt, onLoggedOut) {
 
     /*
      * Make an ajax request, if the user access token is invalid
-     * try to get a new one.
+     * try to get a new one. Param loop is used to detect infinite
+     * loops and should be initialized to 0.
      */
-    function ajaxRequest(url, props, onComplete, onFail) {
+    function ajaxRequest(url, props, onComplete, onFail, loop) {
 
         fetch(url, props)
             .then(r => {
@@ -30,15 +31,19 @@ function QNotesRequests (cxt, onLoggedOut) {
                     if (ctType && ctType.includes("application/json")) {
 
                         r.json().then(json => {
+
+                            // If this is a response from authentication filter, and not
+                            // part of an infinite loop try to refresh the access token
                             if ("authFilterError" in json) {
-
-                                // Pass current arguments to refresh so it can re call this
-                                // function on success
+                                if (loop > 3) {
+                                    showLoggedOut();
+                                    return;
+                                }
                                 refreshAccess(json["authFilterError"]["code"], arguments);
-
                             } else {
                                 onFail(r);
                             }
+
                         });
 
                     } else {
@@ -56,6 +61,8 @@ function QNotesRequests (cxt, onLoggedOut) {
      * was blocked, on fail call the logged out callback.
      */
     function refreshAccess(err, onCompleteArgs) {
+        onCompleteArgs[onCompleteArgs.length - 1] += 1;
+
         if (err === "401001" || err === "401003") {
             ajaxRequest(
                 root + "refresh"

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Forward to the account activating page.
+ * Forward to the account activation page.
  *
  * @author bsinner
  */
@@ -18,8 +18,7 @@ import java.io.IOException;
 public class ActivateAccount extends HttpServlet {
 
     /**
-     * Forward to the account activation page, send the query string in an request
-     * attribute so it can be used by JavaScript.
+     * Forward to account activation page, send query string in request attribute for JS.
      *
      * @param req               the HTTP Request
      * @param res               the HTTP Response
@@ -28,15 +27,41 @@ public class ActivateAccount extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        forwardToJsp(req, res);
+    }
+
+    /**
+     * Forward to the account activation page when login.jsp makes a post request, send query string in
+     * request attribute for JS.
+     *
+     * @param req               the HTTP Request
+     * @param res               the HTTP Response
+     * @throws IOException      if an I/O Exception occurs
+     * @throws ServletException if a Servlet Exception occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        forwardToJsp(req, res);
+    }
+
+    /**
+     * Set the request dispatcher's destination JSP with ServletAuthenticator, add query string to request attribute,
+     * forward to the destination JSP.
+     *
+     * @param req               the HTTP Request
+     * @param res               the HTTP Response
+     * @throws IOException      if an I/O Exception occurs
+     * @throws ServletException if a Servlet Exception occurs
+     */
+    private void forwardToJsp(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         ServletAuthenticator auth = new ServletAuthenticator(req, res);
         req.setAttribute("params", req.getQueryString());
 
         auth.setUpDispatcher("/activate.jsp"
-                        , "/acivate" + (req.getQueryString() == null
-                                ? ""
-                                : "?" + req.getQueryString()))
+                , "/activate" + (req.getQueryString() == null
+                        ? ""
+                        : "?" + req.getQueryString()))
                 .forward(req, res);
-
     }
 
 }

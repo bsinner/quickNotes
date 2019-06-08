@@ -13,7 +13,7 @@
         <h4>You Must be Signed in to Continue</h4>
         <br>
 
-        <form class="ui form" id="form">
+        <form class="ui form" id="form" method="POST">
 
             <div class="field" id="emailDiv">
                 <label>E-mail</label>

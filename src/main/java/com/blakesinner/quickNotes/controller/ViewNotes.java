@@ -18,19 +18,44 @@ import java.io.IOException;
 public class ViewNotes extends HttpServlet {
 
     /**
-     * Get user notes and forward to viewNotes jsp page.
+     * Forward to viewNotes JSP, or login JSP if not logged in.
      *
      * @param req               The HttpRequest
      * @param res               The HttpResponse
-     * @throws ServletException If a servlet exception occurs
      * @throws IOException      If an I/O exception occurs
+     * @throws ServletException If a servlet exception occurs
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        forwardToJsp(req, res);
+    }
+
+    /**
+     * Forward to viewNotes JSP when login page makes post request to this servlet,
+     * or forward to login JSP if not logged in.
+     *
+     * @param req               The HttpRequest
+     * @param res               The HttpResponse
+     * @throws IOException      If an I/O exception occurs
+     * @throws ServletException If a servlet exception occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        forwardToJsp(req, res);
+    }
+
+    /**
+     * Set up request dispatcher with ServletAuthenticator and forward to destination JSP.
+     *
+     * @param req               The HttpRequest
+     * @param res               The HttpResponse
+     * @throws IOException      If an I/O exception occurs
+     * @throws ServletException If a servlet exception occurs
+     */
+    private void forwardToJsp(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         ServletAuthenticator auth = new ServletAuthenticator(req, res);
 
         auth.setUpDispatcher("/viewNotes.jsp", "/viewNotes")
                 .forward(req, res);
     }
-
 }

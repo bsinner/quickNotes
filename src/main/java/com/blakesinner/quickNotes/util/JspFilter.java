@@ -23,8 +23,10 @@ public class JspFilter {
 
     private static final String ACCESS_NAME = "access_token";
     private static final String REFRESH_NAME = "refresh_token";
-    private final Logger logger = LogManager.getLogger(this.getClass());
     private static final String SECRET = "/accessTokenPw.txt";
+    private static final int MAX_SECONDS = 60 * 60;
+
+    private final Logger LOGGER = LogManager.getLogger(this.getClass());
 
     /**
      * Instantiates a new JspFilter.
@@ -51,7 +53,7 @@ public class JspFilter {
         } catch (ExpiredJwtException eje){
             return false;
         } catch (JwtException je) {
-            logger.info("Invalid access token found: " + token);
+            LOGGER.info("Invalid access token found: " + token);
             return false;
 
         }
@@ -61,18 +63,36 @@ public class JspFilter {
     public void updateCookies() {
         Optional<String> token = getToken(ACCESS_NAME);
 
+        // if access token is missing exit
         if (!token.isPresent()) return;
 
+        // if token is found but not valid try to refresh it
         if (!isValid(token.get())) {
             Optional<String> refreshId = getToken(REFRESH_NAME);
 
+            // if there is a refresh token try to refresh the access token
             if (refreshId.isPresent()) {
-                //refresh the token
-                // if (refreshFail) {
-                //     delete refresh + access
-                // }
+                AccessTokenProvider provider = new AccessTokenProvider();
+                String newAccessToken = provider.createAccessToken(refreshId.get());
+
+                // if the access token was refreshed update the response
+                if (newAccessToken != null) {
+                    Cookie cookie = new Cookie(ACCESS_NAME, newAccessToken);
+                    cookie.setMaxAge(MAX_SECONDS);
+
+                    response.addCookie(cookie);
+
+                    return;
+
+                // if the access token couldnt be refreshed delete refresh + access cookies
+                } else {
+                    deleteCookies(REFRESH_NAME, ACCESS_NAME);
+                }
+
+            // if there was no refresh token delete the access token, because it is invalid
+            // and impossible to refresh
             } else {
-                // delete access token
+                deleteCookies(ACCESS_NAME);
             }
 
         }

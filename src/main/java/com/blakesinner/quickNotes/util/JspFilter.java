@@ -6,6 +6,9 @@ import io.jsonwebtoken.Jwts;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -15,28 +18,30 @@ import java.util.Optional;
  */
 public class JspFilter {
 
-    private Cookie[] cookies;
-    private static final String NAME = "access_token";
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+
+    private static final String ACCESS_NAME = "access_token";
+    private static final String REFRESH_NAME = "refresh_token";
     private final Logger logger = LogManager.getLogger(this.getClass());
     private static final String SECRET = "/accessTokenPw.txt";
 
     /**
      * Instantiates a new JspFilter.
      *
-     * @param cookies the cookies
+     * @param req the HttpServletRequest
      */
-    public JspFilter(Cookie[] cookies) { this.cookies = cookies; }
+    public JspFilter(HttpServletRequest req, HttpServletResponse res) {
+        this.request = req;
+        this.response = res;
+    }
 
     /**
-     * Check if the cookies contain a valid access token.
+     * Check if an access token is valid.
      *
-     * @return true or false depending on if the access token is valid
+     * @return true if the token is valid, false if the token is invalid
      */
     private boolean isValid(String token) {
-//        Optional<String> token = getToken();
-//
-//        if (!token.isPresent()) return false;
-
         try {
             Jwts.parser()
                     .setSigningKey(new KeyLoader().getKeyBytes(SECRET))
@@ -54,25 +59,46 @@ public class JspFilter {
     }
 
     public void updateCookies() {
-        Optional<String> token = getToken();
+        Optional<String> token = getToken(ACCESS_NAME);
 
         if (!token.isPresent()) return;
 
-        if (isValid(token.get())) return;
+        if (!isValid(token.get())) {
+            Optional<String> refreshId = getToken(REFRESH_NAME);
 
-        // make a refresh xhr
+            if (refreshId.isPresent()) {
+                //refresh the token
+                // if (refreshFail) {
+                //     delete refresh + access
+                // }
+            } else {
+                // delete access token
+            }
+
+        }
+    }
+
+    private void deleteCookies(String... cookies) {
+        Arrays.stream(request.getCookies()).forEach(c -> {
+            Cookie cookie = new Cookie(c.getName(), "");
+            cookie.setMaxAge(0);
+
+            response.addCookie(cookie);
+        });
     }
 
     /**
-     * Get the value of the cookie with name equal to instance
-     * variable NAME.
+     * Search for cookie.
      *
-     * @return cookie value, or null of no matching token is found
+     * @param name the cookie name
+     * @return     the cookie value, or null if not found
      */
-    private Optional<String> getToken() {
+    private Optional<String> getToken(String name) {
+        Cookie[] cookies = request.getCookies();
+
         if (cookies != null) {
             for (Cookie c : cookies) {
-                if (c.getName().equals(NAME)) {
+                if (c.getName().equals(name)) {
                     return Optional.of(c.getValue());
                 }
             }

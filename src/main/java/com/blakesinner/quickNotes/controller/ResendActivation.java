@@ -28,6 +28,13 @@ public class ResendActivation extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        JspFilter filter = new JspFilter(req, res);
+
+        filter.updateCookies();
+
+//        if (filter.isTokenPresent()) {
+//
+//        }
 //        JspFilter filter = new JspFilter(req.getCookies());
 //        RequestDispatcher rd = null;
 //

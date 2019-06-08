@@ -74,9 +74,9 @@ DELIMITER ;
 INSERT INTO users
     (id, username, email, password)
 VALUES
-    (1, 'bsmith', 'bsmith@gmail.com', 'password1')
-    , (2, 'zsmith', 'zsmith@gmail.com', 'password2')
-    , (3, 'ldavis', 'ldavis@gmail.com', 'password35');
+    (1, 'bsmith', 'bsmith@gmail.555', 'password1')
+    , (2, 'zsmith', 'zsmith@gmail.555', 'password2')
+    , (3, 'ldavis', 'ldavis@gmail.555', 'password35');
 
 INSERT INTO notes
     (user_id, title, contents)

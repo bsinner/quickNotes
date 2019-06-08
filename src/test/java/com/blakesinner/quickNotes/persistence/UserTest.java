@@ -70,7 +70,7 @@ class UserTest {
      */
     @Test
     void testInsert() {
-        User newUser = new User("rsmith", "password4", "rsmith@gmail.com");
+        User newUser = new User("rsmith", "password4", "rsmith@gmail.555");
         int id = dao.insert(newUser);
 
         User insertedUser = dao.getByPropertyEqual("id", String.valueOf(id)).get(0);
@@ -84,7 +84,7 @@ class UserTest {
      */
     @Test
     void testInsertWithNote() {
-        User newUser = new User("ksmith", "password8", "ksmith@gmail.com");
+        User newUser = new User("ksmith", "password8", "ksmith@gmail.555");
         Note newNote = new Note("Untitled", "{}", newUser);
         newUser.addNote(newNote);
 
@@ -155,7 +155,7 @@ class UserTest {
 
         assertEquals(1, users.size());
         assertEquals(1, users.get(0).getId());
-        assertEquals("bsmith@gmail.com", users.get(0).getEmail());
+        assertEquals("bsmith@gmail.555", users.get(0).getEmail());
     }
 
     /**

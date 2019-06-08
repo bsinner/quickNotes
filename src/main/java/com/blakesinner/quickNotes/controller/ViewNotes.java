@@ -1,5 +1,7 @@
 package com.blakesinner.quickNotes.controller;
 
+import com.blakesinner.quickNotes.util.ServletAuthenticator;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,8 +27,9 @@ public class ViewNotes extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-//        ServletAuthenticator auth = new ServletAuthenticator(req.getCookies());
-//        RequestDispatcher rd = null;
+        ServletAuthenticator auth = new ServletAuthenticator(req, res);
+
+        //        RequestDispatcher rd = null;
 //
 ////        if (filter.isValid()) {
 //            rd = req.getRequestDispatcher("/viewNotes.jsp");

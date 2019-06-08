@@ -5,6 +5,8 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +31,7 @@ public class ServletAuthenticator {
     private static final String REFRESH_NAME = "refresh_token";
     private static final String ACCESS_JS_NAME = "access_token_data";
     private static final String SECRET = "/accessTokenPw.txt";
+    private static final String LOGIN = "/login.jsp";
     private static final int MAX_SECONDS = 60 * 60;
 
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
@@ -44,6 +47,29 @@ public class ServletAuthenticator {
     }
 
     /**
+     * Authenticate the user accessing the servlet and set up the dispatcher to link to
+     * the passed in JSP if authenticated, or the login page if unauthenticated.
+     *
+     * @param authenticatedJsp the page to go to if the user is authenticated
+     * @param loginFormAction  the action of the login form displayed to unauthenticated
+     *                         users, stored in request attribute "servlet" so it can be
+     *                         loaded into the login form with JSP templates
+     * @return                 the set up request dispatcher
+     */
+    public RequestDispatcher setUpDispatcher(String authenticatedJsp, String loginFormAction) {
+
+        updateCookies();
+
+        if (isLoggedIn()) {
+            return req.getRequestDispatcher(authenticatedJsp);
+        } else {
+            req.setAttribute("servlet", loginFormAction);
+            return req.getRequestDispatcher(LOGIN);
+        }
+
+    }
+
+    /**
      * Find if the user trying to access a servlet has an access token; this method will return
      * true even if an invalid access token is passed to the servlet, so it is recommended to call
      * updateCookies to refresh or delete invalid access tokens.
@@ -51,7 +77,7 @@ public class ServletAuthenticator {
      * @return true if an access token is found, false if no access token is present or if
      *         the token is scheduled for deletion
      */
-    public boolean isLoggedIn() {
+    private boolean isLoggedIn() {
         return getToken(ACCESS_NAME, req.getCookies()).isPresent()
                 && !getToken(ACCESS_NAME, toDelete.toArray(new Cookie[0])).isPresent();
     }
@@ -60,7 +86,7 @@ public class ServletAuthenticator {
      * Update expired or invalid access token cookies and add them to the Servlet
      * response, if no valid refresh token is found delete no longer used cookies.
      */
-    public void updateCookies() {
+    private void updateCookies() {
         Optional<String> accessToken = getToken(ACCESS_NAME, req.getCookies());
 
         if (!accessToken.isPresent()) return;

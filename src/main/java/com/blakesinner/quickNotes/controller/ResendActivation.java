@@ -29,18 +29,9 @@ public class ResendActivation extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         ServletAuthenticator auth = new ServletAuthenticator(req, res);
-        RequestDispatcher dispatcher;
 
-        auth.updateCookies();
-
-        if (auth.isLoggedIn()) {
-            dispatcher = req.getRequestDispatcher("/resend.jsp");
-        } else {
-            req.setAttribute("servlet", "/resend");
-            dispatcher = req.getRequestDispatcher("/login.jsp");
-        }
-
-        dispatcher.forward(req, res);
+        auth.setUpDispatcher("/resend.jsp", "/resend")
+                .forward(req, res);
 
     }
 

@@ -47,7 +47,7 @@ public class RefreshAccess {
 
         return Response.status(200)
                 .header(HttpHeaders.SET_COOKIE
-                        , provider.cookieStringFor(accessToken, cxt.getContextPath()))
+                        , provider.accessCookieString(accessToken, cxt.getContextPath()))
                 .build();
     }
 

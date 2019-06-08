@@ -29,17 +29,8 @@ public class ViewNotes extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         ServletAuthenticator auth = new ServletAuthenticator(req, res);
 
-        //        RequestDispatcher rd = null;
-//
-////        if (filter.isValid()) {
-//            rd = req.getRequestDispatcher("/viewNotes.jsp");
-////        } else {
-////            rd = req.getRequestDispatcher("/login.jsp");
-////        }
-//
-//        req.setAttribute("servlet", "/viewNotes");
-//
-//        rd.forward(req, res);
+        auth.setUpDispatcher("/viewNotes.jsp", "/viewNotes")
+                .forward(req, res);
     }
 
 }

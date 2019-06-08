@@ -1,5 +1,7 @@
 package com.blakesinner.quickNotes.controller;
 
+import com.blakesinner.quickNotes.util.ServletAuthenticator;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,9 +28,15 @@ public class ActivateAccount extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        ServletAuthenticator auth = new ServletAuthenticator(req, res);
         req.setAttribute("params", req.getQueryString());
-        req.getRequestDispatcher("/activate.jsp")
+
+        auth.setUpDispatcher("/activate.jsp"
+                        , "/acivate" + (req.getQueryString() == null
+                                ? ""
+                                : "?" + req.getQueryString()))
                 .forward(req, res);
+
     }
 
 }

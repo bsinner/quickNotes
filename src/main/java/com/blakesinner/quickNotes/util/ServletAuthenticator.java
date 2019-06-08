@@ -1,6 +1,5 @@
 package com.blakesinner.quickNotes.util;
 
-import com.blakesinner.quickNotes.entity.RefreshToken;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -15,7 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Checks passed in Cookie array for an JWT token signed by this webapp.
+ * Class for updating the access token in the cookies passed to a servlet, and for
+ * checking if the user trying to access a servlet is logged in.
  *
  * @author bsinner
  */
@@ -44,6 +44,40 @@ public class ServletAuthenticator {
     }
 
     /**
+     * Find if the user trying to access a servlet has an access token; this method will return
+     * true even if an invalid access token is passed to the servlet, so it is recommended to call
+     * updateCookies to refresh or delete invalid access tokens.
+     *
+     * @return true if an access token is found, false if no access token is present or if
+     *         the token is scheduled for deletion
+     */
+    public boolean isLoggedIn() {
+        return getToken(ACCESS_NAME, req.getCookies()).isPresent()
+                && !getToken(ACCESS_NAME, toDelete.toArray(new Cookie[0])).isPresent();
+    }
+
+    /**
+     * Update expired or invalid access token cookies and add them to the Servlet
+     * response, if no valid refresh token is found delete no longer used cookies.
+     */
+    public void updateCookies() {
+        Optional<String> accessToken = getToken(ACCESS_NAME, req.getCookies());
+
+        if (!accessToken.isPresent()) return;
+
+        if (isInvalid(accessToken.get())) {
+            Optional<String> rTokenId = getToken(REFRESH_NAME, req.getCookies());
+
+            if (rTokenId.isPresent()) {
+                createNewAccessToken(rTokenId.get());
+            } else {
+                deleteCookies(ACCESS_NAME, ACCESS_JS_NAME);
+            }
+
+        }
+    }
+
+    /**
      * Check if an access token is valid.
      *
      * @return true if the token is valid, false if the token is invalid
@@ -64,28 +98,12 @@ public class ServletAuthenticator {
 
     }
 
-    public boolean isLoggedIn() {
-        return getToken(ACCESS_NAME, req.getCookies()).isPresent()
-                && !getToken(ACCESS_NAME, toDelete.toArray(new Cookie[0])).isPresent();
-    }
-
-    public void updateCookies() {
-        Optional<String> accessToken = getToken(ACCESS_NAME, req.getCookies());
-
-        if (!accessToken.isPresent()) return;
-
-        if (isInvalid(accessToken.get())) {
-            Optional<String> rTokenId = getToken(REFRESH_NAME, req.getCookies());
-
-            if (rTokenId.isPresent()) {
-                createNewAccessToken(rTokenId.get());
-            } else {
-                deleteCookies(ACCESS_NAME, ACCESS_JS_NAME);
-            }
-
-        }
-    }
-
+    /**
+     * Create a new access token, delete all authentication related
+     * cookies if no valid refresh token can be found.
+     *
+     * @param refreshId the refresh token ID
+     */
     private void createNewAccessToken(String refreshId) {
         AccessTokenProvider provider = new AccessTokenProvider();
         String accessToken = provider.createAccessToken(refreshId);
@@ -102,6 +120,11 @@ public class ServletAuthenticator {
         }
     }
 
+    /**
+     * Set the response to delete cookies.
+     *
+     * @param cookies the cookies to delete
+     */
     private void deleteCookies(String... cookies) {
         Arrays.stream(cookies).forEach(c -> {
             Cookie newCookie = new Cookie(c, "");
@@ -116,8 +139,9 @@ public class ServletAuthenticator {
     /**
      * Search for cookie.
      *
-     * @param name the cookie name
-     * @return     the cookie value, or null if not found
+     * @param name    the cookie name
+     * @param cookies the array of cookies to search
+     * @return        the cookie value, or null if not found
      */
     private Optional<String> getToken(String name, Cookie[] cookies) {
         if (cookies != null) {

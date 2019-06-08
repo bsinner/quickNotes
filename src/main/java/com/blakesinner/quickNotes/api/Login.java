@@ -1,18 +1,11 @@
 package com.blakesinner.quickNotes.api;
 
-import com.blakesinner.quickNotes.entity.RefreshToken;
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
 import com.blakesinner.quickNotes.util.AccessTokenProvider;
-import com.blakesinner.quickNotes.util.KeyLoader;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import javax.servlet.ServletContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.sql.Ref;
 import java.util.*;
 
 /**
@@ -83,31 +76,15 @@ public class Login {
      */
     private Response buildOkResponse(User user, String cxt) {
         AccessTokenProvider provider = new AccessTokenProvider();
-        String token = provider.getToken(user);
+
+        String access = provider.createAccessToken(user);
+        String refresh = provider.createRefreshToken(user);
 
         return Response.status(Response.Status.OK)
-                .cookie(NewCookie.valueOf(provider.cookieStringFor(token, cxt))
-                        , NewCookie.valueOf(
-                                "refresh_token=" + getRefreshToken(user)
-                                + "; Path=" + cxt
-                                + "; HttpOnly"
-                        ))
+                .cookie(NewCookie.valueOf(provider.accessCookieString(access, cxt))
+                        , NewCookie.valueOf(provider.refreshCookieString(refresh, cxt)))
                 .entity(user.getUsername())
                 .build();
-    }
-
-    /**
-     * Create a refresh token.
-     *
-     * @param user the user account refreshed by the token
-     * @return     the refresh token id
-     */
-    private String getRefreshToken(User user) {
-        GenericDAO<RefreshToken> dao = new GenericDAO<>(RefreshToken.class);
-
-        RefreshToken rt = new RefreshToken(user);
-
-        return dao.insertWithUUID(rt).toString();
     }
 
     /**

@@ -1,10 +1,6 @@
 package com.blakesinner.quickNotes.api;
 
-import com.blakesinner.quickNotes.entity.RefreshToken;
-import com.blakesinner.quickNotes.persistence.GenericDAO;
 import com.blakesinner.quickNotes.util.AccessTokenProvider;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletContext;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.POST;
@@ -13,7 +9,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
-import java.time.LocalDateTime;
 
 /**
  * User refresh token to get new access token.
@@ -25,7 +20,6 @@ public class RefreshAccess {
 
     private static final String REALM = "Quick Notes";
     private static final String CHARSET = "UTF-8";
-//    private final Logger LOGGER = LogManager.getLogger(this.getClass());
 
     /**
      * Use refresh token to get new access token.
@@ -45,7 +39,7 @@ public class RefreshAccess {
             return unauthorized();
         }
 
-        String accessToken = provider.refreshAccess(cookie.getValue());
+        String accessToken = provider.createAccessToken(cookie.getValue());
 
         if (accessToken == null) {
             return unauthorized();
@@ -69,34 +63,4 @@ public class RefreshAccess {
                 .build();
     }
 
-    /**
-     * Try to get the refresh token in the cookie.
-     *
-     * @param cookie the refresh token cookie
-     * @return       the refresh token, or null if the
-     *               token is invalid or not found
-     */
-//    private RefreshToken getRefreshToken(Cookie cookie) {
-//        if (cookie != null) {
-//            return AccessTokenProvider.re
-//        }
-//
-//        return null;
-//    }
-
-    /**
-     * Delete refresh token from the database, used to delete expired tokens.
-     *
-     * @param token the refresh token
-     * @param dao   the DAO
-     */
-//    private void deleteToken(RefreshToken token, GenericDAO<RefreshToken> dao) {
-//        dao.delete(token);
-//
-//        RefreshToken deleted = dao.getByUUID(token.getId().toString());
-//
-//        if (deleted != null) {
-//            LOGGER.warn("Error: RefreshToken ID: " + token.getId().toString() + " could not be deleted");
-//        }
-//    }
 }

@@ -15,7 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Create an access token set to expire in one hour.
+ * Class for creating access and refresh tokens. Also has methods for creating
+ * token cookie strings.
  *
  * @author bsinner
  */
@@ -24,17 +25,25 @@ public class AccessTokenProvider {
     private static final int LIFESPAN = 60 * 60000;
     private static final String ISSUER = "Quick Notes";
     private static final String KEY_PATH = "/accessTokenPw.txt";
+    private static final String REFRESH_NAME = "refresh_token";
+    private static final String ACCESS_NAME = "access_token";
     private final Logger LOGGER = LogManager.getLogger(AccessTokenProvider.class);
 
     /**
-     * Get the access token string.
+     * Create an access token from an user.
      *
      * @param user the user
-     * @return     the string
+     * @return     the access token JWT string
      */
-    public String getToken(User user) { return createToken(user); }
+    public String createAccessToken(User user) { return createAccessJwt(user); }
 
-    public String refreshAccess(String refreshTokenId) {
+    /**
+     * Create access token string.
+     *
+     * @param refreshTokenId the refresh token id
+     * @return the string
+     */
+    public String createAccessToken(String refreshTokenId) {
         GenericDAO<RefreshToken> dao = new GenericDAO<>(RefreshToken.class);
         RefreshToken rToken = dao.getByUUID(refreshTokenId);
 
@@ -45,10 +54,45 @@ public class AccessTokenProvider {
             return null;
         }
 
-        return createToken(rToken.getUser());
+        return createAccessJwt(rToken.getUser());
     }
 
-    private String createToken(User user) {
+    /**
+     * Create refresh token string.
+     *
+     * @param user the user
+     * @return the string
+     */
+    public String createRefreshToken(User user) {
+        GenericDAO<RefreshToken> dao = new GenericDAO<>(RefreshToken.class);
+        RefreshToken rt = new RefreshToken(user);
+
+        return dao.insertWithUUID(rt).toString();
+    }
+
+    /**
+     * Access cookie string string.
+     *
+     * @param token the token
+     * @param path  the path
+     * @return the string
+     */
+    public String accessCookieString(String token, String path) {
+        return cookieString(ACCESS_NAME, token, path);
+    }
+
+    /**
+     * Refresh cookie string string.
+     *
+     * @param token the token
+     * @param path  the path
+     * @return the string
+     */
+    public String refreshCookieString(String token, String path) {
+        return cookieString(REFRESH_NAME, token, path);
+    }
+
+    private String createAccessJwt(User user) {
         Date expiry = new Date();
         expiry.setTime(expiry.getTime() + LIFESPAN);
 
@@ -68,8 +112,8 @@ public class AccessTokenProvider {
                 ).compact();
     }
 
-    public String cookieStringFor(String token, String path) {
-        return "access_token=" + token
+    private String cookieString(String name, String token, String path) {
+        return name + "=" + token
                 + "; Path=" + path
                 + "; HttpOnly";
     }

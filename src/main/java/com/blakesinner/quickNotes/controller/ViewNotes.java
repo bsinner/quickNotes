@@ -1,8 +1,5 @@
 package com.blakesinner.quickNotes.controller;
 
-import com.blakesinner.quickNotes.util.JspFilter;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,7 +25,7 @@ public class ViewNotes extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-//        JspFilter filter = new JspFilter(req.getCookies());
+//        ServletAuthenticator auth = new ServletAuthenticator(req.getCookies());
 //        RequestDispatcher rd = null;
 //
 ////        if (filter.isValid()) {

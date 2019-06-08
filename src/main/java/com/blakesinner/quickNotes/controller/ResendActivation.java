@@ -1,6 +1,6 @@
 package com.blakesinner.quickNotes.controller;
 
-import com.blakesinner.quickNotes.util.JspFilter;
+import com.blakesinner.quickNotes.util.ServletAuthenticator;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -28,12 +28,12 @@ public class ResendActivation extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        JspFilter filter = new JspFilter(req, res);
+        ServletAuthenticator auth = new ServletAuthenticator(req, res);
         RequestDispatcher dispatcher;
 
-        filter.updateCookies();
+        auth.updateCookies();
 
-        if (filter.isLoggedIn()) {
+        if (auth.isLoggedIn()) {
             dispatcher = req.getRequestDispatcher("/resend.jsp");
         } else {
             req.setAttribute("servlet", "/resend");

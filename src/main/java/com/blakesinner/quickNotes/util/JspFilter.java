@@ -8,7 +8,9 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -18,11 +20,13 @@ import java.util.Optional;
  */
 public class JspFilter {
 
-    private HttpServletRequest request;
-    private HttpServletResponse response;
+    private HttpServletRequest req;
+    private HttpServletResponse res;
+    private List<Cookie> toDelete = new ArrayList<>();
 
     private static final String ACCESS_NAME = "access_token";
     private static final String REFRESH_NAME = "refresh_token";
+    private static final String ACCESS_JS_NAME = "access_token_data";
     private static final String SECRET = "/accessTokenPw.txt";
     private static final int MAX_SECONDS = 60 * 60;
 
@@ -34,8 +38,8 @@ public class JspFilter {
      * @param req the HttpServletRequest
      */
     public JspFilter(HttpServletRequest req, HttpServletResponse res) {
-        this.request = req;
-        this.response = res;
+        this.req = req;
+        this.res = res;
     }
 
     /**
@@ -60,15 +64,20 @@ public class JspFilter {
 
     }
 
+    public boolean isLoggedIn() {
+        return getToken(ACCESS_NAME, req.getCookies()).isPresent()
+                && !getToken(ACCESS_NAME, toDelete.toArray(new Cookie[0])).isPresent();
+    }
+
     public void updateCookies() {
-        Optional<String> token = getToken(ACCESS_NAME);
+        Optional<String> token = getToken(ACCESS_NAME, req.getCookies());
 
         // if access token is missing exit
         if (!token.isPresent()) return;
 
         // if token is found but not valid try to refresh it
         if (!isValid(token.get())) {
-            Optional<String> refreshId = getToken(REFRESH_NAME);
+            Optional<String> refreshId = getToken(REFRESH_NAME, req.getCookies());
 
             // if there is a refresh token try to refresh the access token
             if (refreshId.isPresent()) {
@@ -79,31 +88,32 @@ public class JspFilter {
                 if (newAccessToken != null) {
                     Cookie cookie = new Cookie(ACCESS_NAME, newAccessToken);
                     cookie.setMaxAge(MAX_SECONDS);
+                    cookie.setPath(req.getContextPath());
 
-                    response.addCookie(cookie);
+                    res.addCookie(cookie);
 
-                    return;
-
-                // if the access token couldnt be refreshed delete refresh + access cookies
+                // if the access token couldn't be refreshed delete refresh + access cookies
                 } else {
-                    deleteCookies(REFRESH_NAME, ACCESS_NAME);
+                    deleteCookies(REFRESH_NAME, ACCESS_NAME, ACCESS_JS_NAME);
                 }
 
             // if there was no refresh token delete the access token, because it is invalid
             // and impossible to refresh
             } else {
-                deleteCookies(ACCESS_NAME);
+                deleteCookies(ACCESS_NAME, ACCESS_JS_NAME);
             }
 
         }
     }
 
     private void deleteCookies(String... cookies) {
-        Arrays.stream(request.getCookies()).forEach(c -> {
-            Cookie cookie = new Cookie(c.getName(), "");
-            cookie.setMaxAge(0);
+        Arrays.stream(cookies).forEach(c -> {
+            Cookie newCookie = new Cookie(c, "");
+            newCookie.setMaxAge(0);
+            newCookie.setPath(req.getContextPath());
 
-            response.addCookie(cookie);
+            res.addCookie(newCookie);
+            toDelete.add(newCookie);
         });
     }
 
@@ -113,9 +123,7 @@ public class JspFilter {
      * @param name the cookie name
      * @return     the cookie value, or null if not found
      */
-    private Optional<String> getToken(String name) {
-        Cookie[] cookies = request.getCookies();
-
+    private Optional<String> getToken(String name, Cookie[] cookies) {
         if (cookies != null) {
             for (Cookie c : cookies) {
                 if (c.getName().equals(name)) {

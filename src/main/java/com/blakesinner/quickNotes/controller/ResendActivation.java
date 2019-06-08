@@ -29,23 +29,19 @@ public class ResendActivation extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         JspFilter filter = new JspFilter(req, res);
+        RequestDispatcher dispatcher;
 
         filter.updateCookies();
 
-//        if (filter.isTokenPresent()) {
-//
-//        }
-//        JspFilter filter = new JspFilter(req.getCookies());
-//        RequestDispatcher rd = null;
-//
-//        if (filter.isValid()) {
-//            rd = req.getRequestDispatcher("/resend.jsp");
-//        } else {
-//            req.setAttribute("servlet", "/resend");
-//            rd = req.getRequestDispatcher("/login.jsp");
-//        }
-//
-//        rd.forward(req, res);
+        if (filter.isLoggedIn()) {
+            dispatcher = req.getRequestDispatcher("/resend.jsp");
+        } else {
+            req.setAttribute("servlet", "/resend");
+            dispatcher = req.getRequestDispatcher("/login.jsp");
+        }
+
+        dispatcher.forward(req, res);
+
     }
 
 }

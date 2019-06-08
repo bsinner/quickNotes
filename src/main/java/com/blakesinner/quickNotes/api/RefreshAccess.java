@@ -44,8 +44,8 @@ public class RefreshAccess {
             return unauthorized();
         }
 
-        String accessTokenCookie = AccessTokenProvider
-                .get(refreshToken.getUser(), context.getContextPath());
+        String accessTokenCookie = null; /*= AccessTokenProvider
+                .get(refreshToken.getUser(), context.getContextPath());*/
 
         return Response.status(200)
                 .header(HttpHeaders.SET_COOKIE, accessTokenCookie)

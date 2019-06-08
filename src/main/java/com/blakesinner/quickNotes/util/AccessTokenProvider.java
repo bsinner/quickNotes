@@ -9,7 +9,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,7 +24,7 @@ public class AccessTokenProvider {
     private static final int LIFESPAN = 60 * 60000;
     private static final String ISSUER = "Quick Notes";
     private static final String KEY_PATH = "/accessTokenPw.txt";
-    private static final Logger LOGGER = LogManager.getLogger(AccessTokenProvider.class);
+    private final Logger LOGGER = LogManager.getLogger(AccessTokenProvider.class);
 
     /**
      * Get the access token string.
@@ -33,9 +32,9 @@ public class AccessTokenProvider {
      * @param user the user
      * @return     the string
      */
-    public static String getToken(User user) { return createToken(user); }
+    public String getToken(User user) { return createToken(user); }
 
-    public static String refreshAccess(String refreshTokenId) {
+    public String refreshAccess(String refreshTokenId) {
         GenericDAO<RefreshToken> dao = new GenericDAO<>(RefreshToken.class);
         RefreshToken rToken = dao.getByUUID(refreshTokenId);
 
@@ -49,7 +48,7 @@ public class AccessTokenProvider {
         return createToken(rToken.getUser());
     }
 
-    private static String createToken(User user) {
+    private String createToken(User user) {
         Date expiry = new Date();
         expiry.setTime(expiry.getTime() + LIFESPAN);
 
@@ -69,13 +68,13 @@ public class AccessTokenProvider {
                 ).compact();
     }
 
-    public static String cookieString(String token, String path) {
+    public String cookieStringFor(String token, String path) {
         return "access_token=" + token
                 + "; Path=" + path
                 + "; HttpOnly";
     }
 
-    private static void delete(RefreshToken token, GenericDAO<RefreshToken> dao) {
+    private void delete(RefreshToken token, GenericDAO<RefreshToken> dao) {
         String id = token.getId().toString();
         dao.delete(token);
 
@@ -84,23 +83,8 @@ public class AccessTokenProvider {
         }
     }
 
-    private static boolean isExpired(RefreshToken token) {
+    private boolean isExpired(RefreshToken token) {
         return token.getExpireDate().isBefore(LocalDateTime.now());
     }
-
-    /**
-     * Get the access token cookie string.
-     *
-     * @param user        the user
-     * @param contextPath the context path, needed because the default
-     *                    path may be the base path of the Jersey servlet
-     *                    instead of the application's base path
-     * @return            the
-     */
-//    public static String get(User user, String contextPath) {
-//        return "access_token=" + getToken(user)
-//                + "; Path=" + contextPath
-//                + "; HttpOnly";
-//    }
 
 }

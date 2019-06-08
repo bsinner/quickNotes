@@ -39,8 +39,7 @@ public class Login {
     public Response authenticate(
             @QueryParam("email") String email
             , @QueryParam("password") String password
-            , @Context ServletContext context)
-    {
+            , @Context ServletContext context) {
 
         User user = queryUser(email, password);
 
@@ -77,18 +76,20 @@ public class Login {
     /**
      * Create a 200 Ok response with access and refresh tokens.
      *
-     * @param user        the logged in user
-     * @param contextPath the context path, needed because the default
-     *                    path is the REST base path "quickNotes/api"
-     * @return            the response
+     * @param user the logged in user
+     * @param cxt  the context path, needed because the default
+     *             path is the REST base path "quickNotes/api"
+     * @return     the response
      */
-    private Response buildOkResponse(User user, String contextPath) {
+    private Response buildOkResponse(User user, String cxt) {
+        AccessTokenProvider provider = new AccessTokenProvider();
+        String token = provider.getToken(user);
 
         return Response.status(Response.Status.OK)
-                .cookie(NewCookie.valueOf(AccessTokenProvider.get(user, contextPath))
+                .cookie(NewCookie.valueOf(provider.cookieStringFor(token, cxt))
                         , NewCookie.valueOf(
                                 "refresh_token=" + getRefreshToken(user)
-                                + "; Path=" + contextPath
+                                + "; Path=" + cxt
                                 + "; HttpOnly"
                         ))
                 .entity(user.getUsername())

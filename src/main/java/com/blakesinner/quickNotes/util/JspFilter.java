@@ -1,5 +1,6 @@
 package com.blakesinner.quickNotes.util;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.apache.logging.log4j.LogManager;
@@ -29,25 +30,37 @@ public class JspFilter {
     /**
      * Check if the cookies contain a valid access token.
      *
-     * TODO: When refresh tokens are added, check the expiration date
-     *
      * @return true or false depending on if the access token is valid
      */
-    public boolean isValid() {
-        Optional<String> token = getToken();
-
-        if (!token.isPresent()) return false;
+    private boolean isValid(String token) {
+//        Optional<String> token = getToken();
+//
+//        if (!token.isPresent()) return false;
 
         try {
             Jwts.parser()
-                .setSigningKey(new KeyLoader().getKeyBytes(SECRET))
-                .parseClaimsJws(token.get());
-        } catch (JwtException je) {
-            logger.info("Invalid access token found: " + token.get());
+                    .setSigningKey(new KeyLoader().getKeyBytes(SECRET))
+                    .parseClaimsJws(token);
+
+            return true;
+        } catch (ExpiredJwtException eje){
             return false;
+        } catch (JwtException je) {
+            logger.info("Invalid access token found: " + token);
+            return false;
+
         }
 
-        return true;
+    }
+
+    public void updateCookies() {
+        Optional<String> token = getToken();
+
+        if (!token.isPresent()) return;
+
+        if (isValid(token.get())) return;
+
+        // make a refresh xhr
     }
 
     /**

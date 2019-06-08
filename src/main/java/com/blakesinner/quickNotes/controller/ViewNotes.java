@@ -31,11 +31,11 @@ public class ViewNotes extends HttpServlet {
         JspFilter filter = new JspFilter(req.getCookies());
         RequestDispatcher rd = null;
 
-        if (filter.isValid()) {
+//        if (filter.isValid()) {
             rd = req.getRequestDispatcher("/viewNotes.jsp");
-        } else {
-            rd = req.getRequestDispatcher("/login.jsp");
-        }
+//        } else {
+//            rd = req.getRequestDispatcher("/login.jsp");
+//        }
 
         req.setAttribute("servlet", "/viewNotes");
 

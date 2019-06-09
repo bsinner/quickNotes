@@ -5,7 +5,12 @@
     const Q_STRING = "?${params}";
     const JS_COOKIE = "access_token_data";
     const CXT = "<%=request.getContextPath()%>";
-    const REQUESTS = new QNotesRequests(CXT, null /* TODO logged out handler */);
+
+    // The requests object, if the user cant be refreshed, log them out and refresh the page
+    // so the servlet's filter will redirect them to the login page
+    const REQUESTS = new QNotesRequests(CXT, () => {
+        REQUESTS.logout(() => { location.reload(); }, () => { window.location = CXT + "/editor"; })
+    });
 
     // Elements to hold output
     const S_IMG = document.getElementById("statusImg");

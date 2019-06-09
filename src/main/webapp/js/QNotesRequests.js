@@ -1,10 +1,10 @@
 function QNotesRequests (cxt, onLoggedOut) {
 
-    const post = { method : "POST", credentials : "same-origin" };
-    const root = cxt + "/api/";
+    const POST = { method : "POST", credentials : "same-origin" };
+    const ROOT = cxt + "/api/";
 
     this.activateAcct = (query, complete, fail) => {
-        ajaxRequest(root + "activate" + query, post, complete, fail, 0);
+        ajaxRequest(ROOT + "activate" + query, POST, complete, fail, 0);
     };
 
     this.createNote = (complete, fail) => {};
@@ -13,6 +13,10 @@ function QNotesRequests (cxt, onLoggedOut) {
     this.resendActivate = (complete, fail) => {};
     this.saveNote = (complete, fail) => {};
     this.login = (complete, fail) => {};
+
+    this.logout = (complete, fail) => {
+        ajaxRequest(ROOT + "logout", POST, complete, fail, 0);
+    };
 
     /*
      * Make an ajax request, if the user access token is invalid
@@ -65,11 +69,13 @@ function QNotesRequests (cxt, onLoggedOut) {
 
         if (err === "401001" || err === "401003") {
             ajaxRequest(
-                root + "refresh"
-                , post
+                ROOT + "refresh"
+                , POST
                 , () => { ajaxRequest(...onCompleteArgs); }
                 , () => { onLoggedOut(); }
             );
+        } else if (err === "401002") {
+            onLoggedOut();
         }
     }
 

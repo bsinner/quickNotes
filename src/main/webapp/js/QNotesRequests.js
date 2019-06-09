@@ -18,9 +18,13 @@ function QNotesRequests (cxt, onLoggedOut) {
         ajaxRequest(ROOT + "logout", POST, complete, fail, 0);
     };
 
+    this.refresh = (complete, fail) => {
+        ajaxRequest(ROOT + "refresh", POST, complete, fail, 0);
+    };
+
     /*
      * Make an ajax request, try to refresh access if the access token is invalid,
-     * param loop detects an infinite refresh loop, initialize it to 0 when calling 
+     * param loop detects an infinite refresh loop, initialize it to 0 when calling
      */
     function ajaxRequest(url, props, onComplete, onFail, loop) {
         fetch(url, props)
@@ -31,6 +35,25 @@ function QNotesRequests (cxt, onLoggedOut) {
                     onComplete(r);
                 }
             });
+    }
+
+    /*
+     * Refresh the access token, on complete call the endpoint that
+     * was blocked, on fail call the logged out callback.
+     */
+    function refreshAccess(err, onCompleteArgs) {
+        onCompleteArgs[onCompleteArgs.length - 1] += 1;
+
+        if (err === "401001" || err === "401003") {
+            ajaxRequest(
+                ROOT + "refresh"
+                , POST
+                , () => { ajaxRequest(...onCompleteArgs); }
+                , () => { onLoggedOut(); }
+            );
+        } else if (err === "401002") {
+            onLoggedOut();
+        }
     }
 
     /*
@@ -55,37 +78,17 @@ function QNotesRequests (cxt, onLoggedOut) {
                         refreshAccess(json[prop]["code"], args);
                     }
 
-                // If the error message wasn't from auth filter call onFail
+                    // If the error message wasn't from auth filter call onFail
                 } else {
                     onFail(res);
                 }
 
             });
 
-        // If the error didn't include JSON call onFail
+            // If the error didn't include JSON call onFail
         } else {
             onFail(res);
         }
     }
-
-    /*
-     * Refresh the access token, on complete call the endpoint that
-     * was blocked, on fail call the logged out callback.
-     */
-    function refreshAccess(err, onCompleteArgs) {
-        onCompleteArgs[onCompleteArgs.length - 1] += 1;
-
-        if (err === "401001" || err === "401003") {
-            ajaxRequest(
-                ROOT + "refresh"
-                , POST
-                , () => { ajaxRequest(...onCompleteArgs); }
-                , () => { onLoggedOut(); }
-            );
-        } else if (err === "401002") {
-            onLoggedOut();
-        }
-    }
-
 
 }

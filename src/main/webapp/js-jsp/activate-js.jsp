@@ -61,6 +61,11 @@
         );
 
         setButton("Return to Editor", "editor");
+
+        // Refresh the access token, try to logout on fail
+        REQUESTS.refresh(() => {}, () => {
+           REQUESTS.logout(() => {}, () => {})
+        });
     }
 
     /*

@@ -19,45 +19,53 @@ function QNotesRequests (cxt, onLoggedOut) {
     };
 
     /*
-     * Make an ajax request, if the user access token is invalid
-     * try to get a new one. Param loop is used to detect infinite
-     * loops and should be initialized to 0.
+     * Make an ajax request, try to refresh access if the access token is invalid,
+     * param loop detects an infinite refresh loop, initialize it to 0 when calling 
      */
     function ajaxRequest(url, props, onComplete, onFail, loop) {
-
         fetch(url, props)
             .then(r => {
                 if (!r.ok) {
-
-                    const ctType = r.headers.get("content-type");
-
-                    // Only call .json if the content type is json
-                    if (ctType && ctType.includes("application/json")) {
-
-                        r.json().then(json => {
-
-                            // If this is a response from authentication filter, and not
-                            // part of an infinite loop try to refresh the access token
-                            if ("authFilterError" in json) {
-                                if (loop > 3) {
-                                    showLoggedOut();
-                                    return;
-                                }
-                                refreshAccess(json["authFilterError"]["code"], arguments);
-                            } else {
-                                onFail(r);
-                            }
-
-                        });
-
-                    } else {
-                        onFail(r);
-                    }
-
+                    inspectError(r, onFail, loop, arguments);
                 } else {
                     onComplete(r);
                 }
             });
+    }
+
+    /*
+     * Refresh the access token, call onLoggedOut, or onFail depending on the error
+     */
+    function inspectError(res, onFail, loop, args) {
+        const type = res.headers.get("content-type");
+
+        if (type && type.includes("application/json")) {
+
+            res.json().then(json => {
+                const prop = "authFilterError";
+
+                // If the error object emitted is from Authentication filter is found inspect it
+                if (prop in json) {
+
+                    // Refresh the token, or call onLoggedOut if it has been refreshed 4 times and
+                    // is still invalid
+                    if (loop > 3) {
+                        showLoggedOut();
+                    } else {
+                        refreshAccess(json[prop]["code"], args);
+                    }
+
+                // If the error message wasn't from auth filter call onFail
+                } else {
+                    onFail(res);
+                }
+
+            });
+
+        // If the error didn't include JSON call onFail
+        } else {
+            onFail(res);
+        }
     }
 
     /*

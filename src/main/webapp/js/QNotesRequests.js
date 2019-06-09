@@ -13,21 +13,35 @@ function QNotesRequests (cxt, onLoggedOut) {
         ajaxRequest(ROOT + "activate" + query, POST, complete, fail, 0);
     };
 
-    this.createNote = (complete, fail) => {};
+    this.createNote = (complete, fail) => {
+
+    };
 
     this.deleteNote = (id, complete, fail) => {
         ajaxRequest(ROOT + "delete?id=" + id, DELETE, complete, fail, 0);
     };
 
-    this.getNote = (complete, fail) => {};
+    this.getNote = (complete, fail) => {
+
+    };
 
     this.getAllNotes = (complete, fail) => {
         ajaxRequest(ROOT + "note/list", GET, complete, fail, 0);
     };
 
-    this.resendActivate = (complete, fail) => {};
-    this.saveNote = (complete, fail) => {};
-    this.login = (complete, fail) => {};
+    this.resendActivate = (complete, fail) => {
+
+    };
+
+    this.saveNote = (id, json, complete, fail) => {
+        const props = { method : "POST", credentials : "same-origin", headers : { "note-contents" : json } };
+        
+        ajaxRequest(ROOT + "saveNote?id=" + id, props, complete, fail, 0);
+    };
+
+    this.login = (complete, fail) => {
+
+    };
 
     this.logout = (complete, fail) => {
         ajaxRequest(ROOT + "logout", POST, complete, fail, 0);

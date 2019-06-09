@@ -21,7 +21,7 @@ public class Logout {
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
 
     /**
-     * Log the user out by deleting the cookie that stores the access token.
+     * Log the user out by deleting the cookies that stores the authentication data.
      *
      * @param context the servlet context, needed because the cookie path changes between
      *                localhost and live host
@@ -40,7 +40,11 @@ public class Logout {
                         , NewCookie.valueOf(
                                 "refresh_token=deleted-cookie2; "
                                 + "Expires=Thu, 01 Jan 1970 00:00:00 GMT; "
-                                + "Path=" + context.getContextPath()))
+                                + "Path=" + context.getContextPath())
+                        , NewCookie.valueOf(
+                            "access_token_data=deleted-cookie3; "
+                            + "Expires=Thu, 01 Jan 1970 00:00:00 GMT; "
+                            + "Path=" + context.getContextPath()))
                 .build();
     }
 

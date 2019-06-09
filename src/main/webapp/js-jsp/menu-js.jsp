@@ -36,9 +36,6 @@
             method : "POST"
             , url : CXT_PATH + "/api/logout"
         }).done(() => {
-            document.cookie = JS_COOKIE + "= ; "
-                    + "Path=" + CXT_PATH + "; "
-                    + "Expires=Thu, 01 Jan 1970 00:00:00 GMT";
             showLoggedOut();
         });
 
@@ -182,15 +179,19 @@
         fetch(url, props)
             .then(res => {
                 toggleBtn(btn, true);
+
                 if (!res.ok) {
                     return res.json();
                 } else {
                     LOGIN_REQUEST.login(email, pass);
+                    updateActivateModal(emailData.newUser.title, emailData.newUser.msg);
                     confirmModal.modal("show");
                 }
+
             }).then(json => {
 
                 if ("error" in json) {
+
                     if (json["error"]["code"] === "422001") {
                         signUpData.email.elems.msg.text = "Email already signed up";
                         showFormError([signUpData.email.elems]);
@@ -346,7 +347,6 @@
      * ]
      */
     function clearFormErrState(inputs) {
-        // TODO: clear input text as part of clearing the form
         inputs.forEach(i => {
             const div = $("#" + i.div);
             const msg = document.getElementById(i.msg.name);
@@ -354,6 +354,11 @@
             div.removeClass("error");
             msg.setAttribute("style","display: none;");
         });
+    }
+
+    function updateActivateModal(title, msg) {
+        document.getElementById("actTitle").innerText = title;
+        document.getElementById("actMsg").innerText = msg; // TODO: finish showing please activate msgs
     }
 
     /*
@@ -391,5 +396,16 @@
             , title : "Password"
         }
     };
+
+    const emailData = {
+        newUser : {
+            title : "Check your Inbox"
+            , msg : "Your account has been created and an email containing an activation link has been sent to your inbox, if you did not receive an email click here to resend."
+        }
+        , error : {
+            title : "Please Activate Account"
+            , msg : "Your account must be activated to continue, to activate check your email for an activation link, or click here if one was not sent."
+        }
+    }
 
 </script>

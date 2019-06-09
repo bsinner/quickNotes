@@ -108,10 +108,6 @@
      * Load a list of notes
      */
     function loadNotes() {
-        <%--fetch("<%=request.getContextPath()%>/api/note/list", { credentials: "same-origin" })--%>
-        <%--    .then((res) => res.json())--%>
-        <%--    .then((data) => outputData(data));--%>
-
         VIEW_REQS.getAllNotes(res => {
                     res.json().then(data => {
                         outputData(data);
@@ -124,9 +120,12 @@
 
     /*
      * Try to delete a note with the passed in id, on success return
-     * true, on error return false.
+     * true, on error return false. Request object isn't used because
+     * a promise needs to be returned for the UI to display a message
+     * with how many notes where deleted.
      */
     function deleteNote(id) {
+        VIEW_REQS.refresh(() => {}, () => {});
 
         return fetch("<%=request.getContextPath()%>/api/delete?id=" + id, {
                     method: "DELETE", credentials: "same-origin"

@@ -1,6 +1,12 @@
+/*
+ * Function for making requests to the API and refreshing expired access
+ * tokens in the background.
+ */
 function QNotesRequests (cxt, onLoggedOut) {
 
     const POST = { method : "POST", credentials : "same-origin" };
+    const DELETE = { method : "DELETE", credentials : "same-origin" };
+    const GET = { method : "GET", credentials : "same-origin" };
     const ROOT = cxt + "/api/";
 
     this.activateAcct = (query, complete, fail) => {
@@ -8,8 +14,17 @@ function QNotesRequests (cxt, onLoggedOut) {
     };
 
     this.createNote = (complete, fail) => {};
-    this.deleteNote = (complete, fail) => {};
+
+    this.deleteNote = (id, complete, fail) => {
+        ajaxRequest(ROOT + "delete?id=" + id, DELETE, complete, fail, 0);
+    };
+
     this.getNote = (complete, fail) => {};
+
+    this.getAllNotes = (complete, fail) => {
+        ajaxRequest(ROOT + "note/list", GET, complete, fail, 0);
+    };
+
     this.resendActivate = (complete, fail) => {};
     this.saveNote = (complete, fail) => {};
     this.login = (complete, fail) => {};
@@ -78,7 +93,7 @@ function QNotesRequests (cxt, onLoggedOut) {
                         refreshAccess(json[prop]["code"], args);
                     }
 
-                    // If the error message wasn't from auth filter call onFail
+                // If the error message wasn't from auth filter call onFail
                 } else {
                     onFail(res);
                 }

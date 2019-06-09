@@ -1,6 +1,12 @@
 <script>
 
     const TABLE = document.getElementById("resultsTable");
+    const VIEW_CXT = "<%=request.getContextPath()%>";
+
+    const LOGGED_OUT = [() => { location.reload() }
+            , () => { window.location = VIEW_CXT + "/editor" }];
+
+    const VIEW_REQS = new QNotesRequests(VIEW_CXT, () => { VIEW_REQS.logout(...LOGGED_OUT) });
 
     /*
      * Add event handlers for the note elements to be loaded,
@@ -102,9 +108,18 @@
      * Load a list of notes
      */
     function loadNotes() {
-        fetch("<%=request.getContextPath()%>/api/note/list", { credentials: "same-origin" })
-            .then((res) => res.json())
-            .then((data) => outputData(data));
+        <%--fetch("<%=request.getContextPath()%>/api/note/list", { credentials: "same-origin" })--%>
+        <%--    .then((res) => res.json())--%>
+        <%--    .then((data) => outputData(data));--%>
+
+        VIEW_REQS.getAllNotes(res => {
+                    res.json().then(data => {
+                        outputData(data);
+                    });
+                }
+                , () => {
+                    VIEW_REQS.logout(...LOGGED_OUT);
+                });
     }
 
     /*

@@ -1,6 +1,6 @@
 /*
- * Function for making requests to the API and refreshing expired access
- * tokens in the background.
+ * Function for making requests to the API and refreshing expired access tokens in the background. Params c and f
+ * in wrapper functions stand for onComplete and onFail.
  */
 function QNotesRequests (cxt, onLoggedOut) {
 
@@ -13,76 +13,58 @@ function QNotesRequests (cxt, onLoggedOut) {
     const PUT = { method : "PUT",  credentials : "same-origin" };
 
     // Activate account, query is query string for activate endpoint
-    this.activateAcct = (query, complete, fail) => {
-        ajaxRequest(ROOT + "activate" + query, POST, complete, fail, 0);
-    };
+    this.activateAcct = (query, c, f) => { ajaxRequest(ROOT + "activate" + query, POST, c, f, 0); };
 
     // Create note
-    this.createNote = (title, complete, fail) => {
-        ajaxRequest(ROOT + "createNote?title=" + title, PUT, complete, fail, 0);
-    };
+    this.createNote = (title, c, f) => { ajaxRequest(ROOT + "createNote?title=" + title, PUT, c, f, 0); };
 
-    // Delete note by id
-    this.deleteNote = (id, complete, fail) => {
-        ajaxRequest(ROOT + "delete?id=" + id, DELETE, complete, fail, 0);
-    };
+    // Delete note
+    this.deleteNote = (id, c, f) => { ajaxRequest(ROOT + "delete?id=" + id, DELETE, c, f, 0); };
 
-    // Get note by id
-    this.getNote = (id, complete, fail) => {
-        ajaxRequest(ROOT + "note?id=" + id, GET, complete, fail, 0);
-    };
+    // Get note
+    this.getNote = (id, c, f) => { ajaxRequest(ROOT + "note?id=" + id, GET, c, f, 0); };
 
     // Get all
-    this.getAllNotes = (complete, fail) => {
-        ajaxRequest(ROOT + "note/list", GET, complete, fail, 0);
-    };
+    this.getAllNotes = (c, f) => { ajaxRequest(ROOT + "note/list", GET, c, f, 0); };
 
     // Resend activation email
-    this.resendActivate = (complete, fail) => {
-        ajaxRequest(ROOT + "register/resend", PUT, complete, fail, 0);
-    };
+    this.resendActivate = (c, f) => { ajaxRequest(ROOT + "register/resend", PUT, c, f, 0); };
+
+    // Logout
+    this.logout = (c, f) => { ajaxRequest(ROOT + "logout", POST, c, f, 0); };
+
+    // Refresh access token
+    this.refresh = (c, f) => { ajaxRequest(ROOT + "refresh", POST, c, f, 0); };
 
     // Save note
-    this.saveNote = (id, json, complete, fail) => {
+    this.saveNote = (id, json, c, f) => {
         const props = { method : "POST", credentials : "same-origin", headers : { "note-contents" : json } };
 
-        ajaxRequest(ROOT + "saveNote?id=" + id, props, complete, fail, 0);
-    };
-
-    // Login request, unlike other requests, complete gets passed request.text() instead of request object
-    this.login = (email, pass, complete, fail) => {
-        const onComplete = res => {
-            res.text().then(t => {
-                document.cookie = JS_COOKIE + "=" + t + "; Path=" + cxt;
-                complete(t);
-            });
-        };
-
-        ajaxRequest(ROOT + "login?email=" + email + "&password=" + pass, POST, onComplete, fail, 0);
-    };
-
-    // Logout, destroy cookies
-    this.logout = (complete, fail) => {
-        ajaxRequest(ROOT + "logout", POST, complete, fail, 0);
-    };
-
-    // Refresh activation
-    this.refresh = (complete, fail) => {
-        ajaxRequest(ROOT + "refresh", POST, complete, fail, 0);
-    };
-
-    // Translate, json is format accepted by Microsoft translate api
-    this.translate = (json, source, dest, complete, fail) => {
-        const props = { body : json, method : "POST" };
-
-        ajaxRequest(ROOT + "translate?from=" + source + "&to=" + dest, props, complete, fail, 0);
+        ajaxRequest(ROOT + "saveNote?id=" + id, props, c, f, 0);
     };
 
     // Create account
-    this.createUser = (email, user, pass, complete, fail) => {
-        ajaxRequest("register?user=" + user + "&pass=" + pass + "&email=" + email
-            , PUT, complete, fail, 0
-        );
+    this.createUser = (email, user, pass, c, f) => {
+        ajaxRequest("register?user=" + user + "&pass=" + pass + "&email=" + email, PUT, c, f, 0);
+    };
+
+    // Login, unlike other functions onComplete param gets passed Response.text() instead of Response
+    this.login = (email, pass, c, f) => {
+        const onComplete = res => {
+            res.text().then(text => {
+                document.cookie = JS_COOKIE + "=" + text + "; Path=" + cxt;
+                c(text);
+            });
+        };
+
+        ajaxRequest(ROOT + "login?email=" + email + "&password=" + pass, POST, onComplete, f, 0);
+    };
+
+    // Translate, json format is Microsoft translate api format
+    this.translate = (json, source, dest, c, f) => {
+        const props = { body : json, method : "POST" };
+
+        ajaxRequest(ROOT + "translate?from=" + source + "&to=" + dest, props, c, f, 0);
     };
 
     /*

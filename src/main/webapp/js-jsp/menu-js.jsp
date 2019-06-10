@@ -24,14 +24,7 @@
      * Logout, create, and sign button event handlers
      */
     $("#rightMenu").on("click", "#logout", () => {
-
-        $.ajax({
-            method : "POST"
-            , url : CXT_PATH + "/api/logout"
-        }).done(() => {
-            showLoggedOut();
-        });
-
+        REQUESTS.logout(() => { showLoggedOut(); }, () => {});
     })
     .on("click", "#create", () => { createModal.modal("show"); })
     .on("click", "#signIn", () => { loginModal.modal("show"); })
@@ -180,7 +173,7 @@
         const btn = "signUpBtn";
 
         toggleBtn(btn, false);
-        
+
         REQUESTS.createUser(email, user, pass, () => {
 
             // Create user success
@@ -214,21 +207,24 @@
         });
     }
 
-    // Confirm modal resend email event handler
+    // Resend account activation email handler
     document.getElementById("resendActivation").onclick = () => {
-        const url = CXT_PATH + "/api/register/resend";
-        const props = { method : "PUT", credentials : "same-origin" };
 
-        const id = "resendActivation";
-        toggleBtn(id, false);
+        const btn = "resendActivation";
+        toggleBtn(btn, false);
 
-        fetch(url, props)
-            .then(res => {
-               toggleBtn(id, true);
+        REQUESTS.resendActivate(
 
-               if(res.status === 400) {
-                   window.location.href = CXT_PATH + "/resend";
-               }
+            // Resend success
+            () => { toggleBtn(btn, true); }
+
+            // Resend failure
+            , e => {
+                toggleBtn(btn, true);
+
+                if (e.status === 400) {
+                    window.location.href = CXT_PATH + "/resend";
+                }
             });
     };
 

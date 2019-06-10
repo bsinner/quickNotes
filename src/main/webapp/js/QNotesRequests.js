@@ -39,7 +39,7 @@ function QNotesRequests (cxt, onLoggedOut) {
 
     // Resend activation email
     this.resendActivate = (complete, fail) => {
-
+        ajaxRequest(ROOT + "register/resend", PUT, complete, fail, 0);
     };
 
     // Save note

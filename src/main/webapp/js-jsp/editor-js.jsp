@@ -169,27 +169,25 @@
         const source = s.options[s.selectedIndex].value;
         const dest = d.options[d.selectedIndex].value;
 
-        // Output
+        // Results of batch of api calls
         let results = [];
 
-        // After the results are merged into one array, fetch will call the output method
         formatted.forEach((item, index) => {
-            const url = PATH + "/api/translate?from=" + source + "&to=" + dest;
-            const props = { body : JSON.stringify(item), method : "POST" };
 
-            fetch(url, props)
-                .then(res => {
-                    if (res.ok) {
-                        return res.json();
-                    }
-                    console.error("Error: " + res.status);// TODO: error message for user?
-                })
-                .then(data => {
+            EDITOR_REQ.translate(JSON.stringify(item), source, dest, res => {
+
+                // On success add json to array, on last api call send array for processing
+                res.json().then(data => {
                     results = results.concat(data);
                     if (index === formatted.length - 1) {
                         applyChanges(original, results);
                     }
                 });
+
+            }, res => {
+                console.error("Error " + res.status + ": could not translate text");
+                // TODO: user error message?
+            });
 
         });
 

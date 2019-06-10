@@ -40,7 +40,7 @@ function QNotesRequests (cxt, onLoggedOut) {
     };
 
     this.login = (complete, fail) => {
-
+        // TODO delete login request js file, use this function instead
     };
 
     this.logout = (complete, fail) => {
@@ -52,9 +52,9 @@ function QNotesRequests (cxt, onLoggedOut) {
     };
 
     this.translate = (json, source, dest, complete, fail) => {
-        const props = { body : json, method : "POST" }
+        const props = { body : json, method : "POST" };
 
-        ajaxRequest(ROOT + "/api/translate?from=" + source + "&to=" + dest, props, complete, fail, 0);
+        ajaxRequest(ROOT + "translate?from=" + source + "&to=" + dest, props, complete, fail, 0);
     };
 
     /*

@@ -91,24 +91,23 @@
      */
     createModal.on("click", "#createSubmit", () => {
         const title = $("#title");
+        const titleText = title.val();
 
-        // Create the note and close the modal, or show an error state if no note
-        // title is present, or if a note with the same name exists
-        if (title.val().length > 0) {
-            const url = CXT_PATH + "/api/createNote?title=" + title.val();
-            const props = { credentials : "same-origin", method : "PUT" };
+        if (titleText.length > 0) {
+            
+            REQUESTS.createNote(titleText, res => {
+                res.text().then(t => {
+                    window.location = CXT_PATH + "/editor?id=" + t;
+                });
 
-            fetch(url, props)
-                    .then(res => {
-                        if (res.ok) {
-                            res.text().then(t => {
-                                window.location = CXT_PATH + "/editor?id=" + t;
-                            });
-                        } else if (res.status === 422) {
-                            showCreateInputError("Note " + title.val().toString() + " already exists");
-                        }
-                        // TODO: handle user not signed in
-                    });
+            }, err => {
+                if (err.status === 422) {
+                    showCreateInputError("Note " + titleText + " already exists");
+                } else {
+                    console.error("Error " + err.status + ": could not create note");
+                }
+
+            });
 
         } else {
             showCreateInputError("Note must have title");

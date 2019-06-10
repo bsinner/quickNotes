@@ -4,11 +4,13 @@
  */
 function QNotesRequests (cxt, onLoggedOut) {
 
+    const ROOT = cxt + "/api/";
+    const JS_COOKIE = "access_token_data";
+
     const POST = { method : "POST", credentials : "same-origin" };
     const DELETE = { method : "DELETE", credentials : "same-origin" };
     const GET = { method : "GET", credentials : "same-origin" };
-    const ROOT = cxt + "/api/";
-    const JS_COOKIE = "access_token_data";
+    const PUT = { method : "PUT",  credentials : "same-origin" };
 
     // Activate account, query is query string for activate endpoint
     this.activateAcct = (query, complete, fail) => {
@@ -16,8 +18,8 @@ function QNotesRequests (cxt, onLoggedOut) {
     };
 
     // Create note
-    this.createNote = (complete, fail) => {
-
+    this.createNote = (title, complete, fail) => {
+        ajaxRequest(ROOT + "createNote?title=" + title, PUT, complete, fail, 0);
     };
 
     // Delete note by id

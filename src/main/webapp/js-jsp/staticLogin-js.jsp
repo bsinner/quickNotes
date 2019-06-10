@@ -1,4 +1,4 @@
-<script src="js/loginRequest.js" type="application/javascript"></script>
+<script src="js/QNotesRequests.js" type="application/javascript"></script>
 
 <script>
 
@@ -9,11 +9,7 @@
         // Root url, js current user cookie name
         const CXT = "<%=request.getContextPath()%>";
         const JS_COOKIE = "access_token_data";
-        const LOGIN_REQ = new LoginRequest({
-            basePath : CXT
-            , onComplete : () => { submit(); }
-            , onError : () => { showError("Email and/or password are incorrect"); }
-        });
+        const REQUESTS = new QNotesRequests(CXT, () => {});
 
         // Submit event handler
         document.getElementById("submit").onclick = () => {
@@ -21,7 +17,11 @@
                 showError("Email and password must not be blank");
             }
 
-            LOGIN_REQ.login(EMAIL.value, PASSWORD.value);
+            REQUESTS.login(EMAIL.value, PASSWORD.value
+                    , () => { submit(); }
+                    , () => {
+                        showError("Email and/or password are incorrect");
+                    });
         };
 
         /*

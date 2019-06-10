@@ -3,6 +3,7 @@
     const TABLE = document.getElementById("resultsTable");
     const VIEW_CXT = "<%=request.getContextPath()%>";
 
+    // Logout request is called in two places with the same parameters
     const LOGGED_OUT = [() => { location.reload() }
             , () => { window.location = VIEW_CXT + "/editor" }];
 

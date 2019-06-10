@@ -1,4 +1,3 @@
-<%--<script src="js/loginRequest.js" type="application/javascript"></script>--%>
 <script src="js/QNotesRequests.js" type="application/javascript"></script>
 
 <script>

@@ -7,24 +7,15 @@
     // context path changes between local host and AWS
     const CXT_PATH = "<%=request.getContextPath()%>";
     const JS_COOKIE = "access_token_data";
-    const LOGIN_REQUEST = new LoginRequest({
-        basePath : CXT_PATH
-        , onComplete : data => {
-            toggleBtn("loginBtn", true);
-            showLoggedIn(data);
-            loginClose();
-        }
-        , onError : () => {
-            toggleBtn("loginBtn", true);
-            showLoginError("Email and/or password are incorrect");
-        }
-    });
 
     // Modal elements
     const loginModal = $("#loginModal");
     const createModal = $("#createModal");
     const signUpModal = $("#signUpModal");
     const confirmModal = $("#regConfirmModal");
+
+    // Requests function
+    const REQUESTS = new QNotesRequests(CXT_PATH, () => { loginModal.modal("show") });
 
     // Display if the user is logged in or logged out
     initMenu();
@@ -33,6 +24,7 @@
      * Logout, create, and sign button event handlers
      */
     $("#rightMenu").on("click", "#logout", () => {
+
         $.ajax({
             method : "POST"
             , url : CXT_PATH + "/api/logout"
@@ -60,7 +52,19 @@
         }
 
         toggleBtn("loginBtn", false);
-        LOGIN_REQUEST.login(emailInput.value, passwordInput.value);
+
+        REQUESTS.login(emailInput.value, passwordInput.value, text => {
+
+            // Success
+            toggleBtn("loginBtn", true);
+            showLoggedIn(text);
+            loginClose();
+        }, () => {
+
+            // Fail
+            toggleBtn("loginBtn", true);
+            showLoginError("Email and/or password are incorrect");
+        });
 
     }).on("click", "#loginExit", () => { loginClose(); });
 

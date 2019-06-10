@@ -21,8 +21,8 @@ function QNotesRequests (cxt, onLoggedOut) {
         ajaxRequest(ROOT + "delete?id=" + id, DELETE, complete, fail, 0);
     };
 
-    this.getNote = (complete, fail) => {
-
+    this.getNote = (id, complete, fail) => {
+        ajaxRequest(ROOT + "note?id=" + id, GET, complete, fail, 0);
     };
 
     this.getAllNotes = (complete, fail) => {

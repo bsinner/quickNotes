@@ -89,12 +89,12 @@
 <div class="ui tiny modal" id="regConfirmModal">
 
     <i class="icon-cancel" id="exitRegConfirm"></i>
-    <div class="header">
+    <div class="header" id="actTitle">
         Check your Inbox
     </div>
 
     <div class="content">
-        <p>
+        <p id="actMsg">
             Your account has been created and an email containing an activation link has been sent
             to your inbox, if you did not receive an email click here to resend.
         </p>

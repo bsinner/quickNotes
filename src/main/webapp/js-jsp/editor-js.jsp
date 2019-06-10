@@ -25,17 +25,23 @@
      * If there is a note in the
      */
     function loadNote() {
-        const idString = parseQueryString();
+        const id = parseQueryString();
 
-        if (idString != null) {
+        if (id != null) {
 
-            fetchNote(idString)
-                    .then(text => {
-                        if (text != null) {
-                            loadContents(text);
-                            addSaveButton(idString);
-                        }
-                    });
+            EDITOR_REQ.getNote(id, res => {
+
+                // Note load success
+                res.text().then(data => {
+                    if (data != null) {
+                        loadContents(data);
+                        addSaveButton(id);
+                    }
+                });
+
+            }, e => {
+                console.error("Error " + e.status + ": could not load note");
+            });
         }
 
     }
@@ -53,23 +59,6 @@
         }
 
         return null;
-    }
-
-    /*
-     * Fetch the contents of a given note id
-     */
-    async function fetchNote(id) {
-        return await fetch(PATH + "/api/note?id=" + id, { credentials: "same-origin" })
-            .then(res => {
-                if (!res.ok) {
-                    console.error("Error loading note: " + res.status);
-                    return null;
-                }
-
-                return res.text();
-            })
-            .then(data => data)
-            .catch(err => { console.error(err); });
     }
 
     /*
@@ -184,8 +173,8 @@
                     }
                 });
 
-            }, res => {
-                console.error("Error " + res.status + ": could not translate text");
+            }, e => {
+                console.error("Error " + e.status + ": could not translate text");
                 // TODO: user error message?
             });
 

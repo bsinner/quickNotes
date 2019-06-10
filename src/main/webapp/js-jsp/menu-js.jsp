@@ -1,4 +1,5 @@
 <script src="js/loginRequest.js" type="application/javascript"></script>
+<script src="js/QNotesRequests.js" type="application/javascript"></script>
 
 <script>
 // TODO: use objects to store data for all forms
@@ -89,7 +90,7 @@
 
         // Create the note and close the modal, or show an error state if no note
         // title is present, or if a note with the same name exists
-        if (title.val().length > 1) {
+        if (title.val().length > 0) {
             const url = CXT_PATH + "/api/createNote?title=" + title.val();
             const props = { credentials : "same-origin", method : "PUT" };
 

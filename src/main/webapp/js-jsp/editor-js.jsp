@@ -1,8 +1,9 @@
 <script>
 
     const REGEX = /id=([0-9]+)/;
-    const PATH = "<%=request.getContextPath()%>";
-    const EDITOR_REQ = new QNotesRequests(PATH, () => { $("#loginModal").modal("show"); });
+    const EDITOR_REQ = new QNotesRequests("<%=request.getContextPath()%>"
+        , () => { $("#loginModal").modal("show"); }
+    );
 
     // Translate api limits
     const MAX_CHARS = 15000;

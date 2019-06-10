@@ -78,6 +78,13 @@ function QNotesRequests (cxt, onLoggedOut) {
         ajaxRequest(ROOT + "translate?from=" + source + "&to=" + dest, props, complete, fail, 0);
     };
 
+    // Create account
+    this.createUser = (email, user, pass, complete, fail) => {
+        ajaxRequest("register?user=" + user + "&pass=" + pass + "&email=" + email
+            , PUT, complete, fail, 0
+        );
+    };
+
     /*
      * Make an ajax request, try to refresh access if the access token is invalid,
      * param loop detects an infinite refresh loop, initialize it to 0 when calling

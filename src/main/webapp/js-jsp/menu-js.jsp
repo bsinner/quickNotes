@@ -55,13 +55,13 @@
 
         REQUESTS.login(emailInput.value, passwordInput.value, text => {
 
-            // Success
+            // Login success
             toggleBtn("loginBtn", true);
             showLoggedIn(text);
             loginClose();
         }, () => {
 
-            // Fail
+            // Login failure
             toggleBtn("loginBtn", true);
             showLoginError("Email and/or password are incorrect");
         });
@@ -94,13 +94,17 @@
         const titleText = title.val();
 
         if (titleText.length > 0) {
-            
+
             REQUESTS.createNote(titleText, res => {
+
+                // Create note success
                 res.text().then(t => {
                     window.location = CXT_PATH + "/editor?id=" + t;
                 });
 
             }, err => {
+
+                // Create note failure
                 if (err.status === 422) {
                     showCreateInputError("Note " + titleText + " already exists");
                 } else {
@@ -170,42 +174,44 @@
     .on("click", "#signUpExit", () => { signUpClose(); });
 
     /*
-     * Send a request to the endpoint to register and email a new user
+     * Register a new user
      */
     function createUser(email, user, pass) {
-        const url = CXT_PATH + "/api/register?user=" + user
-                + "&pass=" + pass + "&email=" + email;
-        const props = { method : "PUT" };
-        const btn = "signUpBtn"
+        const btn = "signUpBtn";
 
         toggleBtn(btn, false);
+        
+        REQUESTS.createUser(email, user, pass, () => {
 
-        fetch(url, props)
-            .then(res => {
-                toggleBtn(btn, true);
+            // Create user success
+            toggleBtn(btn, true);
 
-                if (!res.ok) {
-                    return res.json();
-                } else {
-                    LOGIN_REQUEST.login(email, pass);
-                    updateActivateModal(emailData.newUser.title, emailData.newUser.msg);
-                    confirmModal.modal("show");
-                }
+            REQUESTS.login(email, pass
+                , () => { showLoggedIn(user); }
+                , e => { console.error("Error " + e.status + ": could not log user in") });
 
-            }).then(json => {
+            updateActivateModal(emailData.newUser.title, emailData.newUser.msg);
+            confirmModal.modal("show");
 
-                if ("error" in json) {
+        }, res => {
 
-                    if (json["error"]["code"] === "422001") {
-                        signUpData.email.elems.msg.text = "Email already signed up";
-                        showFormError([signUpData.email.elems]);
-                    } else if (json["error"]["code"] === "422002") {
-                        signUpData.uname.elems.msg.text = "Username taken";
-                        showFormError([signUpData.uname.elems]);
-                    }
-                }
+            // Create user failure
+            toggleBtn(btn, true);
 
+            res.json().then(data => {
+               if ("error" in data) {
+
+                   if (data["error"]["code"] === "422001") {
+                       signUpData.email.elems.msg.text = "Email already signed up";
+                       showFormError([signUpData.email.elems]);
+                   } else if (data["error"]["code"] === "422002") {
+                       signUpData.uname.elems.msg.text = "Username taken";
+                       showFormError([signUpData.uname.elems]);
+                   }
+               }
             });
+
+        });
     }
 
     // Confirm modal resend email event handler
@@ -226,11 +232,13 @@
             });
     };
 
-    // Confirm modal close button event handler
+    /*
+     * Account confirmation exit button handler
+     */
     document.getElementById("exitRegConfirm").onclick = () => { confirmClose(); };
 
     /*
-     * Hide the confirmation modal
+     * Hide the confirm account modal
      */
     function confirmClose() {
         confirmModal.modal("hide");

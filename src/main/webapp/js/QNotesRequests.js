@@ -35,7 +35,7 @@ function QNotesRequests (cxt, onLoggedOut) {
 
     this.saveNote = (id, json, complete, fail) => {
         const props = { method : "POST", credentials : "same-origin", headers : { "note-contents" : json } };
-        
+
         ajaxRequest(ROOT + "saveNote?id=" + id, props, complete, fail, 0);
     };
 
@@ -49,6 +49,12 @@ function QNotesRequests (cxt, onLoggedOut) {
 
     this.refresh = (complete, fail) => {
         ajaxRequest(ROOT + "refresh", POST, complete, fail, 0);
+    };
+
+    this.translate = (json, source, dest, complete, fail) => {
+        const props = { body : json, method : "POST" }
+
+        ajaxRequest(ROOT + "/api/translate?from=" + source + "&to=" + dest, props, complete, fail, 0);
     };
 
     /*

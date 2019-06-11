@@ -9,7 +9,7 @@
     // so the servlet's filter will redirect them to the login page
     const REQUESTS = new QNotesRequests(CXT, () => {
         REQUESTS.logout(() => { location.reload(); }, () => { window.location = CXT + "/editor"; })
-    });
+    }, () => {});
 
     // Elements to hold output
     const S_IMG = document.getElementById("statusImg");

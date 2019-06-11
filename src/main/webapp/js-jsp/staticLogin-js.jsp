@@ -9,7 +9,7 @@
         // Root url, js current user cookie name
         const CXT = "<%=request.getContextPath()%>";
         const JS_COOKIE = "access_token_data";
-        const REQUESTS = new QNotesRequests(CXT, () => {});
+        const REQUESTS = new QNotesRequests(CXT, () => {}, () => {});
 
         // Submit event handler
         document.getElementById("submit").onclick = () => {

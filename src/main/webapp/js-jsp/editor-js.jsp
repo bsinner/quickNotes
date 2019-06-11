@@ -2,7 +2,7 @@
 
     const REGEX = /id=([0-9]+)/;
     const EDITOR_REQ = new QNotesRequests("<%=request.getContextPath()%>"
-        , () => { $("#loginModal").modal("show"); }
+        , () => { $("#loginModal").modal("show"); }, () => {}
     );
 
     // Translate api limits

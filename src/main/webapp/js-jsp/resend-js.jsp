@@ -7,7 +7,7 @@
         REQUESTS.logout(
             () => { location.reload(); }
             , () => { window.location = CXT + "/editor"; });
-    });
+    }, () => {});
 
     sendEmail();
 

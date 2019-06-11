@@ -7,7 +7,13 @@
     const LOGGED_OUT = [() => { location.reload() }
             , () => { window.location = VIEW_CXT + "/editor" }];
 
-    const VIEW_REQS = new QNotesRequests(VIEW_CXT, () => { VIEW_REQS.logout(...LOGGED_OUT) });
+    const VIEW_REQS = new QNotesRequests(VIEW_CXT
+        , () => { VIEW_REQS.logout(...LOGGED_OUT) }
+        , () => {
+                updateActivateModal(emailData.error);
+                confirmModal.modal("show");
+                displayNoneFound();
+        });
 
     /*
      * Add event handlers for the note elements to be loaded,

@@ -14,7 +14,12 @@
     const confirmModal = $("#regConfirmModal");
 
     // Requests function
-    const REQUESTS = new QNotesRequests(CXT_PATH, () => { loginModal.modal("show") });
+    const REQUESTS = new QNotesRequests(CXT_PATH
+        , () => { loginModal.modal("show"); }
+        , () => {
+            updateActivateModal(emailData.error);
+            confirmModal.modal("show");
+        });
 
     // Display if the user is logged in or logged out
     initMenu();
@@ -182,7 +187,7 @@
                 , () => { showLoggedIn(user); }
                 , e => { console.error("Error " + e.status + ": could not log user in") });
 
-            updateActivateModal(emailData.newUser.title, emailData.newUser.msg);
+            updateActivateModal(emailData.newUser);
             confirmModal.modal("show");
 
         }, res => {
@@ -363,9 +368,9 @@
         });
     }
 
-    function updateActivateModal(title, msg) {
-        document.getElementById("actTitle").innerText = title;
-        document.getElementById("actMsg").innerText = msg; // TODO: finish showing please activate msgs
+    function updateActivateModal(obj) {
+        document.getElementById("actTitle").innerText = obj.title;
+        document.getElementById("actMsg").innerText = obj.msg;
     }
 
     /*
@@ -410,8 +415,8 @@
             , msg : "Your account has been created and an email containing an activation link has been sent to your inbox, if you did not receive an email click here to resend."
         }
         , error : {
-            title : "Please Activate Account"
-            , msg : "Your account must be activated to continue, to activate check your email for an activation link, or click here if one was not sent."
+            title : "Activate Account"
+            , msg : "Your account must be activated to continue, to activate check your email inbox for an activation link, or click here to resend."
         }
     }
 

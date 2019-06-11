@@ -2,7 +2,7 @@
  * Function for making requests to the API and refreshing expired access tokens in the background. Params c and f
  * in wrapper functions stand for onComplete and onFail.
  */
-function QNotesRequests (cxt, onLoggedOut) {
+function QNotesRequests (cxt, onLoggedOut, onUnactivated) {
 
     const ROOT = cxt + "/api/";
     const JS_COOKIE = "access_token_data";
@@ -98,6 +98,8 @@ function QNotesRequests (cxt, onLoggedOut) {
             );
         } else if (err === "401002") {
             onLoggedOut();
+        } else if (err === "403002") {
+            onUnactivated();
         }
     }
 

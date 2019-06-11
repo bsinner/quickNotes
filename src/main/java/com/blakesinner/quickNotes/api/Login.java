@@ -3,6 +3,8 @@ package com.blakesinner.quickNotes.api;
 import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
 import com.blakesinner.quickNotes.util.AccessTokenProvider;
+import com.blakesinner.quickNotes.util.StringDigester;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -55,7 +57,7 @@ public class Login {
 
         Map<String, String> query = new HashMap<>();
         query.put("email", email);
-        query.put("password", password);
+        query.put("password", StringDigester.encrypt(password));
 
         List<User> foundUsers = dao.getByPropertiesEqual(query);
 

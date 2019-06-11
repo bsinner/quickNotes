@@ -5,6 +5,7 @@ import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.persistence.ActivationDAO;
 import com.blakesinner.quickNotes.persistence.GenericDAO;
 import com.blakesinner.quickNotes.util.ActivationEmail;
+import com.blakesinner.quickNotes.util.StringDigester;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.UUID;
 @Path("/register")
 public class Registration {
 
-    private final GenericDAO<User> dao = new GenericDAO<>(User.class);
+    private final GenericDAO<User> DAO = new GenericDAO<>(User.class);
 
     /**
      * Create the new user and send a confirmation email, if the
@@ -48,6 +49,11 @@ public class Registration {
         if(error != null) return error;
 
         UUID actTokenId = createAccount(email, password, username);
+
+        if (actTokenId == null) {
+            return Response.status(500).entity("{}").build();
+        }
+
         ActivationEmail.send(actTokenId.toString(), uri, email);
 
         return Response.status(200).entity("{}").build();
@@ -88,9 +94,13 @@ public class Registration {
      * @return         the activation token, to be included in the email
      */
     private UUID createAccount(String email, String password, String username) {
-        User user = new User(username, password, email);
-        int id = dao.insert(user);
-        User createdUser = dao.getByPropertyEqual("id", String.valueOf(id)).get(0);
+        String encrypted = StringDigester.encrypt(password);
+        if (encrypted == null) return null;
+
+        User user = new User(username, encrypted, email);
+
+        int id = DAO.insert(user);
+        User createdUser = DAO.getByPropertyEqual("id", String.valueOf(id)).get(0);
 
         return createToken(createdUser);
     }
@@ -115,7 +125,7 @@ public class Registration {
      * @return      true or false depending on if the email is unique or non unique
      */
     private boolean validEmail(String email) {
-        List<User> users = dao.getByPropertyEqual("email", email);
+        List<User> users = DAO.getByPropertyEqual("email", email);
         return users.size() == 0;
     }
 
@@ -126,7 +136,7 @@ public class Registration {
      * @return         true or false depending on if the username is unique or non unique
      */
     private boolean validUsername(String username) {
-        List<User> users = dao.getByPropertyEqual("username", username);
+        List<User> users = DAO.getByPropertyEqual("username", username);
         return users.size() == 0;
     }
 
@@ -147,4 +157,5 @@ public class Registration {
                 "}"
         ).build();
     }
+
 }

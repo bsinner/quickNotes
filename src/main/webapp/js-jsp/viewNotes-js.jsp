@@ -32,7 +32,7 @@
         Object.keys(data).forEach(key => {
 
             resultsNode.append("<tr class='note'  data-id='" + key + "'>"
-                + "<td class='collasing'>"
+                + "<td class='collapsing'>"
                     + "<div class='ui fitted checkbox'>"
                         + "<input type='checkbox' class='delCheckbox'><label></label>"
                     + "</div>"

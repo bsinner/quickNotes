@@ -62,7 +62,7 @@ public class ActivationEmail {
      */
     private static String getBody(String token, UriInfo uri) {
         String url = uri.getBaseUri().toString().replace(BASE_PATH, "")
-                + "activate?t=" + token;
+                + "/activate?t=" + token;
 
         return "<div style=\"margin: 1em, 1em, 1em, 1em;\">"
                 + "<h3 style=\"font-family:Lato,'Helvetica Neue',Arial,Helvetica,sans-serif\">"

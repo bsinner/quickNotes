@@ -91,7 +91,8 @@ public class Registration {
      * @param email    the email
      * @param password the password
      * @param username the username
-     * @return         the activation token, to be included in the email
+     * @return         the activation token to be emailed, or null if exception
+     *                 occurred encrypting password
      */
     private UUID createAccount(String email, String password, String username) {
         String encrypted = StringDigester.encrypt(password);

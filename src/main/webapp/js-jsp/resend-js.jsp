@@ -1,29 +1,28 @@
+<script src="js/QNotesRequests.js" type="application/javascript"></script>
+
 <script>
-    const JS_COOKIE = "access_token_data";
     const CXT = "<%=request.getContextPath()%>";
+
+    const REQUESTS = new QNotesRequests(CXT, () => {
+        REQUESTS.logout(
+            () => { location.reload(); }
+            , () => { window.location = CXT + "/editor"; });
+    });
 
     sendEmail();
 
-    // Event handler for resend button
-    document.getElementById("resend").onclick = () => {
-       sendEmail();
-    };
+    /*
+     * Resend button event handler
+     */
+    document.getElementById("resend").onclick = () => { sendEmail(); };
 
     /*
-     * Try to send an activation email, if no access token cookie is
-     * present status 400 is returned and the user is redirected to the
-     * login page.
+     * Try to send an activation email, if no user is logged in redirect to login page
      */
     function sendEmail() {
-        const url = CXT + "/api/register/resend";
-        const props = { method : "PUT",  credentials : "same-origin"};
-
-        fetch(url, props)
-            .then(res => {
-               if(res.status === 400) {
-                   window.location.href = CXT + "/resend";
-               }
-            });
+        REQUESTS.resendActivate(() => {}, err => {
+            console.error("Error " + err.status + ": activation could not be resent");
+        });
     }
 
 </script>

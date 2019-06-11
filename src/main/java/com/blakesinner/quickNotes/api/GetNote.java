@@ -44,19 +44,19 @@ public class GetNote {
     @GET
     @Produces({"application/json"})
     public Response getNote(@QueryParam("id") String id) {
-        List<Note> notes = dao.getByPropertyEqual("id", id);
+        Note note = dao.getById(id);
         int userId = Integer.parseInt(securityContext.getUserPrincipal().getName());
 
-        if (notes.size() > 0) {
+        if (note != null) {
 
-            if (notes.get(0).getUser().getId() != userId
+            if (note.getUser().getId() != userId
                     && !securityContext.isUserInRole("ADMIN")) {
 
                 return Response.status(403).build();
 
             }
 
-            return Response.status(200).entity(notes.get(0).getContents()).build();
+            return Response.status(200).entity(note.getContents()).build();
         }
 
         return Response.status(404).entity("Error 404 - Note Not Found").build();
@@ -74,9 +74,8 @@ public class GetNote {
 
         GenericDAO<User> DAO = new GenericDAO<>(User.class);
 
-        Set<Note> notes = DAO.getByPropertyEqual(
-                "id", securityContext.getUserPrincipal().getName()
-        ).get(0).getNotes();
+        Set<Note> notes = DAO.getById(securityContext.getUserPrincipal().getName())
+                .getNotes();
 
         String results = notes.size() > 0 ? createNoteJson(notes) : "{}";
 

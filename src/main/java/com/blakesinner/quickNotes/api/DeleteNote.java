@@ -33,14 +33,14 @@ public class DeleteNote {
      */
     @DELETE
     public Response deleteNote(@QueryParam("id") String id) {
-        List<Note> notes = dao.getByPropertyEqual("id", id);
+        Note note = dao.getById(id);
 
-        if (notes.size() == 0) {
+        if (note == null) {
             return Response.status(404).entity("Note ID: " + id + " not found").build();
         }
 
-        return checkIfUnauthorized(notes.get(0))
-                .orElseGet(() -> deleteFromDatabase(notes.get(0)));
+        return checkIfUnauthorized(note)
+                .orElseGet(() -> deleteFromDatabase(note));
     }
 
     /**
@@ -73,9 +73,9 @@ public class DeleteNote {
      */
     private Response deleteFromDatabase(Note note) {
         dao.delete(note);
-        List<Note> noteSearch = dao.getByPropertyEqual("id", String.valueOf(note.getId()));
+        Note noteSearch = dao.getById(note.getId());
 
-        return noteSearch.size() == 0
+        return noteSearch == null
                 ? Response.status(200)
                         .entity("Note ID: " + note.getId() + " deleted")
                         .build()

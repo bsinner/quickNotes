@@ -101,7 +101,7 @@ public class Registration {
         User user = new User(username, encrypted, email);
 
         int id = DAO.insert(user);
-        User createdUser = DAO.getByPropertyEqual("id", String.valueOf(id)).get(0);
+        User createdUser = DAO.getById(id);
 
         return createToken(createdUser);
     }

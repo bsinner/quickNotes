@@ -110,11 +110,7 @@ public class SaveNote {
      * @param id the note id
      * @return   the note, or null if no note is found
      */
-    private Note getNote(String id) {
-        List<Note> notes = dao.getByPropertyEqual("id", id);
-        if (notes.size() > 0) return notes.get(0);
-        return null;
-    }
+    private Note getNote(String id) { return dao.getById(id); }
 
     /**
      * Get the current user, doesn't return null values because the filter
@@ -123,11 +119,7 @@ public class SaveNote {
      * @return the user
      */
     private User getUser() {
-        return new GenericDAO<>(User.class)
-                .getByPropertyEqual(
-                        "id"
-                        , securityContext.getUserPrincipal().getName())
-                .get(0);
+        return new GenericDAO<>(User.class).getById(securityContext.getUserPrincipal().getName());
     }
 
     /**

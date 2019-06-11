@@ -72,13 +72,7 @@ public class CreateNote {
         Note note = new Note(title, "{}", user);
         int id = dao.insert(note);
 
-        List<Note> newNotes = dao.getByPropertyEqual("id", String.valueOf(id));
-
-        if (newNotes.size() == 0) {
-            return null;
-        }
-
-        return newNotes.get(0);
+        return dao.getById(id);
     }
 
     /**
@@ -108,9 +102,7 @@ public class CreateNote {
      * @param id the added note id
      * @return   Ok response with the added note id
      */
-    private Response okResponse(int id) {
-        return Response.status(200).entity(id).build();
-    }
+    private Response okResponse(int id) { return Response.status(200).entity(id).build(); }
 
     /**
      * Get the user making the current request.
@@ -119,10 +111,7 @@ public class CreateNote {
      */
     private User getCurrentUser() {
         return new GenericDAO<>(User.class)
-                .getByPropertyEqual(
-                        "id"
-                        , securityContext.getUserPrincipal().getName())
-                .get(0);
+                .getById(securityContext.getUserPrincipal().getName());
     }
 
 }

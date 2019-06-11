@@ -210,8 +210,6 @@ public class GenericDAO<T> {
     /**
      * Gets by id.
      *
-     * TODO: replace usages of getByPropertyEqual("id", id) with getById(id)
-     *
      * @param id the id
      * @return   the entity
      */
@@ -223,6 +221,14 @@ public class GenericDAO<T> {
         session.close();
         return entity;
     }
+
+    /**
+     * Gets by string id.
+     *
+     * @param id the id
+     * @return   the entity
+     */
+    public T getById(String id) { return getById(Integer.valueOf(id)); }
 
     /**
      * Set the dao type.

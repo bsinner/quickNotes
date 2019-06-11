@@ -181,7 +181,7 @@ public class GenericDAO<T> {
             predicates.add(cb.equal(root.get((String) item.getKey()), item.getValue()));
         }
 
-        query.select(root).where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+        query.select(root).where(cb.and(predicates.toArray(new Predicate[0])));
 
         return session.createQuery(query).getResultList();
     }

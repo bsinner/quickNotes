@@ -5,12 +5,9 @@ import com.blakesinner.quickNotes.entity.User;
 import com.blakesinner.quickNotes.test.util.DatabaseUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.lang.annotation.Target;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -20,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class UserTest {
 
-    GenericDAO<User> dao;
+    private GenericDAO<User> dao;
 
     /**
      * Initialize user DAO.
@@ -59,10 +56,8 @@ class UserTest {
      */
     @Test
     void testGetUserById() {
-        List<User> foundUser = dao.getByPropertyEqual("id", "1");
+        User foundUser = dao.getById(1);
         assertNotNull(foundUser);
-        assertEquals(1, foundUser.size());
-        assertEquals(1, foundUser.get(0).getId());
     }
 
     /**
@@ -73,7 +68,7 @@ class UserTest {
         User newUser = new User("rsmith", "password4", "rsmith@gmail.555");
         int id = dao.insert(newUser);
 
-        User insertedUser = dao.getByPropertyEqual("id", String.valueOf(id)).get(0);
+        User insertedUser = dao.getById(id);
 
         assertNotEquals(0, id);
         assertEquals(newUser, insertedUser);
@@ -90,7 +85,7 @@ class UserTest {
 
         int id = dao.insert(newUser);
 
-        User insertedUser = dao.getByPropertyEqual("id", String.valueOf(id)).get(0);
+        User insertedUser = dao.getById(id);
 
         assertNotEquals(0, id);
         assertEquals(newUser, insertedUser);
@@ -119,7 +114,7 @@ class UserTest {
 
         assertEquals(userCount - 1, dao.getAll().size());
         assertEquals(noteCount - userNoteCount, noteDao.getAll().size());
-        assertEquals(0, dao.getByPropertyEqual("id", String.valueOf(userId)).size());
+        assertNull(dao.getById(userId));
 
     }
 

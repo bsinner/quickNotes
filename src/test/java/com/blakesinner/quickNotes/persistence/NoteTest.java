@@ -6,7 +6,6 @@ import com.blakesinner.quickNotes.test.util.DatabaseUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -16,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class NoteTest {
 
-    GenericDAO<Note> dao;
-    Note testNote;
-    User testUser;
+    private GenericDAO<Note> dao;
+    private Note testNote;
+    private User testUser;
 
     /**
      * Set up for note tests.
@@ -27,7 +26,7 @@ public class NoteTest {
     void setUp() {
         dao = new GenericDAO<>(Note.class);
 
-        testUser = new GenericDAO<>(User.class).getByPropertyEqual("id", "1").get(0);
+        testUser = new GenericDAO<>(User.class).getById(1);
         testNote = new Note("test_note", "{}", testUser);
 
         DatabaseUtility dbUtil = new DatabaseUtility();
@@ -56,7 +55,7 @@ public class NoteTest {
         testNote.setTitle("testNote");
         dao.saveOrUpdate(testNote);
 
-        Note updatedNote = dao.getByPropertyEqual("id", String.valueOf(newId)).get(0);
+        Note updatedNote = dao.getById(newId);
 
         assertEquals(testNote, updatedNote);
     }
@@ -70,7 +69,7 @@ public class NoteTest {
 
         int newId = dao.insert(testNote);
 
-        Note newNote = dao.getByPropertyEqual("id", String.valueOf(newId)).get(0);
+        Note newNote = dao.getById(newId);
 
         assertNotEquals(0, newId);
         assertEquals(testNote, newNote);
@@ -104,4 +103,5 @@ public class NoteTest {
         List<Note> notes = dao.getByPropertyLike("title", "World");
         assertEquals(2, notes.size());
     }
+
 }

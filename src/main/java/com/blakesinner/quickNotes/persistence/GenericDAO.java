@@ -91,17 +91,16 @@ public class GenericDAO<T> {
      * @return             found entities
      */
     public List<T> getByPropertyEqual(String propertyName, String value) {
-        Session session = FACTORY.openSession();
+        return accessData(session -> {
 
-        CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<T> query = cb.createQuery(TYPE);
-        Root<T> root = query.from(TYPE);
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<T> query = cb.createQuery(TYPE);
+            Root<T> root = query.from(TYPE);
 
-        query.select(root).where(cb.equal(root.get(propertyName), value));
+            query.select(root).where(cb.equal(root.get(propertyName), value));
 
-        List<T> results = session.createQuery(query).getResultList();
-        session.close();
-        return results;
+            return session.createQuery(query).getResultList();
+        });
     }
 
     /**
@@ -112,18 +111,17 @@ public class GenericDAO<T> {
      * @return             found entities
      */
     public List<T> getByPropertyLike(String propertyName, String value) {
-        Session session = FACTORY.openSession();
+        return accessData(session -> {
 
-        CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<T> query = cb.createQuery(TYPE);
-        Root<T> root = query.from(TYPE);
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<T> query = cb.createQuery(TYPE);
+            Root<T> root = query.from(TYPE);
 
-        Expression<String> propertyPath = root.get(propertyName);
-        query.where(cb.like(propertyPath, "%" + value + "%"));
+            Expression<String> propPath = root.get(propertyName);
+            query.where(cb.like(propPath, "%" + value + "%"));
 
-        List<T> results = session.createQuery(query).getResultList();
-        session.close();
-        return results;
+            return session.createQuery(query).getResultList();
+        });
     }
 
     /**
@@ -133,21 +131,22 @@ public class GenericDAO<T> {
      * @return           found entities
      */
     public List<T> getByPropertiesEqual(Map<String, String> properties) {
-        Session session = FACTORY.openSession();
+        return accessData(session -> {
 
-        CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<T> query = cb.createQuery(TYPE);
-        Root<T> root = query.from(TYPE);
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<T> query = cb.createQuery(TYPE);
+            Root<T> root = query.from(TYPE);
 
-        List<Predicate> predicates = new ArrayList<>();
+            List<Predicate> predicates = new ArrayList<>();
 
-        for(Map.Entry item : properties.entrySet()) {
-            predicates.add(cb.equal(root.get((String) item.getKey()), item.getValue()));
-        }
+            for (Map.Entry item : properties.entrySet()) {
+                predicates.add(cb.equal(root.get((String) item.getKey()), item.getValue()));
+            }
 
-        query.select(root).where(cb.and(predicates.toArray(new Predicate[0])));
+            query.select(root).where(cb.and(predicates.toArray(new Predicate[0])));
 
-        return session.createQuery(query).getResultList();
+            return session.createQuery(query).getResultList();
+        });
     }
 
     /**
@@ -163,12 +162,7 @@ public class GenericDAO<T> {
 
         UUID uuid = UUID.fromString(id);
 
-        Session session = FACTORY.openSession();
-
-        T entity = session.get(TYPE, uuid);
-
-        session.close();
-        return entity;
+        return accessData(s -> s.get(TYPE, uuid));
     }
 
     /**
@@ -177,14 +171,7 @@ public class GenericDAO<T> {
      * @param id the id
      * @return   the entity
      */
-    public T getById(int id) {
-        Session session = FACTORY.openSession();
-
-        T entity = session.get(TYPE, id);
-
-        session.close();
-        return entity;
-    }
+    public T getById(int id) { return accessData(s -> s.get(TYPE, id)); }
 
     /**
      * Gets by string id.

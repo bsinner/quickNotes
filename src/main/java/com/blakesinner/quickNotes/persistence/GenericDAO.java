@@ -181,6 +181,13 @@ public class GenericDAO<T> {
      */
     public T getById(String id) { return getById(Integer.valueOf(id)); }
 
+    /**
+     * Preform read-only actions on the database.
+     *
+     * @param callback the read only actions to preform
+     * @param <T2>     the return type
+     * @return         the data read from the database
+     */
     private <T2> T2 accessData(Function<Session, T2> callback) {
         Session session = FACTORY.openSession();
 
@@ -190,6 +197,14 @@ public class GenericDAO<T> {
         return value;
     }
 
+    /**
+     * Preform state changing actions on the database, and return a value.
+     *
+     * @param callback the actions to preform
+     * @param <T2>     the return type
+     * @return         value related to the actions preformed, such as an
+     *                 ID or number of rows changed
+     */
     private <T2> T2 alterData(Function<Session, T2> callback) {
         Session session = FACTORY.openSession();
 
@@ -203,6 +218,11 @@ public class GenericDAO<T> {
         return value;
     }
 
+    /**
+     * Perform state changing actions on the database.
+     *
+     * @param callback the actions to preform
+     */
     private void alterDataVoid(Consumer<Session> callback) {
         alterData(session -> {
             callback.accept(session);

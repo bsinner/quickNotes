@@ -114,11 +114,11 @@ function QNotesRequests (cxt, onLoggedOut, onUnactivated) {
             res.json().then(json => {
                 const prop = "authFilterError";
 
-                // If the error object emitted is from Authentication filter is found inspect it
+                // If the error object emitted is from Authentication filter inspect it
                 if (prop in json) {
 
-                    // Refresh the token, or call onLoggedOut if it has been refreshed 4 times and
-                    // is still invalid
+                    // Refresh the token, or call onLoggedOut if it has been refreshed more than
+                    // three times and is still invalid
                     if (loop > 3) {
                         showLoggedOut();
                     } else {

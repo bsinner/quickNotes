@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 /**
@@ -41,15 +43,14 @@ public class GenericDAO<T> {
      * @return all found entities
      */
     public List<T> getAll() {
-        Session session = FACTORY.openSession();
+        return accessData(session -> {
 
-        CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<T> query = cb.createQuery(TYPE);
-        query.from(TYPE);
+           CriteriaBuilder cb = session.getCriteriaBuilder();
+           CriteriaQuery<T> query = cb.createQuery(TYPE);
+           query.from(TYPE);
 
-        List<T> list = session.createQuery(query).getResultList();
-        session.close();
-        return list;
+           return session.createQuery(query).getResultList();
+        });
     }
 
     /**
@@ -57,15 +58,7 @@ public class GenericDAO<T> {
      *
      * @param entity entity to save or update
      */
-    public void saveOrUpdate(T entity) {
-        Session session = FACTORY.openSession();
-
-        Transaction transaction = session.beginTransaction();
-        session.saveOrUpdate(entity);
-        transaction.commit();
-
-        session.close();
-    }
+    public void saveOrUpdate(T entity) { alterDataVoid(s -> s.saveOrUpdate(entity)); }
 
     /**
      * Inserts new entity.
@@ -73,18 +66,7 @@ public class GenericDAO<T> {
      * @param entity entity to insert
      * @return       id of inserted entity
      */
-    public int insert(T entity) {
-        Session session = FACTORY.openSession();
-
-        int id;
-
-        Transaction transaction = session.beginTransaction();
-        id = (int)session.save(entity);
-        transaction.commit();
-
-        session.close();
-        return id;
-    }
+    public int insert(T entity) { return alterData(s -> (int)s.save(entity)); }
 
     /**
      * Inserts new entity with UUID primary key.
@@ -92,32 +74,14 @@ public class GenericDAO<T> {
      * @param entity entity to insert
      * @return id of inserted entity
      */
-    public UUID insertWithUUID(T entity) {
-        Session session = FACTORY.openSession();
-        UUID id;
-
-        Transaction transaction = session.beginTransaction();
-        id = (UUID)session.save(entity);
-        transaction.commit();
-
-        session.close();
-        return id;
-    }
+    public UUID insertWithUUID(T entity) { return alterData(s -> (UUID)s.save(entity)); }
 
     /**
      * Delete entity.
      *
      * @param entity deleted entity
      */
-    public void delete(T entity) {
-        Session session = FACTORY.openSession();
-
-        Transaction transaction = session.beginTransaction();
-        session.delete(entity);
-        transaction.commit();
-
-        session.close();
-    }
+    public void delete(T entity) { alterDataVoid(s -> s.delete(entity)); }
 
     /**
      * Gets by property equal.
@@ -229,6 +193,35 @@ public class GenericDAO<T> {
      * @return   the entity
      */
     public T getById(String id) { return getById(Integer.valueOf(id)); }
+
+    private <T2> T2 accessData(Function<Session, T2> callback) {
+        Session session = FACTORY.openSession();
+
+        T2 value = callback.apply(session);
+
+        session.close();
+        return value;
+    }
+
+    private <T2> T2 alterData(Function<Session, T2> callback) {
+        Session session = FACTORY.openSession();
+
+        Transaction transaction = session.beginTransaction();
+
+        T2 value = callback.apply(session);
+
+        transaction.commit();
+        session.close();
+
+        return value;
+    }
+
+    private void alterDataVoid(Consumer<Session> callback) {
+        alterData(session -> {
+            callback.accept(session);
+            return null;
+        });
+    }
 
     /**
      * Set the dao type.

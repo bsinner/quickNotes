@@ -8,4 +8,6 @@
         <a href="editor" class="item">Back to Editor</a>
     </div>
 
+    <input type="hidden" value="<%=request.getContextPath()%>">
+
 </div>

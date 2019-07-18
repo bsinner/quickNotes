@@ -7,6 +7,8 @@
 </head>
 <body>
 
+<input type="hidden" value="${params}">
+
 <div id="bodyDiv">
 
     <!-- Menu bar and page content -->

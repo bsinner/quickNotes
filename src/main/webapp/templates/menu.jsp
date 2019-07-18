@@ -7,6 +7,8 @@
         <a href="#" class="item" id="signIn">Sign In</a>
         <a href="#" class="item">Sign Up</a>
     </div>
+
+    <input type="hidden" value="<%=request.getContextPath()%>">
 </div>
 
 <!-- Login modal -->

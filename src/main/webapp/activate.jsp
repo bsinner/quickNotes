@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<input type="hidden" value="${params}">
+<input id="params" type="hidden" value="${params}">
 
 <div id="bodyDiv">
 

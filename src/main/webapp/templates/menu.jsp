@@ -8,7 +8,7 @@
         <a href="#" class="item">Sign Up</a>
     </div>
 
-    <input type="hidden" value="<%=request.getContextPath()%>">
+    <input id="cxt" type="hidden" value="<%=request.getContextPath()%>">
 </div>
 
 <!-- Login modal -->

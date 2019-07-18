@@ -6,6 +6,8 @@
 
 <%@include file="templates/staticMenu.jsp"%>
 
+<input id="servlet" type="hidden" value="${servlet}">
+
 <div class="ui column centered grid">
     <div class="four wide column">
         <br>
@@ -35,7 +37,8 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-<%@include file="/js-jsp/staticLogin-js.jsp"%>
+<script src="js/QNotesRequests.js"></script>
+<script src="js/staticLogin.js"></script>
 
 </body>
 </html>

@@ -54,7 +54,8 @@
 
 </div>
 
-<%@include file="js-jsp/activate-js.jsp"%>
+<script src="js/QNotesRequests.js"></script>
+<script src="js/activate.js"></script>
 
 </body>
 </html>

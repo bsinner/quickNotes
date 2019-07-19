@@ -21,7 +21,8 @@
     </div>
 </div>
 
-<%@include file="js-jsp/resend-js.jsp"%>
+<script src="js/QNotesRequests.js"></script>
+<script src="js/resend.js"></script>
 
 </body>
 </html>

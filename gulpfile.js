@@ -19,6 +19,13 @@ function css() {
         .pipe(dest("src/main/webapp/dist/css"));
 }
 
+// Copy icons
+function copy() {
+    return src([ "src/main/webapp/css/icons/*.*"
+            , "!src/main/webapp/css/icons/*.css" ])
+        .pipe(dest("src/main/webapp/dist/css/icons"))
+}
+
 // Compile and minify js
 function js() {
     return src("src/main/webapp/js/**/*.js")
@@ -28,4 +35,4 @@ function js() {
         .pipe(dest("src/main/webapp/dist/js"));
 }
 
-exports.default = series(cleanDist, parallel(css, js));
+exports.default = series(cleanDist, parallel(css, js, copy));

@@ -7,5 +7,3 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dimmer.min.js"></script>
 <%@include file="../js-jsp/menu-js.jsp"%>
 
-</body>
-</html>

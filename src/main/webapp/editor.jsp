@@ -19,5 +19,8 @@
 
 <script type="text/javascript" src="js/editor/quill.min.js"></script>
 
-<%@include file="templates/footer.jsp"%>
-<%@include file="js-jsp/editor-js.jsp"%>
+<%@include file="templates/footerImports.jsp"%>
+<script src="js/editor.js"></script>
+
+</body>
+</html>

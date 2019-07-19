@@ -1,5 +1,5 @@
 <%@include file="templates/header.jsp"%>
-<link rel="stylesheet" href="css/quill.snow.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.6/quill.snow.min.css">
 <link rel="stylesheet" href="css/editor.css">
 <title>Quick Notes</title>
 
@@ -17,7 +17,7 @@
 
 </div>
 
-<script type="text/javascript" src="js/editor/quill.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.6/quill.min.js" type="text/javascript"></script>
 
 <%@include file="templates/footerImports.jsp"%>
 <script src="js/editor.js"></script>

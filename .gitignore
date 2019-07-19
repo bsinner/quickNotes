@@ -9,6 +9,7 @@ node/
 .idea/misc.xml
 *.log
 *.pem
+*dist/
 sshLogin.sh
 *accessTokenPw.txt*
 *translateKey.txt*

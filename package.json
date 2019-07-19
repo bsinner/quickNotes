@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/bsinner/quickNotes#readme",
   "devDependencies": {
-    "gulp": "^4.0.2"
+    "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-clean-css": "^4.2.0"
   }
 }

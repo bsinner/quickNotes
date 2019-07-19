@@ -55,9 +55,8 @@
     </div>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <%@include file="templates/footerImports.jsp"%>
-<%@include file="js-jsp/viewNotes-js.jsp"%>
+<script src="js/viewNotes.js"></script>
 
 </body>
 </html>

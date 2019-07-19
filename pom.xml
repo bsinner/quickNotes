@@ -122,7 +122,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.9.9</version>
+      <version>[2.9.9.1,)</version>
     </dependency>
     <!-- Mail API -->
     <!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
@@ -135,7 +135,9 @@
   </dependencies>
 
   <build>
+
     <finalName>quickNotes</finalName>
+
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <plugin>
@@ -165,19 +167,52 @@
         </plugin>
       </plugins>
     </pluginManagement>
+
     <plugins>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.22.1</version>
       </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-                <source>8</source>
-                <target>8</target>
-            </configuration>
-        </plugin>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+              <source>8</source>
+              <target>8</target>
+          </configuration>
+      </plugin>
+      <plugin>
+        <!-- https://mvnrepository.com/artifact/com.github.eirslett/frontend-maven-plugin -->
+          <groupId>com.github.eirslett</groupId>
+          <artifactId>frontend-maven-plugin</artifactId>
+          <version>1.7.6</version>
+
+          <executions>
+            <execution>
+              <id>Install node and npm</id>
+              <goals>
+                <goal>install-node-and-npm</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>Npm install</id>
+              <goals>
+                <goal>npm</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>Run gulp</id>
+              <goals>
+                <goal>gulp</goal>
+              </goals>
+            </execution>
+          </executions>
+
+          <configuration>
+            <nodeVersion>v10.16.0</nodeVersion>
+          </configuration>
+      </plugin>
     </plugins>
+
   </build>
 </project>

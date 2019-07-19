@@ -3,6 +3,8 @@
 .DS_Store*
 
 # Custom
+node_modules/
+node/
 .idea/
 .idea/misc.xml
 *.log

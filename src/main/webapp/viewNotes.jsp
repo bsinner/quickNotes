@@ -1,6 +1,6 @@
 <%@include file="templates/header.jsp"%>
 <title>View Notes</title>
-<link rel="stylesheet" href="css/viewNotes.css">
+<link rel="stylesheet" href="dist/css/viewNotes.min.css">
 
 </head>
 <body>
@@ -56,7 +56,7 @@
 </div>
 
 <%@include file="templates/footerImports.jsp"%>
-<script src="js/viewNotes.js"></script>
+<script src="dist/js/viewNotes.min.js"></script>
 
 </body>
 </html>

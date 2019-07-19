@@ -1,6 +1,6 @@
 <%@include file="templates/header.jsp"%>
 <title>Resend Email</title>
-<link rel="stylesheet" href="css/resend.css">
+<link rel="stylesheet" href="dist/css/resend.min.css">
 
 </head>
 <body>
@@ -21,8 +21,8 @@
     </div>
 </div>
 
-<script src="js/QNotesRequests.js"></script>
-<script src="js/resend.js"></script>
+<script src="dist/js/QNotesRequests.min.js"></script>
+<script src="dist/js/resend.min.js"></script>
 
 </body>
 </html>

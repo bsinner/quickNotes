@@ -37,8 +37,8 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-<script src="js/QNotesRequests.js"></script>
-<script src="js/staticLogin.js"></script>
+<script src="dist/js/QNotesRequests.min.js"></script>
+<script src="dist/js/staticLogin.min.js"></script>
 
 </body>
 </html>

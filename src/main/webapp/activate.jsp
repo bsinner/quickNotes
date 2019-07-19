@@ -1,6 +1,6 @@
 <%@include file="templates/header.jsp"%>
-<link rel="stylesheet" href="css/activate.css">
-<link rel="stylesheet" href="css/icons/loadingSpinner.css">
+<link rel="stylesheet" href="dist/css/activate.min.css">
+<link rel="stylesheet" href="dist/css/icons/loadingSpinner.min.css">
 
 <title>Activate Account</title>
 
@@ -54,8 +54,8 @@
 
 </div>
 
-<script src="js/QNotesRequests.js"></script>
-<script src="js/activate.js"></script>
+<script src="dist/js/QNotesRequests.min.js"></script>
+<script src="dist/js/activate.min.js"></script>
 
 </body>
 </html>

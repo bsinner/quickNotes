@@ -150,7 +150,7 @@ class UserTest {
 
         assertEquals(1, users.size());
         assertEquals(1, users.get(0).getId());
-        assertEquals("bsmith@gmail.555", users.get(0).getEmail());
+        assertEquals("bsmith@example.com", users.get(0).getEmail());
     }
 
     /**

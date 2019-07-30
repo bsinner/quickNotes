@@ -53,7 +53,8 @@ public class ViewNotes extends HttpServlet {
      * @throws ServletException If a servlet exception occurs
      */
     private void forwardToJsp(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        ServletAuthenticator auth = new ServletAuthenticator(req, res);
+        ServletAuthenticator auth = new ServletAuthenticator(req, res
+                , (byte[]) getServletContext().getAttribute("authKey"));
 
         auth.setUpDispatcher("/viewNotes.jsp", "/viewNotes")
                 .forward(req, res);

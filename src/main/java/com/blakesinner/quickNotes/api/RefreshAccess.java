@@ -33,7 +33,7 @@ public class RefreshAccess {
     @POST
     public Response refreshAccessToken(@CookieParam("refresh_token") Cookie cookie, @Context ServletContext cxt) {
 
-        AccessTokenProvider provider = new AccessTokenProvider();
+        AccessTokenProvider provider = new AccessTokenProvider((byte[]) cxt.getAttribute("authKey"));
 
         if (cookie == null) {
             return unauthorized();

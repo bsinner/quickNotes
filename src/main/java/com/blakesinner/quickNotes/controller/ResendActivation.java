@@ -54,7 +54,8 @@ public class ResendActivation extends HttpServlet {
      * @throws ServletException if a Servlet exception occurs
      */
     private void forwardToJsp(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        ServletAuthenticator auth = new ServletAuthenticator(req, res);
+        ServletAuthenticator auth = new ServletAuthenticator(req, res
+                , (byte[]) getServletContext().getAttribute("authKey"));
 
         auth.setUpDispatcher("/resend.jsp", "/resend")
                 .forward(req, res);

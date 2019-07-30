@@ -1,11 +1,10 @@
 package com.blakesinner.quickNotes.api;
 
-import com.blakesinner.quickNotes.util.KeyLoader;
 import io.jsonwebtoken.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.annotation.Priority;
+import javax.servlet.ServletContext;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -30,9 +29,11 @@ import java.util.*;
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
 
+    @Context
+    private ServletContext S_CONTEXT;
     private static final String REALM = "Quick Notes";
     private static final String CHARSET = "UTF-8";
-    private static final String SECRET = "/accessTokenPw.txt";
+    private static final String KEY = "authKey";
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
 
     /**
@@ -72,7 +73,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             String tokenString = token.getValue();
 
             Jws<Claims> parsedClaims = Jwts.parser()
-                    .setSigningKey(new KeyLoader().getKeyBytes(SECRET))
+                    .setSigningKey((byte[]) S_CONTEXT.getAttribute(KEY))
                     .parseClaimsJws(tokenString);
 
             Claims claims = parsedClaims.getBody();

@@ -28,6 +28,14 @@ public class AccessTokenProvider {
     private static final String REFRESH_NAME = "refresh_token";
     private static final String ACCESS_NAME = "access_token";
     private final Logger LOGGER = LogManager.getLogger(AccessTokenProvider.class);
+    private byte[] KEY;
+
+    /**
+     * Construct Access Token Provider.
+     *
+     * @param key the app secret key
+     */
+    public AccessTokenProvider(byte[] key) { KEY = key; }
 
     /**
      * Create an access token from an user.
@@ -119,7 +127,7 @@ public class AccessTokenProvider {
                 .setExpiration(expiry);
 
         return token.signWith(
-                        Keys.hmacShaKeyFor(new KeyLoader().getKeyBytes(KEY_PATH))
+                        Keys.hmacShaKeyFor(KEY)
                         , SignatureAlgorithm.HS256
                 ).compact();
     }

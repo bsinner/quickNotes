@@ -5,7 +5,6 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +24,7 @@ public class ServletAuthenticator {
 
     private HttpServletRequest req;
     private HttpServletResponse res;
+    private byte[] key;
     private List<Cookie> toDelete = new ArrayList<>();
 
     private static final String ACCESS_NAME = "access_token";
@@ -41,9 +41,10 @@ public class ServletAuthenticator {
      *
      * @param req the HttpServletRequest
      */
-    public ServletAuthenticator(HttpServletRequest req, HttpServletResponse res) {
+    public ServletAuthenticator(HttpServletRequest req, HttpServletResponse res, byte[] key) {
         this.req = req;
         this.res = res;
+        this.key = key;
     }
 
     /**
@@ -70,9 +71,7 @@ public class ServletAuthenticator {
     }
 
     /**
-     * Find if the user trying to access a servlet has an access token; this method will return
-     * true even if an invalid access token is passed to the servlet, so it is recommended to call
-     * updateCookies to refresh or delete invalid access tokens.
+     * Check if a cookie with an access token is present.
      *
      * @return true if an access token is found, false if no access token is present or if
      *         the token is scheduled for deletion
@@ -111,7 +110,7 @@ public class ServletAuthenticator {
     private boolean isInvalid(String token) {
         try {
             Jwts.parser()
-                    .setSigningKey(new KeyLoader().getKeyBytes(SECRET))
+                    .setSigningKey(key)
                     .parseClaimsJws(token);
 
             return false;
@@ -131,7 +130,7 @@ public class ServletAuthenticator {
      * @param refreshId the refresh token ID
      */
     private void createNewAccessToken(String refreshId) {
-        AccessTokenProvider provider = new AccessTokenProvider();
+        AccessTokenProvider provider = new AccessTokenProvider(key);
         String accessToken = provider.createAccessToken(refreshId);
 
         if (accessToken != null) {

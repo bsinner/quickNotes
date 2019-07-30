@@ -54,7 +54,9 @@ public class ActivateAccount extends HttpServlet {
      * @throws ServletException if a Servlet Exception occurs
      */
     private void forwardToJsp(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        ServletAuthenticator auth = new ServletAuthenticator(req, res);
+        ServletAuthenticator auth = new ServletAuthenticator(req, res
+                , (byte[]) getServletContext().getAttribute("authKey"));
+
         req.setAttribute("params", req.getQueryString());
 
         auth.setUpDispatcher("/activate.jsp"

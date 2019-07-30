@@ -1,12 +1,13 @@
 package com.blakesinner.quickNotes.api;
 
-import com.blakesinner.quickNotes.util.KeyLoader;
+import javax.servlet.ServletContext;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -28,7 +29,7 @@ public class Translate {
 
     private static final String BASE_URL = "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0";
     private static final String AUTH_HEADER = "Ocp-Apim-Subscription-Key";
-    private static final String KEY = "/translateKey.txt";
+    private static final String ATTR = "translateKey";
 
     /**
      * Get translation of passed in text
@@ -41,14 +42,15 @@ public class Translate {
     @POST
     public Response translateNoteText(String text
             , @QueryParam("from") String from
-            , @QueryParam("to") String to) {
+            , @QueryParam("to") String to
+            , @Context ServletContext context) {
 
         Client client = ClientBuilder.newClient();
 
         return client
                 .target(BASE_URL + "&from=" + from + "&to=" + to)
                 .request(MediaType.APPLICATION_JSON)
-                .header(AUTH_HEADER, new KeyLoader().getKey(KEY))
+                .header(AUTH_HEADER, context.getAttribute(ATTR))
                 .post(Entity.json(text));
     }
 

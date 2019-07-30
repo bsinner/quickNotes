@@ -39,7 +39,8 @@ public class Login {
         User user = queryUser(email, password);
 
         if (user != null) {
-            return buildOkResponse(user, context.getContextPath());
+            return buildOkResponse(user, context.getContextPath()
+                    , (byte[]) context.getAttribute("authKey"));
         }
 
         return buildUnauthorizedResponse();
@@ -76,8 +77,8 @@ public class Login {
      *             path is the REST base path "quickNotes/api"
      * @return     the response
      */
-    private Response buildOkResponse(User user, String cxt) {
-        AccessTokenProvider provider = new AccessTokenProvider();
+    private Response buildOkResponse(User user, String cxt, byte[] key) {
+        AccessTokenProvider provider = new AccessTokenProvider(key);
 
         String access = provider.createAccessToken(user);
         String refresh = provider.createRefreshToken(user);

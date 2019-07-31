@@ -27,7 +27,7 @@ public class ApplicationInit extends HttpServlet {
     private static final String AUTH = "/accessTokenPw.txt";
 
     /**
-     * Initialize the application by loading secret keys into environment variables.
+     * Add data to the servlet context when the application starts up.
      */
     @Override
     public void init() {
@@ -40,9 +40,9 @@ public class ApplicationInit extends HttpServlet {
     }
 
     /**
-     * Get a map of roles authorized to access servlets. Roles that may access servlets are
-     * specified in the Secured annotation, the keys in the map are servlet URL patterns, if
-     * a servlet has more than one url pattern multiple entries are added with the same value.
+     * Get a map of roles authorized to access servlets. Map keys are url patterns, and values are
+     * role arrays. If a servlet has more than one url pattern, multiple entries are added with the
+     * same array of roles.
      *
      * @return the roles map
      */

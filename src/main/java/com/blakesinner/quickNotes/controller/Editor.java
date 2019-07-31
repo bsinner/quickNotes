@@ -11,7 +11,6 @@ import java.io.IOException;
 @WebServlet(name = "editor",
         urlPatterns = ("/editor")
 )
-
 public class Editor extends HttpServlet {
 
     /** 

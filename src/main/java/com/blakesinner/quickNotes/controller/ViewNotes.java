@@ -13,7 +13,7 @@ import java.io.IOException;
  *
  * @author bsinner
  */
-@WebServlet(urlPatterns = "/viewNotes")
+@WebServlet(urlPatterns = "/viewNotes", name = "viewNotes")
 public class ViewNotes extends HttpServlet {
 
     /**

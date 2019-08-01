@@ -3,7 +3,7 @@ const CXT = document.getElementById("cxt").value;
 
 const REQUESTS = new QNotesRequests(CXT, () => {
     REQUESTS.logout(
-        () => { location.reload(); }
+        () => { window.location = CXT + "/login" }
         , () => { window.location = CXT + "/editor"; });
 }, () => {});
 

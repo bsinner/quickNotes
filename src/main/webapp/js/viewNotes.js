@@ -2,7 +2,7 @@ const TABLE = document.getElementById("resultsTable");
 const VIEW_CXT = document.getElementById("cxt").value;
 
 // Logout request is called in two places with the same parameters
-const LOGGED_OUT = [() => { location.reload() }
+const LOGGED_OUT = [() => { window.location = VIEW_CXT + "/login" }
         , () => { window.location = VIEW_CXT + "/editor" }];
 
 const VIEW_REQS = new QNotesRequests(VIEW_CXT

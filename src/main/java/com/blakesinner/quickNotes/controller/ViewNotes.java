@@ -1,6 +1,6 @@
 package com.blakesinner.quickNotes.controller;
 
-import com.blakesinner.quickNotes.util.ServletAuthenticator;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +17,7 @@ import java.io.IOException;
 public class ViewNotes extends HttpServlet {
 
     /**
-     * Forward to viewNotes JSP, or login JSP if not logged in.
+     * Forward to viewNotes JSP.
      *
      * @param req               The HttpRequest
      * @param res               The HttpResponse
@@ -30,8 +30,7 @@ public class ViewNotes extends HttpServlet {
     }
 
     /**
-     * Forward to viewNotes JSP when login page makes post request to this servlet,
-     * or forward to login JSP if not logged in.
+     * Forward to viewNotes JSP when login page makes post request.
      *
      * @param req               The HttpRequest
      * @param res               The HttpResponse
@@ -44,7 +43,7 @@ public class ViewNotes extends HttpServlet {
     }
 
     /**
-     * Set up request dispatcher with ServletAuthenticator and forward to destination JSP.
+     * Forward to viewNotes JSP.
      *
      * @param req               The HttpRequest
      * @param res               The HttpResponse
@@ -52,10 +51,7 @@ public class ViewNotes extends HttpServlet {
      * @throws ServletException If a servlet exception occurs
      */
     private void forwardToJsp(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        ServletAuthenticator auth = new ServletAuthenticator(req, res
-                , (byte[]) getServletContext().getAttribute("authKey"));
-
-        auth.setUpDispatcher("/viewNotes.jsp", "/viewNotes")
-                .forward(req, res);
+        RequestDispatcher rd = req.getRequestDispatcher("/viewNotes.jsp");
+        rd.forward(req, res);
     }
 }

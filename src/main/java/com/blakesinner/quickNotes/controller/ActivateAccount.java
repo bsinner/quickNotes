@@ -1,7 +1,6 @@
 package com.blakesinner.quickNotes.controller;
 
-import com.blakesinner.quickNotes.util.ServletAuthenticator;
-
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,11 +13,11 @@ import java.io.IOException;
  *
  * @author bsinner
  */
-@WebServlet(urlPatterns = {"/activate"})
+@WebServlet(urlPatterns = { "/activate" }, name = "activate")
 public class ActivateAccount extends HttpServlet {
 
     /**
-     * Forward to account activation page, send query string in request attribute for JS.
+     * Forward to account activation page.
      *
      * @param req               the HTTP Request
      * @param res               the HTTP Response
@@ -31,8 +30,7 @@ public class ActivateAccount extends HttpServlet {
     }
 
     /**
-     * Forward to the account activation page when login.jsp makes a post request, send query string in
-     * request attribute for JS.
+     * Forward to the account activation page when login.jsp makes a post request.
      *
      * @param req               the HTTP Request
      * @param res               the HTTP Response
@@ -45,8 +43,7 @@ public class ActivateAccount extends HttpServlet {
     }
 
     /**
-     * Set the request dispatcher's destination JSP with ServletAuthenticator, add query string to request attribute,
-     * forward to the destination JSP.
+     * Forward to activate JSP, add query string to request attribute for JS.
      *
      * @param req               the HTTP Request
      * @param res               the HTTP Response
@@ -54,16 +51,11 @@ public class ActivateAccount extends HttpServlet {
      * @throws ServletException if a Servlet Exception occurs
      */
     private void forwardToJsp(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        ServletAuthenticator auth = new ServletAuthenticator(req, res
-                , (byte[]) getServletContext().getAttribute("authKey"));
-
         req.setAttribute("params", req.getQueryString());
 
-        auth.setUpDispatcher("/activate.jsp"
-                , "/activate" + (req.getQueryString() == null
-                        ? ""
-                        : "?" + req.getQueryString()))
-                .forward(req, res);
+        RequestDispatcher rd = req.getRequestDispatcher("/activate.jsp");
+
+        rd.forward(req, res);
     }
 
 }

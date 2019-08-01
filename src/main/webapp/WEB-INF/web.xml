@@ -31,6 +31,8 @@
   <filter-mapping>
     <filter-name>authentication-filter</filter-name>
     <servlet-name>viewNotes</servlet-name>
+    <servlet-name>activate</servlet-name>
+    <servlet-name>resend</servlet-name>
   </filter-mapping>
 
 </web-app>

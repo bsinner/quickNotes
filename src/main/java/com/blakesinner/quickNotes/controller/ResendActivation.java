@@ -1,7 +1,5 @@
 package com.blakesinner.quickNotes.controller;
 
-import com.blakesinner.quickNotes.util.ServletAuthenticator;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,11 +13,11 @@ import java.io.IOException;
  *
  * @author bsinner
  */
-@WebServlet(urlPatterns = "/resend")
+@WebServlet(urlPatterns = "/resend", name = "resend")
 public class ResendActivation extends HttpServlet {
 
     /**
-     * Forward to resend jsp page, or forward to login page if user isn't logged in.
+     * Forward to resend JSP.
      *
      * @param req               the HttpRequest
      * @param res               the HttpResponse
@@ -32,8 +30,7 @@ public class ResendActivation extends HttpServlet {
     }
 
     /**
-     * Forward to resend jsp page when login page makes a post request to this servlet, or
-     * forward back to login page if user isn't logged in.
+     * Forward to resend JSP when login page makes a post request.
      *
      * @param req               the HttpRequest
      * @param res               the HttpResponse
@@ -46,7 +43,7 @@ public class ResendActivation extends HttpServlet {
     }
 
     /**
-     * Set up request dispatcher with ServletAuthenticator and forward to destination JSP.
+     * Set forward to resend JSP.
      *
      * @param req               the HttpRequest
      * @param res               the HttpResponse
@@ -54,11 +51,8 @@ public class ResendActivation extends HttpServlet {
      * @throws ServletException if a Servlet exception occurs
      */
     private void forwardToJsp(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        ServletAuthenticator auth = new ServletAuthenticator(req, res
-                , (byte[]) getServletContext().getAttribute("authKey"));
-
-        auth.setUpDispatcher("/resend.jsp", "/resend")
-                .forward(req, res);
+        RequestDispatcher rd = req.getRequestDispatcher("/resend.jsp");
+        rd.forward(req, res);
     }
 
 }

@@ -59,16 +59,19 @@ public class AuthenticationFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
 
-        if (isLoggedInAndAuthorized((HttpServletRequest) req
-                , (HttpServletResponse) res)) {
+        HttpServletRequest httpReq = (HttpServletRequest) req;
 
+        if (isLoggedInAndAuthorized(httpReq, (HttpServletResponse) res)) {
             chain.doFilter(req, res);
-        } else {
-            req.setAttribute("servlet", ((HttpServletRequest) req).getServletPath());
-            RequestDispatcher rd = req.getRequestDispatcher(LOGIN_PAGE);
-            rd.forward(req, res);
-        }
 
+        } else {
+            String qString = httpReq.getQueryString();
+            httpReq.setAttribute("servlet"
+                    , httpReq.getServletPath() + (qString == null ? "" : "?" + qString));
+
+            RequestDispatcher rd = httpReq.getRequestDispatcher(LOGIN_PAGE);
+            rd.forward(httpReq, res);
+        }
     }
 
     /**

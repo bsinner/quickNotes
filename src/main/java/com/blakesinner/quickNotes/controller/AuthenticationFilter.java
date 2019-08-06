@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * Authentication filter for servlets, to apply authorization to a servlet
- * add the Secured annotation and define at least url pattern in the
+ * add the Secured annotation and define at least one url pattern in the
  * WebServlet annotation.
  *
  * @author bsinner
